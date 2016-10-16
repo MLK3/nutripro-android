@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">Nutripro</string>
+    <!--DIALOG MESSAGES-->
+    <string name="progress_dialog_standard_msg">Aguarde um momento.</string>
+
+    <!--NETWORK ERRORS-->
+    <string name="network_error_timeout">Erro inesperado, por favor tente novamente.</string>
+    <string name="network_error_unknown">Erro desconhecido, não foi possível completar sua requisição.</string>
+
+    <!--PLACEHOLDERS LABELS-->
+    <string name="placeholder_empty_label">Não existem resultados.</string>
+    <string name="placeholder_error_label">Houve um erro inesperado.</string>
+    <string name="placeholder_error_button_label">Tentar novamente</string>
+
+    <!--LOGIN-->
+    <string name="login_hint_mail">E-mail</string>
+    <string name="login_hint_password">Senha</string>
+    <string name="login_label_forgot_password">Esqueceu a senha?</string>
+    <string name="login_label_register">Ainda não tem uma conta? Cadastre-se</string>
+    <string name="login_button_enter">Entrar</string>
+        <!--ERRORS-->
+    <string name="login_error_user_not_found">Usuário não encontrado, verifique seu e-mail.</string>
+    <string name="login_error_user_unauthorized">Senha inválida</string>
+
+    <!--REGISTER-->
+    <string name="register_info">Cadastro de Informações</string>
+    <string name="register_hint_mail">E-mail</string>
+    <string name="register_hint_password">Senha</string>
+    <string name="register_hint_password_confirmation">Confirmação de Senha</string>
+    <string name="register_hint_name">Nome</string>
+    <string name="register_hint_gender">Sexo</string>
+    <string name="register_hint_age">Idade</string>
+    <string name="register_hint_weight_in_kg">Peso em kg</string>
+    <string name="register_hint_height_in_meters">Altura em metros</string>
+    <string name="register_btn_send">Enviar</string>
+    <string name="register_gender_option_male">Masculino</string>
+    <string name="register_gender_option_female">Feminino</string>
+</resources>
