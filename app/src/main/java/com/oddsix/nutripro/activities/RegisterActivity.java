@@ -12,6 +12,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.oddsix.nutripro.R;
+import com.oddsix.nutripro.models.RegisterModel;
 
 import io.realm.Realm;
 
@@ -56,8 +57,17 @@ public class RegisterActivity extends BaseActivity {
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showProgressdialog();
                 validateFields();
+                showProgressdialog();
+                RegisterModel registerModel = new RegisterModel(mMailTil.getEditText().getText().toString(),
+                        mPassTil.getEditText().getText().toString(), mNameTil.getEditText().getText().toString(),
+                        Integer.valueOf(mAgeTil.getEditText().getText().toString()), mGenderArray[mGenderSp.getSelectedItemPosition()], Integer.valueOf(mHeightTil.getEditText().getText().toString()),
+                        Float.valueOf(mWeightTil.getEditText().getText().toString()));
+                mRealm.beginTransaction();
+                mRealm.copyToRealmOrUpdate(registerModel);
+                mRealm.commitTransaction();
+                dismissProgressDialog();
+                //TODO OPEN DIETA ACTIVITY
             }
         });
 
