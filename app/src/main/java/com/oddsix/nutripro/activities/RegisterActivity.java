@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -27,6 +28,7 @@ public class RegisterActivity extends BaseActivity {
     private Spinner mGenderSp;
     private String[] mGenderArray;
     private Realm mRealm;
+    private Button mButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +36,11 @@ public class RegisterActivity extends BaseActivity {
         setContentView(R.layout.activity_register);
         findViews();
         setGenderSpinner();
-
+        setButton();
         mRealm = Realm.getDefaultInstance();
     }
 
-    private void findViews(){
+    private void findViews() {
         mMailTil = (TextInputLayout) findViewById(R.id.register_mail_til);
         mPassTil = (TextInputLayout) findViewById(R.id.register_password_til);
         mPassConfirmationTil = (TextInputLayout) findViewById(R.id.register_password_confirmation_til);
@@ -47,12 +49,29 @@ public class RegisterActivity extends BaseActivity {
         mWeightTil = (TextInputLayout) findViewById(R.id.register_weight_til);
         mHeightTil = (TextInputLayout) findViewById(R.id.register_height_til);
         mGenderSp = (Spinner) findViewById(R.id.register_gender_sp);
+        mButton = (Button) findViewById(R.id.register_send_btn);
     }
 
-    public void onSendClicked(View view){
-        showProgressdialog();
+    public void setButton() {
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showProgressdialog();
+                validateFields();
+            }
+        });
+
     }
 
+    private void validateFields() {
+        validateMail();
+    }
+
+    private void validateMail() {
+        if (mMailTil.getEditText().getText().toString().isEmpty()) {
+            mMailTil.setErrorEnabled(true);
+        }
+    }
 
     private void setGenderSpinner() {
         mGenderArray = getResources().getStringArray(R.array.info_gender_options);
