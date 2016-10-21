@@ -35,4 +35,8 @@
     <string name="register_btn_send">Enviar</string>
     <string name="register_gender_option_male">Masculino</string>
     <string name="register_gender_option_female">Feminino</string>
+    <string name="register_error_invalid_mail">E-mail inválido.</string>
+    <string name="register_error_empty_field">O campo não pode estar vazio.</string>
+    <string name="register_error_password_length">A senha deve possuir no mínimo 6 caracteres.</string>
+    <string name="register_error_not_matching">Senha e confirmação de senha não conferem.</string>
 </resources>

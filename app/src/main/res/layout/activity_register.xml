@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:clipToPadding="false"
-    android:scrollbarStyle="insideOverlay"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/tools">
+    android:clipToPadding="false"
+    android:scrollbarStyle="insideOverlay">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,15 +25,14 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/text_title"
+            android:text="@string/register_info"
             android:textColor="@color/colorPrimary"
-            android:text="@string/register_info"/>
+            android:textSize="@dimen/text_title" />
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/register_mail_til"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
             <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
@@ -46,8 +45,7 @@
         <android.support.design.widget.TextInputLayout
             android:id="@+id/register_password_til"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
             <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
@@ -69,8 +67,7 @@
         <android.support.design.widget.TextInputLayout
             android:id="@+id/register_password_confirmation_til"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
             <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
@@ -83,8 +80,7 @@
         <android.support.design.widget.TextInputLayout
             android:id="@+id/register_name_til"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
             <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
@@ -97,14 +93,13 @@
         <Spinner
             android:id="@+id/register_gender_sp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="30dp" />
 
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/register_age_til"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
             <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
@@ -117,8 +112,7 @@
         <android.support.design.widget.TextInputLayout
             android:id="@+id/register_weight_til"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
             <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
@@ -131,8 +125,7 @@
         <android.support.design.widget.TextInputLayout
             android:id="@+id/register_height_til"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
             <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
@@ -143,19 +136,14 @@
         </android.support.design.widget.TextInputLayout>
 
 
-
-
-
         <android.support.v7.widget.AppCompatButton
+            android:id="@+id/register_send_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/large_spacing_between_items"
-            android:onClick="onSendClicked"
-            android:textColor="@color/color_white"
             android:backgroundTint="@color/colorPrimary"
             android:text="@string/register_btn_send"
-            />
-
+            android:textColor="@color/color_white" />
 
 
     </LinearLayout>
