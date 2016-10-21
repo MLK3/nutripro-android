@@ -1,4 +1,4 @@
-package com.oddsix.nutripro.activities;
+package com.oddsix.nutripro;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;

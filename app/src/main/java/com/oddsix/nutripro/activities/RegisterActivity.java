@@ -5,12 +5,12 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.oddsix.nutripro.BaseActivity;
 import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.models.RegisterModel;
 import com.oddsix.nutripro.utils.validations.HasMinLength;
@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by Filippe on 16/10/16.

@@ -11,6 +11,11 @@
     <string name="placeholder_empty_label">Não existem resultados.</string>
     <string name="placeholder_error_label">Houve um erro inesperado.</string>
     <string name="placeholder_error_button_label">Tentar novamente</string>
+    
+    <!--TAB TITLES-->
+    <string name="tab_title_day_resume">Resumo do Dia</string>
+    <string name="tab_title_analysed_picture">Foto Analisada</string>
+    <string name="tab_title_profile">Perfil</string>
 
     <!--LOGIN-->
     <string name="login_hint_mail">E-mail</string>

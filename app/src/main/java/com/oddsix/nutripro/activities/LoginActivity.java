@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.view.View;
 
+import com.oddsix.nutripro.BaseActivity;
 import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.models.RegisterModel;
 import com.oddsix.nutripro.utils.Constants;

@@ -5,4 +5,16 @@
         <item>@string/register_gender_option_female</item>
         <item>@string/register_gender_option_male</item>
     </string-array>
+
+    <array name="tab_icons">
+        <item>@drawable/ic_tab_history</item>
+        <item>@drawable/ic_tab_plate</item>
+        <item>@drawable/ic_tab_profile</item>
+    </array>
+    
+    <string-array name="tab_titles">
+        <item>@string/tab_title_day_resume</item>
+        <item>@string/tab_title_profile</item>
+        <item>@string/tab_title_analysed_picture</item>
+    </string-array>
 </resources>
