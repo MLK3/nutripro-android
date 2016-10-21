@@ -12,6 +12,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.oddsix.nutripro.R;
+import com.oddsix.nutripro.models.RegisterModel;
 import com.oddsix.nutripro.utils.validations.HasMinLength;
 import com.oddsix.nutripro.utils.validations.IsEmail;
 import com.oddsix.nutripro.utils.validations.IsNotEmpty;
@@ -107,6 +108,11 @@ public class RegisterActivity extends BaseActivity {
         validateFields();
         if (areAllFieldsValid()) {
             showProgressdialog();
+            mRealm.beginTransaction();
+            mRealm.copyToRealmOrUpdate(new RegisterModel(mMailTil.getEditText().getText().toString(), mPassTil.getEditText().getText().toString(), mNameTil.getEditText().getText().toString(),
+                    Integer.valueOf(mAgeTil.getEditText().getText().toString()), mGenderArray[mGenderSp.getSelectedItemPosition()], Integer.valueOf(mHeightTil.getEditText().getText().toString()),
+                    Float.valueOf(mWeightTil.getEditText().getText().toString())));
+            mRealm.commitTransaction();
         }
     }
 
