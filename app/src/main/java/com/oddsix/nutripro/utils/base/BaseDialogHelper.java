@@ -44,7 +44,7 @@ public class BaseDialogHelper {
 
     private ProgressDialog buildProgressDialog() {
         ProgressDialog progressDialog = new ProgressDialog(mContext);
-//        progressDialog.setCancelable(false);
+        progressDialog.setCancelable(false);
         return progressDialog;
     }
 

@@ -113,6 +113,8 @@ public class RegisterActivity extends BaseActivity {
                     Integer.valueOf(mAgeTil.getEditText().getText().toString()), mGenderArray[mGenderSp.getSelectedItemPosition()], Integer.valueOf(mHeightTil.getEditText().getText().toString()),
                     Float.valueOf(mWeightTil.getEditText().getText().toString())));
             mRealm.commitTransaction();
+            dismissProgressDialog();
+            finish();
         }
     }
 
