@@ -45,6 +45,9 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.squareup.retrofit2:retrofit:2.0.0-beta4'
     compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta4'
+    compile 'com.wdullaer:materialdatetimepicker:2.5.0'
+    compile 'com.github.PhilJay:MPAndroidChart-Realm:v1.1.0@aar'
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.0-beta1'
     compile 'com.squareup.okhttp3:logging-interceptor:3.0.1'
     testCompile 'junit:junit:4.12'
     compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
