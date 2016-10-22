@@ -16,6 +16,7 @@ import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.fragments.AnalysedPictureFragment;
 import com.oddsix.nutripro.fragments.DayResumeFragment;
 import com.oddsix.nutripro.fragments.ProfileFragment;
+import com.oddsix.nutripro.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;

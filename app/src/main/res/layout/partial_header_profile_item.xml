@@ -23,16 +23,20 @@
         android:paddingRight="@dimen/list_internal_horizontal_margin">
 
         <TextView
+            android:id="@+id/profile_item_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sexo"
+            android:lines="1"
+            android:ellipsize="end"
             android:textSize="@dimen/text_small_body"
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/profile_item_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sexo"
+            android:lines="1"
+            android:ellipsize="end"
             android:textSize="@dimen/text_small_body" />
     </LinearLayout>
 </LinearLayout>

@@ -10,4 +10,10 @@ public class Constants {
 
     //REQUEST CODES
     public final static int REQ_REGISTER = 0;
+
+    //EXTRA
+    public final static String EXTRA_REGISTER_MODEL = "EXTRA_REGISTER_MODEL";
+
+    //PREF
+    public final static String PREF_MAIL = PACKAGE_NAME + ".PREF_MAIL";
 }

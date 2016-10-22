@@ -1,6 +1,7 @@
 package com.oddsix.nutripro.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.view.View;
@@ -46,6 +47,9 @@ public class LoginActivity extends BaseActivity {
         RealmResults<RegisterModel> registers = Realm.getDefaultInstance().where(RegisterModel.class)
                 .equalTo("mail", mLoginTil.getEditText().getText().toString())
                 .findAll();
+
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.PACKAGE_NAME, MODE_PRIVATE);
+        sharedPreferences.edit().putString(Constants.PREF_MAIL, mLoginTil.getEditText().getText().toString()).apply();
 
         if (registers.isEmpty()) {
             showToast(getString(R.string.login_error_user_not_found));
