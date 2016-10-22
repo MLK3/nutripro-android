@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingRight="@dimen/horizontal_margin"
+        android:paddingLeft="@dimen/horizontal_margin"
+        android:layout_marginBottom="@dimen/small_spacing_between_items"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_user_profile"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingRight="@dimen/small_spacing_between_items"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nome da Pessoa"
+                android:lines="1"
+                android:ellipsize="end"
+                android:textSize="@dimen/text_body"
+                android:textColor="@color/color_black"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="1"
+                android:ellipsize="end"
+                android:text="Nome da Pessoa"
+                android:textSize="@dimen/text_body"
+                android:textColor="@color/color_black"
+                />
+
+        </LinearLayout>
+
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/register_send_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorPrimary"
+            android:text="Editar"
+            android:textColor="@color/color_white" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingRight="@dimen/horizontal_margin"
+        android:paddingLeft="@dimen/horizontal_margin"
+        android:orientation="horizontal"
+        >
+        <include layout="@layout/partial_header_profile_item"/>
+        <include layout="@layout/partial_header_profile_item"/>
+        <include layout="@layout/partial_header_profile_item"/>
+        <include layout="@layout/partial_header_profile_item"/>
+    </LinearLayout>
+
+    <View
+        android:layout_marginTop="@dimen/small_spacing_between_items"
+        android:layout_marginBottom="@dimen/small_spacing_between_items"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorAccent"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingRight="@dimen/horizontal_margin"
+        android:paddingLeft="@dimen/horizontal_margin"
+        android:layout_marginBottom="@dimen/spacing_between_items"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:text="Minha dieta:"
+            android:lines="1"
+            android:ellipsize="end"
+            android:gravity="bottom"
+            android:textSize="@dimen/text_body"
+            android:textColor="@color/color_black"
+            android:textStyle="bold"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/register_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorPrimary"
+            android:text="Editar"
+            android:textColor="@color/color_white" />
+    </LinearLayout>
+
+
+</LinearLayout>

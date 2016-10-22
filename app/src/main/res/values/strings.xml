@@ -44,4 +44,10 @@
     <string name="register_error_empty_field">O campo não pode estar vazio.</string>
     <string name="register_error_password_length">A senha deve possuir no mínimo 6 caracteres.</string>
     <string name="register_error_not_matching">Senha e confirmação de senha não conferem.</string>
+    <string name="register_error_gender_not_selected">É necessárioe escolher um sexo.</string>
+
+    <!--SUGGESTED DIET-->
+    <string name="suggested_diet_header_info">Dieta diária sugerida:</string>
+    <string name="suggested_diet_btn_edit">Editar</string>
+    <string name="suggested_diet_btn_conclude">Concluir</string>
 </resources>

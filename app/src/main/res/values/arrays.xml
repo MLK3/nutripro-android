@@ -14,7 +14,7 @@
     
     <string-array name="tab_titles">
         <item>@string/tab_title_day_resume</item>
-        <item>@string/tab_title_profile</item>
         <item>@string/tab_title_analysed_picture</item>
+        <item>@string/tab_title_profile</item>
     </string-array>
 </resources>

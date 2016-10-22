@@ -1,5 +1,6 @@
 package com.oddsix.nutripro.activities;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -113,8 +114,13 @@ public class RegisterActivity extends BaseActivity {
                     Float.valueOf(mWeightTil.getEditText().getText().toString())));
             mRealm.commitTransaction();
             dismissProgressDialog();
-            finish();
+            startSuggestedDietActivity();
         }
+    }
+
+    private void startSuggestedDietActivity(){
+        Intent intent = new Intent(this, SuggestedDietActivity.class);
+        startActivity(intent);
     }
 
     private void validateFields() {
@@ -146,7 +152,7 @@ public class RegisterActivity extends BaseActivity {
         }
 
         if (mGenderSp.getSelectedItemPosition() == 0) {
-            showToast("É necessário escolher um sexo.");
+            showToast(getString(R.string.register_error_gender_not_selected));
         }
     }
 
@@ -158,7 +164,7 @@ public class RegisterActivity extends BaseActivity {
             }
         }
 
-        if (mGenderSp.getSelectedItemPosition() == 0) {
+        if (mGenderSp.getSelectedItemPosition() == SPINNER_HINT_POSITION) {
             hasInvalidField = true;
         }
 

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_gray"
+        android:layout_marginBottom="@dimen/small_spacing_between_items"
+        android:layout_marginLeft="@dimen/horizontal_margin"
+        android:layout_marginRight="@dimen/horizontal_margin"
+        android:layout_marginTop="@dimen/small_spacing_between_items"
+        android:paddingBottom="@dimen/list_internal_vertical_margin"
+        android:paddingTop="@dimen/list_internal_vertical_margin"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:id="@+id/item_diet_name"
+            android:layout_width="0dp"
+            android:lines="1"
+            android:ellipsize="end"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_black"
+            android:textSize="@dimen/text_large_body"
+            android:paddingLeft="@dimen/list_internal_horizontal_margin"
+            android:paddingRight="@dimen/list_internal_horizontal_margin"
+            android:text="Item da Dieta"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/item_diet_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_large_body"
+            android:textStyle="bold"
+            android:text="de {min} à {max} {unit}"
+            android:paddingLeft="@dimen/list_internal_horizontal_margin"
+            android:paddingRight="@dimen/list_internal_horizontal_margin"
+            android:textColor="@color/colorPrimary"
+            />
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

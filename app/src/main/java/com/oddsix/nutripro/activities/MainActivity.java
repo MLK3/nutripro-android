@@ -1,5 +1,7 @@
 package com.oddsix.nutripro.activities;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,14 +25,14 @@ import java.util.List;
  */
 
 public class MainActivity extends BaseActivity {
-    private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
-    private TabLayout mTabLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        setToolbar(false);
 
         setViewPager();
 
@@ -38,34 +40,31 @@ public class MainActivity extends BaseActivity {
     }
 
     private void setViewPager() {
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        final String[] tabTitles = getResources().getStringArray(R.array.tab_titles);
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
-        mSectionsPagerAdapter.addFragment(new DayResumeFragment());
-        mSectionsPagerAdapter.addFragment(new AnalysedPictureFragment());
-        mSectionsPagerAdapter.addFragment(new ProfileFragment());
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        sectionsPagerAdapter.addFragment(new DayResumeFragment());
+        sectionsPagerAdapter.addFragment(new AnalysedPictureFragment());
+        sectionsPagerAdapter.addFragment(new ProfileFragment());
+        mViewPager.setAdapter(sectionsPagerAdapter);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
             @Override
             public void onPageSelected(int position) {
-
+                setTitle(tabTitles[position]);
             }
 
             @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
+            public void onPageScrollStateChanged(int state) {}
         });
     }
 
     private void setTabLayout() {
-        mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        mTabLayout.setupWithViewPager(mViewPager);
-        setupTabIcons(mTabLayout);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        tabLayout.setupWithViewPager(mViewPager);
+        setupTabIcons(tabLayout);
     }
 
     private void setupTabIcons(TabLayout tabLayout) {
