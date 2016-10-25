@@ -20,6 +20,10 @@
         <activity android:name=".activities.MainActivity"/>
         <activity android:name=".activities.SuggestedDietActivity"/>
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="19e8f6ff1c6c2c8598a26e995a3947ab967db397" />
     </application>
 
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

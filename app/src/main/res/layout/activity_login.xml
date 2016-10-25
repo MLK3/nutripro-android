@@ -17,9 +17,9 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x_large_spacing_between_items"
             android:layout_marginBottom="@dimen/x_large_spacing_between_items"
             android:src="@drawable/ic_logo_nutripro" />
-
 
 
         <android.support.design.widget.TextInputLayout
