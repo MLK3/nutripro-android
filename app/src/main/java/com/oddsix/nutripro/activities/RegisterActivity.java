@@ -110,7 +110,7 @@ public class RegisterActivity extends BaseActivity {
             showProgressdialog();
             mRealm.beginTransaction();
             mRealm.copyToRealmOrUpdate(new RegisterModel(mMailTil.getEditText().getText().toString(), mPassTil.getEditText().getText().toString(), mNameTil.getEditText().getText().toString(),
-                    Integer.valueOf(mAgeTil.getEditText().getText().toString()), mGenderArray[mGenderSp.getSelectedItemPosition()], Integer.valueOf(mHeightTil.getEditText().getText().toString()),
+                    Integer.valueOf(mAgeTil.getEditText().getText().toString()), mGenderArray[mGenderSp.getSelectedItemPosition()], Float.valueOf(mHeightTil.getEditText().getText().toString()),
                     Float.valueOf(mWeightTil.getEditText().getText().toString())));
             mRealm.commitTransaction();
             dismissProgressDialog();

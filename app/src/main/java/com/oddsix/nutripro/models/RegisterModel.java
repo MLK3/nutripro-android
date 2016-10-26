@@ -16,10 +16,10 @@ public class RegisterModel extends RealmObject {
     private String name;
     private int age;
     private String gender;
-    private int height;
+    private float height;
     private float weight;
 
-    public RegisterModel(String mail, String password, String name, int age, String gender, int height, float weight) {
+    public RegisterModel(String mail, String password, String name, int age, String gender, float height, float weight) {
         this.mail = mail;
         this.password = password;
         this.name = name;
@@ -52,7 +52,7 @@ public class RegisterModel extends RealmObject {
         return gender;
     }
 
-    public int getHeight() {
+    public float getHeight() {
         return height;
     }
 

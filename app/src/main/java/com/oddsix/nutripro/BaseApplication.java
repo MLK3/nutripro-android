@@ -3,6 +3,7 @@ package com.oddsix.nutripro;
 import android.app.Application;
 
 import com.crashlytics.android.Crashlytics;
+import com.oddsix.nutripro.models.RegisterModel;
 import com.oddsix.nutripro.utils.Constants;
 
 import io.fabric.sdk.android.Fabric;
@@ -24,7 +25,9 @@ public class BaseApplication extends Application {
                 .initialData(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        
+                        RegisterModel model = new RegisterModel("nutripro@nutripro.com.br",
+                                "123456",
+                                "Nutripro", 12, "Masculino", 20, 90);
                     }
                 })
                 .deleteRealmIfMigrationNeeded().build();
