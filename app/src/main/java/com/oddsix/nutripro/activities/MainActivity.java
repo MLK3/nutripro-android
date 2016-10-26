@@ -16,6 +16,7 @@ import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.fragments.AnalysedPictureFragment;
 import com.oddsix.nutripro.fragments.DayResumeFragment;
 import com.oddsix.nutripro.fragments.ProfileFragment;
+import com.oddsix.nutripro.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,7 @@ import java.util.List;
 
 public class MainActivity extends BaseActivity {
     private ViewPager mViewPager;
+    private String[] mTabTitles;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,7 +42,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void setViewPager() {
-        final String[] tabTitles = getResources().getStringArray(R.array.tab_titles);
+        mTabTitles = getResources().getStringArray(R.array.tab_titles);
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
         sectionsPagerAdapter.addFragment(new DayResumeFragment());
@@ -53,7 +55,7 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
-                setTitle(tabTitles[position]);
+                setTitle(mTabTitles[position]);
             }
 
             @Override
@@ -64,6 +66,7 @@ public class MainActivity extends BaseActivity {
     private void setTabLayout() {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(mViewPager);
+        setTitle(mTabTitles[tabLayout.getSelectedTabPosition()]);
         setupTabIcons(tabLayout);
     }
 

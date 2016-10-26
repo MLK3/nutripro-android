@@ -50,4 +50,11 @@
     <string name="suggested_diet_header_info">Dieta diária sugerida:</string>
     <string name="suggested_diet_btn_edit">Editar</string>
     <string name="suggested_diet_btn_conclude">Concluir</string>
+
+    <!--PROFILE-->
+    <string name="profile_item_gender">Sexo</string>
+    <string name="profile_item_height">Altura</string>
+    <string name="profile_item_weight">Peso</string>
+    <string name="profile_item_age">Idade</string>
+
 </resources>
