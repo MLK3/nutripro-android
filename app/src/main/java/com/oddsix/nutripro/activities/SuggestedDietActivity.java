@@ -40,7 +40,6 @@ public class SuggestedDietActivity extends BaseActivity {
     private View setHeader() {
         View headerView = getLayoutInflater().inflate(R.layout.header_suggested_diet, null);
         return headerView;
-
     }
 
     private View setFooter() {

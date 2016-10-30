@@ -49,6 +49,10 @@ public class BaseActivity extends AppCompatActivity {
         Toast.makeText(this, string, Toast.LENGTH_LONG).show();
     }
 
+    public void functionNotImplemented(){
+        showToast("função não implementada");
+    }
+
     //ACTION BAR METHODS
 
     public void setToolbar(boolean displayHomeAsUpEnabled, String title) {

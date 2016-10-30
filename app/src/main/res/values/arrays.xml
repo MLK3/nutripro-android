@@ -17,4 +17,16 @@
         <item>@string/tab_title_analysed_picture</item>
         <item>@string/tab_title_profile</item>
     </string-array>
+
+
+    <string-array name="update_image_options">
+        <item>Tirar nova foto</item>
+        <item>Escolher do álbum</item>
+        <item>Remover imagem</item>
+    </string-array>
+
+    <string-array name="upload_image_options">
+        <item>Tirar nova foto</item>
+        <item>Escolher do álbum</item>
+    </string-array>
 </resources>

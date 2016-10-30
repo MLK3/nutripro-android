@@ -68,4 +68,12 @@ public class BaseDialogHelper {
         builder.show();
     }
 
+    public void showListDialog(String title, CharSequence[] options, DialogInterface.OnClickListener listener, DialogInterface.OnCancelListener cancelListener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setOnCancelListener(cancelListener);
+        builder.setTitle(title).setItems(options, listener);
+        builder.show();
+    }
+
+
 }

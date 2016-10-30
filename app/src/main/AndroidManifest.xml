@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.oddsix.nutripro">
+          package="com.oddsix.nutripro">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
         android:name=".BaseApplication"
@@ -11,9 +16,9 @@
         android:theme="@style/AppTheme">
         <activity android:name=".activities.LoginActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity android:name=".activities.RegisterActivity"/>
@@ -22,8 +27,7 @@
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="19e8f6ff1c6c2c8598a26e995a3947ab967db397" />
+            android:value="19e8f6ff1c6c2c8598a26e995a3947ab967db397"/>
     </application>
 
-    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

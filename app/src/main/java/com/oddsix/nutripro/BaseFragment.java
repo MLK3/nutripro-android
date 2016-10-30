@@ -23,4 +23,8 @@ public class BaseFragment extends Fragment {
             mDialogHelper.dismissProgressDialog();
         }
     }
+
+    public void functionNotImplemented(){
+        ((BaseActivity) getActivity()).functionNotImplemented();
+    }
 }

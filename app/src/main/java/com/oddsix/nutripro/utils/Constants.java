@@ -8,6 +8,9 @@ public class Constants {
     public static final String PACKAGE_NAME = "com.oddsix.nutripro";
     public static final String BASE_DB_PATH = PACKAGE_NAME + ".DB";
 
+    //PICTURE TO UPLOAD MAX SIZE
+    public static final int PIC_UPLOAD_MAX_SIZE = 500;
+
     //DATE FORMATS
     public static final String STANDARD_DATE_FORMAT = "dd/MM/yyyy";
 

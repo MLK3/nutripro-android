@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="horizontal"
+              android:paddingBottom="@dimen/vertical_margin"
+              android:paddingLeft="@dimen/horizontal_margin"
+              android:paddingRight="@dimen/horizontal_margin"
+              android:paddingTop="@dimen/small_spacing_between_items">
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/footer_analysed_photo_conclude"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/horizontal_margin"
+        app:backgroundTint="@color/colorPrimary"
+        android:text="@string/suggested_diet_btn_conclude"
+        android:textColor="@color/color_white"/>
+
+</LinearLayout>
