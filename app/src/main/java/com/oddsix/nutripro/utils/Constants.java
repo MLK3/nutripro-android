@@ -8,6 +8,9 @@ public class Constants {
     public static final String PACKAGE_NAME = "com.oddsix.nutripro";
     public static final String BASE_DB_PATH = PACKAGE_NAME + ".DB";
 
+    //DATE FORMATS
+    public static final String STANDARD_DATE_FORMAT = "dd/MM/yyyy";
+
     //REQUEST CODES
     public final static int REQ_REGISTER = 0;
 

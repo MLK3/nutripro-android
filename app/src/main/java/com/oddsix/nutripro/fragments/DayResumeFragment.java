@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.oddsix.nutripro.BaseFragment;
 import com.oddsix.nutripro.R;
+import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.DateHelper;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
@@ -47,7 +48,7 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
 
     private void setDateLabel(Calendar cal) {
         try {
-            mDayTv.setText(DateHelper.parseDate("dd/MM/yyyy", cal.getTime()));
+            mDayTv.setText(DateHelper.parseDate(Constants.STANDARD_DATE_FORMAT, cal.getTime()));
         } catch (ParseException e) {
             e.printStackTrace();
         }
