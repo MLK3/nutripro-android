@@ -60,7 +60,7 @@
     
     <!--SETTINGS-->
     <string name="settings_mail">contato@nutripro.com.br</string>
-    <string name="settings_version">version %s</string>
+    <string name="settings_version">versão %s</string>
     <string name="settings_title">Configurações</string>
     <string name="settings_btn_logout">Sair dessa conta</string>
         <!--LOGOUT DIALOG-->
