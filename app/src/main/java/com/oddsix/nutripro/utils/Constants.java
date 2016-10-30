@@ -6,6 +6,8 @@ package com.oddsix.nutripro.utils;
 
 public class Constants {
     public static final String PACKAGE_NAME = "com.oddsix.nutripro";
+    public static final String SHARED_PREF_NAME = PACKAGE_NAME;
+
     public static final String BASE_DB_PATH = PACKAGE_NAME + ".DB";
 
     //PICTURE TO UPLOAD MAX SIZE
@@ -22,4 +24,5 @@ public class Constants {
 
     //PREF
     public final static String PREF_MAIL = PACKAGE_NAME + ".PREF_MAIL";
+    public final static String PREF_IS_LOGGED = PACKAGE_NAME + ".PREF_IS_LOGGED";
 }

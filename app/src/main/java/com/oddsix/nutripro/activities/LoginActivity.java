@@ -48,13 +48,14 @@ public class LoginActivity extends BaseActivity {
                 .equalTo("mail", mLoginTil.getEditText().getText().toString())
                 .findAll();
 
-        SharedPreferences sharedPreferences = getSharedPreferences(Constants.PACKAGE_NAME, MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE);
         sharedPreferences.edit().putString(Constants.PREF_MAIL, mLoginTil.getEditText().getText().toString()).apply();
 
         if (registers.isEmpty()) {
             showToast(getString(R.string.login_error_user_not_found));
         } else {
             if (mPassTil.getEditText().getText().toString().equals(registers.get(0).getPassword())) {
+                sharedPreferences.edit().putBoolean(Constants.PREF_IS_LOGGED, true);
                 Intent intent = new Intent(view.getContext(), MainActivity.class);
                 startActivity(intent);
                 finish();
