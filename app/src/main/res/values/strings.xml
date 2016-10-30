@@ -57,5 +57,15 @@
     <string name="profile_item_height">Altura</string>
     <string name="profile_item_weight">Peso</string>
     <string name="profile_item_age">Idade</string>
+    
+    <!--SETTINGS-->
+    <string name="settings_mail">contato@nutripro.com.br</string>
+    <string name="settings_version">version %s</string>
+    <string name="settings_title">Configurações</string>
+    <string name="settings_btn_logout">Sair dessa conta</string>
+        <!--LOGOUT DIALOG-->
+    <string name="settings_logout_dialog_title">Tem certeza que deseja sair?</string>
+    <string name="settings_logout_dialog_positive">Sair</string>
+    <string name="settings_logout_dialog_negative">Não</string>
 
 </resources>
