@@ -1,6 +1,7 @@
 package com.oddsix.nutripro.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import com.oddsix.nutripro.BaseActivity;
 import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.models.RegisterModel;
+import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.validations.HasMinLength;
 import com.oddsix.nutripro.utils.validations.IsEmail;
 import com.oddsix.nutripro.utils.validations.IsNotEmpty;
@@ -110,9 +112,12 @@ public class RegisterActivity extends BaseActivity {
             showProgressdialog();
             mRealm.beginTransaction();
             mRealm.copyToRealmOrUpdate(new RegisterModel(mMailTil.getEditText().getText().toString(), mPassTil.getEditText().getText().toString(), mNameTil.getEditText().getText().toString(),
-                    Integer.valueOf(mAgeTil.getEditText().getText().toString()), mGenderArray[mGenderSp.getSelectedItemPosition()], Float.valueOf(mHeightTil.getEditText().getText().toString()),
-                    Float.valueOf(mWeightTil.getEditText().getText().toString())));
+                    Integer.valueOf(mAgeTil.getEditText().getText().toString()), mGenderArray[mGenderSp.getSelectedItemPosition()], Float.valueOf(mHeightTil.getEditText().getText().toString().replaceAll(",", ".")),
+                    Float.valueOf(mWeightTil.getEditText().getText().toString().replaceAll(",", "."))));
             mRealm.commitTransaction();
+            SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE);
+            sharedPreferences.edit().putString(Constants.PREF_MAIL, mMailTil.getEditText().getText().toString()).apply();
+            sharedPreferences.edit().putBoolean(Constants.PREF_IS_LOGGED, true).apply();
             dismissProgressDialog();
             startSuggestedDietActivity();
         }
@@ -121,6 +126,7 @@ public class RegisterActivity extends BaseActivity {
     private void startSuggestedDietActivity(){
         Intent intent = new Intent(this, SuggestedDietActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void validateFields() {
@@ -153,6 +159,18 @@ public class RegisterActivity extends BaseActivity {
 
         if (mGenderSp.getSelectedItemPosition() == 0) {
             showToast(getString(R.string.register_error_gender_not_selected));
+        }
+
+        try {
+            Float.valueOf(mWeightTil.getEditText().getText().toString().replaceAll(",", "."));
+        } catch (NumberFormatException e) {
+            mWeightTil.setError(getString(R.string.register_error_invalid_weight));
+        }
+
+        try {
+            Float.valueOf(mHeightTil.getEditText().getText().toString().replaceAll(",", "."));
+        } catch (NumberFormatException e) {
+            mHeightTil.setError(getString(R.string.register_error_invalid_height));
         }
     }
 

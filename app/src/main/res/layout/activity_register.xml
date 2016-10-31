@@ -133,7 +133,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/register_hint_weight_in_kg"
-                    android:inputType="numberDecimal" />
+                    android:inputType="number"
+                    android:digits="1234567890,."
+                    android:imeOptions="actionNext"
+                    />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -147,7 +150,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/register_hint_height_in_meters"
-                    android:inputType="numberDecimal" />
+                    android:inputType="number"
+                    android:digits="1234567890,."
+                    />
 
             </android.support.design.widget.TextInputLayout>
 

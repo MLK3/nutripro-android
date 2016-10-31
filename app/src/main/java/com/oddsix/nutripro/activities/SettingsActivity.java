@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.oddsix.nutripro.BaseActivity;
 import com.oddsix.nutripro.BuildConfig;
 import com.oddsix.nutripro.R;
+import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.helpers.DialogHelper;
 
 /**
@@ -47,6 +48,7 @@ public class SettingsActivity extends BaseActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 startLoginActivity();
+                                getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE).edit().clear().apply();
                             }
                         });
             }
