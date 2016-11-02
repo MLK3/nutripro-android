@@ -7,10 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.oddsix.nutripro.BaseFragment;
 import com.oddsix.nutripro.R;
+import com.oddsix.nutripro.adapters.DayResumeAdapter;
+import com.oddsix.nutripro.adapters.DietAdapter;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.DateHelper;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -24,6 +27,8 @@ import java.util.Calendar;
 
 public class DayResumeFragment extends BaseFragment implements DatePickerDialog.OnDateSetListener {
     private TextView mDayTv;
+    private DayResumeAdapter mAdapter;
+    private View mHeaderView;
 
     @Nullable
     @Override
@@ -32,7 +37,31 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
 
         setDayLabel(view);
 
+        setListView(view);
+
         return view;
+    }
+
+    private void setListView(View view) {
+        ListView list = (ListView) view.findViewById(R.id.day_resume_lv);
+        mAdapter = new DayResumeAdapter(getActivity());
+        list.setAdapter(mAdapter);
+        list.addHeaderView(getHeader());
+        list.setHeaderDividersEnabled(false);
+        mHeaderView.setClickable(false);
+    }
+
+
+    private View getHeader() {
+        mHeaderView = getActivity().getLayoutInflater().inflate(R.layout.header_day_resume, null);
+
+        setHeader(mHeaderView);
+
+        return mHeaderView;
+    }
+
+    private void setHeader(View headerView) {
+
     }
 
     private void setDayLabel(View view) {
