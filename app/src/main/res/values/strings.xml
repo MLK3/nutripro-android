@@ -30,6 +30,8 @@
 
     <!--REGISTER-->
     <string name="register_info">Cadastro de Informações</string>
+    <string name="register_btn_send">Enviar</string>
+    <!--HINT-->
     <string name="register_hint_mail">E-mail</string>
     <string name="register_hint_password">Senha</string>
     <string name="register_hint_password_confirmation">Confirmação de Senha</string>
@@ -38,9 +40,10 @@
     <string name="register_hint_age">Idade</string>
     <string name="register_hint_weight_in_kg">Peso em kg</string>
     <string name="register_hint_height_in_meters">Altura em metros</string>
-    <string name="register_btn_send">Enviar</string>
+        <!--GENDER OPTIONS-->
     <string name="register_gender_option_male">Masculino</string>
     <string name="register_gender_option_female">Feminino</string>
+        <!--ERRORS-->
     <string name="register_error_invalid_mail">E-mail inválido.</string>
     <string name="register_error_empty_field">O campo não pode estar vazio.</string>
     <string name="register_error_password_length">A senha deve possuir no mínimo 6 caracteres.</string>
@@ -69,6 +72,10 @@
     <string name="settings_logout_dialog_title">Tem certeza que deseja sair?</string>
     <string name="settings_logout_dialog_positive">Sair</string>
     <string name="settings_logout_dialog_negative">Não</string>
+
+    <!--EDIT REGISTER-->
+    <string name="edit_register_title">Editar Cadastro</string>
+    <string name="edit_register_btn_save">Salvar</string>
     
     <!--DIET ITEM-->
     <string name="diet_item_range_label">de %1$d à %2$d %3$s</string> //de {min} à {max} {unit}

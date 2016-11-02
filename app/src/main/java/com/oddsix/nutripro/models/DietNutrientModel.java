@@ -1,21 +1,23 @@
 package com.oddsix.nutripro.models;
 
+import java.io.Serializable;
+
 import io.realm.RealmObject;
 
 /**
  * Created by Filippe on 22/10/16.
  */
 
-public class NutrientModel extends RealmObject {
+public class DietNutrientModel extends RealmObject implements Serializable {
     private int max;
     private int min;
     private String name;
     private String unit;
 
-    public NutrientModel() {
+    public DietNutrientModel() {
     }
 
-    public NutrientModel(String name, int min, int max, String unit) {
+    public DietNutrientModel(String name, int min, int max, String unit) {
         this.max = max;
         this.min = min;
         this.name = name;

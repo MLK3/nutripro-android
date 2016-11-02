@@ -4,7 +4,7 @@ import android.app.Application;
 
 import com.crashlytics.android.Crashlytics;
 import com.oddsix.nutripro.models.DietModel;
-import com.oddsix.nutripro.models.NutrientModel;
+import com.oddsix.nutripro.models.DietNutrientModel;
 import com.oddsix.nutripro.models.RegisterModel;
 import com.oddsix.nutripro.utils.Constants;
 
@@ -33,14 +33,14 @@ public class BaseApplication extends Application {
                                 "Nutripro", 12, "Masculino", 20, 90);
                         realm.copyToRealmOrUpdate(model);
 
-                        RealmList<NutrientModel> nutrients = new RealmList<NutrientModel>();
-                        nutrients.add(new NutrientModel("Valor energético", 2000, 2500, "kcal"));
-                        nutrients.add(new NutrientModel("Carboidratos", 300, 400, "g"));
-                        nutrients.add(new NutrientModel("Proteínas", 75, 90, "g"));
-                        nutrients.add(new NutrientModel("Gorduras Totais", 55, 80,  "g"));
-                        nutrients.add(new NutrientModel("Gorduras Saturadas", 22, 30, "g"));
-                        nutrients.add(new NutrientModel("Fibra Alimentar", 25, 40, "g"));
-                        nutrients.add(new NutrientModel("Sódio", 2300, 2800, "mg"));
+                        RealmList<DietNutrientModel> nutrients = new RealmList<DietNutrientModel>();
+                        nutrients.add(new DietNutrientModel("Valor energético", 2000, 2500, "kcal"));
+                        nutrients.add(new DietNutrientModel("Carboidratos", 300, 400, "g"));
+                        nutrients.add(new DietNutrientModel("Proteínas", 75, 90, "g"));
+                        nutrients.add(new DietNutrientModel("Gorduras Totais", 55, 80,  "g"));
+                        nutrients.add(new DietNutrientModel("Gorduras Saturadas", 22, 30, "g"));
+                        nutrients.add(new DietNutrientModel("Fibra Alimentar", 25, 40, "g"));
+                        nutrients.add(new DietNutrientModel("Sódio", 2300, 2800, "mg"));
                         DietModel dietModel = new DietModel(nutrients, "Dieta Nutripro");
                         model.setDietModel(dietModel);
                         realm.copyToRealmOrUpdate(model);
