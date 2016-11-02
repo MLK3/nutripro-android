@@ -1,4 +1,4 @@
-package com.oddsix.nutripro.activities;
+package com.oddsix.nutripro;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -47,6 +47,10 @@ public class BaseActivity extends AppCompatActivity {
 
     public void showToast(String string) {
         Toast.makeText(this, string, Toast.LENGTH_LONG).show();
+    }
+
+    public void functionNotImplemented(){
+        showToast("função não implementada");
     }
 
     //ACTION BAR METHODS

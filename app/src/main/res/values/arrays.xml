@@ -1,5 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="gender_options">
+    <string-array name="info_gender_options">
+        <item>@string/register_hint_gender</item>
+        <item>@string/register_gender_option_female</item>
+        <item>@string/register_gender_option_male</item>
+    </string-array>
+
+    <array name="tab_icons">
+        <item>@drawable/ic_tab_history</item>
+        <item>@drawable/ic_tab_plate</item>
+        <item>@drawable/ic_tab_profile</item>
+    </array>
+    
+    <string-array name="tab_titles">
+        <item>@string/tab_title_day_resume</item>
+        <item>@string/tab_title_analysed_picture</item>
+        <item>@string/tab_title_profile</item>
+    </string-array>
+
+
+    <string-array name="update_image_options">
+        <item>Tirar nova foto</item>
+        <item>Escolher do álbum</item>
+        <item>Remover imagem</item>
+    </string-array>
+
+    <string-array name="upload_image_options">
+        <item>Tirar nova foto</item>
+        <item>Escolher do álbum</item>
     </string-array>
 </resources>

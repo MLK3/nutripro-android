@@ -62,10 +62,30 @@ public class BaseDialogHelper {
         builder.show();
     }
 
+    public void showAlertDialog(String msg, String positiveText, String negativeText, DialogInterface.OnClickListener postiveButtonListener) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext).setMessage(msg).setPositiveButton(positiveText, postiveButtonListener)
+                .setNegativeButton(negativeText, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
     public void showListDialog(String title, CharSequence[] options, DialogInterface.OnClickListener listener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setTitle(title).setItems(options, listener);
         builder.show();
     }
+
+    public void showListDialog(String title, CharSequence[] options, DialogInterface.OnClickListener listener, DialogInterface.OnCancelListener cancelListener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setOnCancelListener(cancelListener);
+        builder.setTitle(title).setItems(options, listener);
+        builder.show();
+    }
+
 
 }

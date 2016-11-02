@@ -1,24 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.oddsix.nutripro">
+          package="com.oddsix.nutripro">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
+        android:name=".BaseApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activities.LoginActivity"/>
+        <activity android:name=".activities.RegisterActivity"/>
         <activity android:name=".activities.MainActivity">
-
-        </activity>
-        <activity android:name=".activities.LoginActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activities.Regis"/>
+        <activity android:name=".activities.SuggestedDietActivity"/>
+        <activity android:name=".activities.SettingsActivity"/>
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="19e8f6ff1c6c2c8598a26e995a3947ab967db397"/>
     </application>
 
 </manifest>

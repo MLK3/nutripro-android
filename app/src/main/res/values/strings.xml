@@ -2,6 +2,7 @@
     <string name="app_name">Nutripro</string>
     <!--DIALOG MESSAGES-->
     <string name="progress_dialog_standard_msg">Aguarde um momento.</string>
+    <string name="dialog_title_select_an_option">Selecione uma opção</string>
 
     <!--NETWORK ERRORS-->
     <string name="network_error_timeout">Erro inesperado, por favor tente novamente.</string>
@@ -11,6 +12,11 @@
     <string name="placeholder_empty_label">Não existem resultados.</string>
     <string name="placeholder_error_label">Houve um erro inesperado.</string>
     <string name="placeholder_error_button_label">Tentar novamente</string>
+    
+    <!--TAB TITLES-->
+    <string name="tab_title_day_resume">Resumo do Dia</string>
+    <string name="tab_title_analysed_picture">Foto Analisada</string>
+    <string name="tab_title_profile">Perfil</string>
 
     <!--LOGIN-->
     <string name="login_hint_mail">E-mail</string>
@@ -35,4 +41,34 @@
     <string name="register_btn_send">Enviar</string>
     <string name="register_gender_option_male">Masculino</string>
     <string name="register_gender_option_female">Feminino</string>
+    <string name="register_error_invalid_mail">E-mail inválido.</string>
+    <string name="register_error_empty_field">O campo não pode estar vazio.</string>
+    <string name="register_error_password_length">A senha deve possuir no mínimo 6 caracteres.</string>
+    <string name="register_error_not_matching">Senha e confirmação de senha não conferem.</string>
+    <string name="register_error_gender_not_selected">É necessário escolher um sexo.</string>
+    <string name="register_error_invalid_weight">Peso inválido.</string>
+    <string name="register_error_invalid_height">Altura inválida.</string>
+
+
+    <!--SUGGESTED DIET-->
+    <string name="suggested_diet_header_info">Dieta diária sugerida:</string>
+    <string name="suggested_diet_btn_edit">Editar</string>
+    <string name="suggested_diet_btn_conclude">Concluir</string>
+
+    <!--PROFILE-->
+    <string name="profile_item_gender">Sexo</string>
+    <string name="profile_item_height">Altura</string>
+    <string name="profile_item_weight">Peso</string>
+    <string name="profile_item_age">Idade</string>
+    
+    <!--SETTINGS-->
+    <string name="settings_mail">contato@nutripro.com.br</string>
+    <string name="settings_version">versão %s</string>
+    <string name="settings_title">Configurações</string>
+    <string name="settings_btn_logout">Sair dessa conta</string>
+        <!--LOGOUT DIALOG-->
+    <string name="settings_logout_dialog_title">Tem certeza que deseja sair?</string>
+    <string name="settings_logout_dialog_positive">Sair</string>
+    <string name="settings_logout_dialog_negative">Não</string>
+
 </resources>

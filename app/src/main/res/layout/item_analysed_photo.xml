@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:paddingBottom="@dimen/small_spacing_between_items"
+              android:paddingLeft="@dimen/horizontal_margin"
+              android:paddingRight="@dimen/horizontal_margin"
+              android:paddingTop="@dimen/small_spacing_between_items"
+              android:gravity="center_vertical"
+              android:orientation="horizontal">
+
+    <EditText
+        android:id="@+id/analysed_photo_name_et"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:clickable="false"
+        android:focusable="false"/>
+
+    <ImageView
+        android:id="@+id/analysed_photo_edit_name_ic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="1dp"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:paddingTop="1dp"
+        android:src="@drawable/ic_edit"/>
+
+    <EditText
+        android:id="@+id/analysed_photo_value_et"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        />
+
+    <ImageView
+        android:id="@+id/analysed_photo_edit_value_ic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="1dp"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:paddingTop="1dp"
+        android:src="@drawable/ic_edit"/>
+
+    <ImageView
+        android:id="@+id/analysed_photo_info_ic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="1dp"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:paddingTop="1dp"
+        android:src="@drawable/ic_info"/>
+
+</LinearLayout>
