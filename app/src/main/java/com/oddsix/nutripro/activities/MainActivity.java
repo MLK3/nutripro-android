@@ -2,6 +2,7 @@ package com.oddsix.nutripro.activities;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
@@ -23,11 +24,14 @@ import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.fragments.AnalysedPictureFragment;
 import com.oddsix.nutripro.fragments.DayResumeFragment;
 import com.oddsix.nutripro.fragments.ProfileFragment;
+import com.oddsix.nutripro.models.RegisterModel;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.helpers.UpdatePhotoHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
 
 /**
  * Created by Filippe on 21/10/16.
@@ -39,16 +43,15 @@ public class MainActivity extends BaseActivity {
     private TabLayout mTabLayout;
     private UpdatePhotoHelper mUpdatePhotoHelper;
     private AnalysedPictureFragment mPictureFragment;
+    private Realm mRealm;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE).getBoolean(Constants.PREF_IS_LOGGED, false)) {
-            Intent loginIntent = new Intent(this, LoginActivity.class);
-            startActivity(loginIntent);
-            finish();
-        }
+        mRealm = Realm.getDefaultInstance();
+
+        verifyUserLogin();
 
         setContentView(R.layout.activity_main);
 
@@ -59,6 +62,22 @@ public class MainActivity extends BaseActivity {
         setViewPager();
 
         setTabLayout();
+    }
+
+    private void verifyUserLogin(){
+        RegisterModel register = mRealm.where(RegisterModel.class)
+                .equalTo("mail", getSharedPreferences(Constants.PACKAGE_NAME, Context.MODE_PRIVATE).getString(Constants.PREF_MAIL, ""))
+                .findFirst();
+
+        if (!getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE).getBoolean(Constants.PREF_IS_LOGGED, false) || register == null) {
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            startActivity(loginIntent);
+            finish();
+        } else if (register.getDietModel() == null){
+            Intent suggestedDietActivity = new Intent(this, SuggestedDietActivity.class);
+            startActivity(suggestedDietActivity);
+            finish();
+        }
     }
 
     private UpdatePhotoHelper.OnRequestReady mOnRequestReady = new UpdatePhotoHelper.OnRequestReady() {

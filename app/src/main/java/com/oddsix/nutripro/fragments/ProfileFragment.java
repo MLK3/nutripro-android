@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.oddsix.nutripro.BaseFragment;
 import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.adapters.DietAdapter;
-import com.oddsix.nutripro.models.DietUnitModel;
+import com.oddsix.nutripro.models.NutrientModel;
 import com.oddsix.nutripro.models.RegisterModel;
 import com.oddsix.nutripro.utils.Constants;
 
@@ -26,27 +26,35 @@ import io.realm.RealmResults;
 
 public class ProfileFragment extends BaseFragment {
     private RegisterModel mUserData;
+    private DietAdapter mAdapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_listview, container, false);
 
-        RealmResults<RegisterModel> registers = Realm.getDefaultInstance().where(RegisterModel.class)
+        RegisterModel register = Realm.getDefaultInstance().where(RegisterModel.class)
                 .equalTo("mail", getActivity().getSharedPreferences(Constants.PACKAGE_NAME, Context.MODE_PRIVATE).getString(Constants.PREF_MAIL, ""))
-                .findAll();
-        if (!registers.isEmpty()) mUserData = registers.get(0);
+                .findFirst();
+        if (register != null) mUserData = register;
 
         setListView(view);
+
+        setDiet();
 
         return view;
     }
 
     private void setListView(View view) {
         ListView list = (ListView) view.findViewById(R.id.listview);
-        list.setAdapter(new DietAdapter(getActivity(), new RealmList<DietUnitModel>()));
-
+        mAdapter = new DietAdapter(getActivity());
+        list.setAdapter(mAdapter);
         list.addHeaderView(setHeader());
+    }
+
+    private void setDiet() {
+        RealmList<NutrientModel> diet = mUserData.getDietModel().getDiet();
+        mAdapter.setDiet(diet);
     }
 
     private View setHeader() {

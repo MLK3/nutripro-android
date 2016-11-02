@@ -1,7 +1,5 @@
 package com.oddsix.nutripro.models;
 
-import java.util.List;
-
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -14,5 +12,21 @@ public class DietModel extends RealmObject {
     @PrimaryKey
     private String name;
 
-    private RealmList<DietUnitModel> diet;
+    private RealmList<NutrientModel> diet;
+
+    public DietModel(RealmList<NutrientModel> diet, String name) {
+        this.diet = diet;
+        this.name = name;
+    }
+
+    public DietModel() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public RealmList<NutrientModel> getDiet() {
+        return diet;
+    }
 }

@@ -9,10 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.oddsix.nutripro.R;
-import com.oddsix.nutripro.models.DietUnitModel;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.oddsix.nutripro.models.NutrientModel;
 
 import io.realm.RealmList;
 
@@ -21,18 +18,21 @@ import io.realm.RealmList;
  */
 
 public class DietAdapter extends BaseAdapter {
-    private RealmList<DietUnitModel> diet = new RealmList<>();
+    private RealmList<NutrientModel> diet = new RealmList<>();
     private Context mContext;
 
-    public DietAdapter(Context mContext, RealmList<DietUnitModel> diet) {
+    public DietAdapter(Context mContext) {
         this.mContext = mContext;
+    }
+
+    public void setDiet(RealmList<NutrientModel> diet) {
         this.diet = diet;
+        notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return 10;
-//        return diet.size();
+        return diet.size();
     }
 
     @Override
@@ -55,8 +55,8 @@ public class DietAdapter extends BaseAdapter {
             view = inflater.inflate(R.layout.item_diet, viewGroup, false);
 
             viewHolder = new DietViewHolder();
-            viewHolder.name = (TextView) viewGroup.findViewById(R.id.item_diet_name);
-            viewHolder.value = (TextView) viewGroup.findViewById(R.id.item_diet_value);
+            viewHolder.name = (TextView) view.findViewById(R.id.item_diet_name);
+            viewHolder.value = (TextView) view.findViewById(R.id.item_diet_value);
 
             // store the holder with the view.
             view.setTag(viewHolder);
@@ -69,8 +69,9 @@ public class DietAdapter extends BaseAdapter {
 
 
         // get the TextView from the ViewHolder and then set the text (item name) and tag (item ID) values
-//        viewHolder.name.setText(diet.get(i).getName());
-//        viewHolder.value.setText();
+        viewHolder.name.setText(diet.get(i).getName());
+        viewHolder.value.setText(mContext.getString(R.string.diet_item_range_label,
+                diet.get(i).getMin(), diet.get(i).getMax(), diet.get(i).getUnit()));
 
         return view;
 

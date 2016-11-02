@@ -6,18 +6,24 @@ import io.realm.RealmObject;
  * Created by Filippe on 22/10/16.
  */
 
-public class DietUnitModel extends RealmObject {
+public class NutrientModel extends RealmObject {
     private int max;
     private int min;
-    private int name;
+    private String name;
+    private String unit;
 
-    public DietUnitModel() {
+    public NutrientModel() {
     }
 
-    public DietUnitModel(int name, int min, int max) {
+    public NutrientModel(String name, int min, int max, String unit) {
         this.max = max;
         this.min = min;
         this.name = name;
+        this.unit = unit;
+    }
+
+    public String getUnit() {
+        return unit;
     }
 
     public int getMax() {
@@ -28,7 +34,7 @@ public class DietUnitModel extends RealmObject {
         return min;
     }
 
-    public int getName() {
+    public String getName() {
         return name;
     }
 }

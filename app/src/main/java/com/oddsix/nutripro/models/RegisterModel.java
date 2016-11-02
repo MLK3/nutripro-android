@@ -1,7 +1,5 @@
 package com.oddsix.nutripro.models;
 
-import java.io.Serializable;
-
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -20,6 +18,7 @@ public class RegisterModel extends RealmObject {
     private String gender;
     private float height;
     private float weight;
+    private DietModel dietModel;
 
     public RegisterModel(String mail, String password, String name, int age, String gender, float height, float weight) {
         this.mail = mail;
@@ -32,6 +31,14 @@ public class RegisterModel extends RealmObject {
     }
 
     public RegisterModel() {
+    }
+
+    public void setDietModel(DietModel dietModel) {
+        this.dietModel = dietModel;
+    }
+
+    public DietModel getDietModel() {
+        return dietModel;
     }
 
     public String getMail() {

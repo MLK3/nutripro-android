@@ -61,7 +61,7 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH));
         //TODO DISABLE DAYS WITHOUT DATA
-        Calendar[] calendars = {calendar};
+//        Calendar[] calendars = {calendar};
 //        dpd.setDisabledDays(calendars);
         dpd.setAccentColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
         dpd.show(getActivity().getFragmentManager(), "dpd");
