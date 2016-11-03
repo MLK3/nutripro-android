@@ -27,6 +27,10 @@
 
     <ListView
         android:id="@+id/day_resume_lv"
+        android:paddingLeft="@dimen/list_internal_horizontal_margin"
+        android:paddingRight="@dimen/list_internal_horizontal_margin"
+        android:clipToPadding="false"
+        android:scrollbarStyle="outsideOverlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

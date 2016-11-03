@@ -9,21 +9,32 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.oddsix.nutripro.R;
+import com.oddsix.nutripro.models.MealModel;
+
+import java.util.ArrayList;
+
+import io.realm.RealmList;
 
 /**
  * Created by filippecl on 02/11/16.
  */
 
 public class DayResumeAdapter extends BaseAdapter {
-    Context mContext;
+    private Context mContext;
+    private RealmList<MealModel> mMeals = new RealmList<>();
 
     public DayResumeAdapter(Context context) {
         mContext = context;
     }
 
+    public void setMeals(RealmList<MealModel> meals) {
+        mMeals = meals;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
-        return 10;
+        return mMeals.size();
     }
 
     @Override
@@ -38,28 +49,28 @@ public class DayResumeAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        DietAdapter.DietViewHolder viewHolder;
+        DayResumeViewHolder viewHolder;
 
-        if (view == null) {
+//        if (view == null) {
 
             LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
             view = inflater.inflate(R.layout.item_day_resume, viewGroup, false);
 
-            viewHolder = new DietAdapter.DietViewHolder();
+            viewHolder = new DayResumeViewHolder();
             viewHolder.name = (TextView) view.findViewById(R.id.item_day_resume_meal);
 
             // store the holder with the view.
             view.setTag(viewHolder);
 
-        } else {
+//        } else {
             // we've just avoided calling findViewById() on resource everytime
             // just use the viewHolder
-            viewHolder = (DietAdapter.DietViewHolder) viewGroup.getTag();
-        }
+//            viewHolder = (DayResumeViewHolder) viewGroup.getTag();
+//        }
 
 
         // get the TextView from the ViewHolder and then set the text (item name) and tag (item ID) values
-//        viewHolder.name.setText(diet.get(i).getName());
+        viewHolder.name.setText(mMeals.get(i).getName());
 //        viewHolder.value.setText(mContext.getString(R.string.diet_item_range_label,
 //                diet.get(i).getMin(), diet.get(i).getMax(), diet.get(i).getUnit()));
 

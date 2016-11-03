@@ -19,6 +19,14 @@
         android:background="@color/colorPrimary"
         />
 
+    <!--1.5 * max = width-->
+    <!--value = x-->
+
+    <!--x = (value * width) / (1.5 * max)-->
+
+    <!--150 = width    -->
+    <!--100 = x-->
+
     <View
         android:id="@+id/chart_bar"
         android:layout_width="50dp"
@@ -28,7 +36,7 @@
         />
 
     <TextView
-        android:id="@+id/value"
+        android:id="@+id/chart_item_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/color_white"
