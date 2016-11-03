@@ -29,7 +29,7 @@
 
     <View
         android:id="@+id/chart_bar"
-        android:layout_width="50dp"
+        android:layout_width="20dp"
         android:layout_below="@id/chart_item_name"
         android:layout_height="50dp"
         android:background="@color/colorAccent"
@@ -37,11 +37,12 @@
 
     <TextView
         android:id="@+id/chart_item_value"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/color_white"
         android:textSize="@dimen/text_large_body"
-        android:gravity="center_vertical"
+        android:lines="1"
+        android:gravity="center_vertical|left"
         android:text="150kcal"
         android:layout_below="@+id/chart_item_name"
         android:layout_alignBottom="@id/chart_bar"/>

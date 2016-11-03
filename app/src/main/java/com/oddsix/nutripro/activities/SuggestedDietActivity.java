@@ -48,10 +48,9 @@ public class SuggestedDietActivity extends BaseActivity {
     }
 
     private void setSuggestedDiet() {
-        RealmResults<DietModel> dietModels = Realm.getDefaultInstance().where(DietModel.class)
-                .findAll();
-        if (!dietModels.isEmpty()) {
-            mSuggestedDiet = dietModels.get(0);
+        mSuggestedDiet = Realm.getDefaultInstance().where(DietModel.class)
+                .findFirst();
+        if (mSuggestedDiet != null) {
             mAdapter.setDiet(mSuggestedDiet.getDiet());
         }
 

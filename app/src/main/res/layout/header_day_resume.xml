@@ -33,7 +33,7 @@
             android:layout_alignTop="@id/chart_container"
             android:layout_alignBottom="@+id/chart_container"
             android:layout_alignParentLeft="true"
-            android:background="@color/color_black"/>
+            android:background="@color/color_red"/>
 
         <View
             android:layout_width="1dp"
