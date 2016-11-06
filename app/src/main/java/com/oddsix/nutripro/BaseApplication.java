@@ -68,9 +68,9 @@ public class BaseApplication extends Application {
                         mealNutrients.add(new DBMealNutrientModel("Sódio", 100, "mg"));
 
                         RealmList<DBMealFoodModel> mealFoods = new RealmList<DBMealFoodModel>();
-                        mealFoods.add(new DBMealFoodModel(mealNutrients, "Arroz"));
-                        mealFoods.add(new DBMealFoodModel(mealNutrients, "Feijão"));
-                        mealFoods.add(new DBMealFoodModel(mealNutrients, "Carne"));
+                        mealFoods.add(new DBMealFoodModel(mealNutrients, "Arroz", 80));
+                        mealFoods.add(new DBMealFoodModel(mealNutrients, "Feijão", 100));
+                        mealFoods.add(new DBMealFoodModel(mealNutrients, "Carne", 120));
 
                         RealmList<DBMealModel> mealModels = new RealmList<DBMealModel>();
                         mealModels.add(new DBMealModel(mealFoods, "Almoço", "none"));

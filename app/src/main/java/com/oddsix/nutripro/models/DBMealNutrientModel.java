@@ -17,6 +17,7 @@ public class DBMealNutrientModel extends RealmObject {
     public DBMealNutrientModel(String name, int quantity, String unit) {
         this.name = name;
         this.quantity = quantity;
+        this.unit = unit;
     }
 
     public String getName() {

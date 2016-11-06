@@ -25,6 +25,7 @@
         </activity>
         <activity android:name=".activities.SuggestedDietActivity"/>
         <activity android:name=".activities.SettingsActivity"/>
+        <activity android:name=".activities.FoodInfoActivity"/>
 
         <meta-data
             android:name="io.fabric.ApiKey"

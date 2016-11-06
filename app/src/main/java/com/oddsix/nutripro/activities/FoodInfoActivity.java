@@ -30,7 +30,8 @@ public class FoodInfoActivity extends BaseActivity {
 
     private void setListView() {
         ListView listView = (ListView) findViewById(R.id.listview);
-        View headerView = getLayoutInflater().inflate(R.layout.header_food_info, listView);
+        View headerView = getLayoutInflater().inflate(R.layout.header_food_info, null);
+        listView.setDividerHeight(0);
         setHeader(headerView);
         listView.addHeaderView(headerView);
         FoodInfoAdapter adapter = new FoodInfoAdapter(mMealFoodModel.getNutrients(), this);

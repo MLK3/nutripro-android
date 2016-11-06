@@ -12,6 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.oddsix.nutripro.R;
+import com.oddsix.nutripro.models.FoodModel;
+
+import java.util.List;
 
 /**
  * Created by filippecl on 30/10/16.
@@ -20,15 +23,21 @@ import com.oddsix.nutripro.R;
 public class AnalysedImgAdapter extends BaseAdapter {
     private Context mContext;
     private OnNutrientClickListener mOnNutrientClickListener;
+    private List<FoodModel> mFoods;
 
     public AnalysedImgAdapter(Context context, OnNutrientClickListener onNutrientClickListener) {
         mContext = context;
         mOnNutrientClickListener = onNutrientClickListener;
     }
 
+    public void setFoods(List<FoodModel> foods) {
+        mFoods = foods;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
-        return 5;
+        return mFoods.size();
     }
 
     @Override
@@ -45,7 +54,7 @@ public class AnalysedImgAdapter extends BaseAdapter {
     public View getView(final int i, View view, ViewGroup viewGroup) {
         NutrientsViewHolder viewHolder;
 
-        if (view == null) {
+//        if (view == null) {
 
             LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
             view = inflater.inflate(R.layout.item_analysed_photo, viewGroup, false);
@@ -81,15 +90,15 @@ public class AnalysedImgAdapter extends BaseAdapter {
             // store the holder with the view.
             view.setTag(viewHolder);
 
-        } else {
+//        } else {
             // we've just avoided calling findViewById() on resource everytime
             // just use the viewHolder
-            viewHolder = (NutrientsViewHolder) viewGroup.getTag();
-        }
+//            viewHolder = (NutrientsViewHolder) viewGroup.getTag();
+//        }
 
         // get the TextView from the ViewHolder and then set the text (item name) and tag (item ID) values
-//        viewHolder.name.setText(diet.get(i).getName());
-//        viewHolder.value.setText();
+        viewHolder.name.setText(mFoods.get(i).getFoodName());
+        viewHolder.value.setText(String.valueOf(mFoods.get(i).getQuantity()));
 
         return view;
 
