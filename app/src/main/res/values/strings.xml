@@ -83,5 +83,8 @@
     <!--FOOD INFO-->
     <string name="food_info_activity_title">Valores Nutricionais</string>
     <string name="food_info_quantity">%1$d %2$s</string> //{quantity} {unit}
+    <!--MEAL DETEAIL-->
+    <string name="meal_detail_activity_title">Detalhe da Refeição</string>
+    <string name="meal_detail_btn_save">Salvar Edição</string>
 
 </resources>

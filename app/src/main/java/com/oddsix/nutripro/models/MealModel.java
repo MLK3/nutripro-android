@@ -8,17 +8,17 @@ import java.util.List;
  */
 
 public class MealModel implements Serializable {
-    private List<MealModel> foods;
+    private List<FoodModel> foods;
     private String name;
     private String imagePath;
 
-    public MealModel(List<MealModel> foods, String name, String imagePath) {
+    public MealModel(List<FoodModel> foods, String name, String imagePath) {
         this.foods = foods;
         this.name = name;
         this.imagePath = imagePath;
     }
 
-    public List<MealModel> getFoods() {
+    public List<FoodModel> getFoods() {
         return foods;
     }
 
