@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <View
+            android:id="@+id/chart_max_bar"
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@+id/chart_container"
+            android:layout_alignBottom="@+id/chart_container"
+            android:layout_alignParentLeft="true"
+            android:background="@color/color_red"/>
+
+        <LinearLayout
+            android:id="@+id/chart_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@id/chart_container"
+            android:layout_alignBottom="@+id/chart_container"
+            android:layout_alignParentRight="true"
+            android:background="@color/color_gray"/>
+
+
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@id/chart_container"
+            android:layout_alignBottom="@+id/chart_container"
+            android:layout_alignParentLeft="true"
+            android:background="@color/color_gray"/>
+
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="Refeições do dia"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/text_large_title"
+        android:textStyle="bold"/>
+
+</LinearLayout>

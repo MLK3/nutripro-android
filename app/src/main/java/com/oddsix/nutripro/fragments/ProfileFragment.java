@@ -15,8 +15,8 @@ import com.oddsix.nutripro.BaseFragment;
 import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.activities.RegisterActivity;
 import com.oddsix.nutripro.adapters.DietAdapter;
-import com.oddsix.nutripro.models.DietNutrientModel;
-import com.oddsix.nutripro.models.RegisterModel;
+import com.oddsix.nutripro.models.DBDietNutrientModel;
+import com.oddsix.nutripro.models.DBRegisterModel;
 import com.oddsix.nutripro.utils.Constants;
 
 import io.realm.Realm;
@@ -27,7 +27,7 @@ import io.realm.RealmList;
  */
 
 public class ProfileFragment extends BaseFragment {
-    private RegisterModel mUserData;
+    private DBRegisterModel mUserData;
     private DietAdapter mAdapter;
     private View mHeaderView;
 
@@ -46,7 +46,7 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void setUserData() {
-        RegisterModel register = Realm.getDefaultInstance().where(RegisterModel.class)
+        DBRegisterModel register = Realm.getDefaultInstance().where(DBRegisterModel.class)
                 .equalTo("mail", getActivity().getSharedPreferences(Constants.PACKAGE_NAME, Context.MODE_PRIVATE).getString(Constants.PREF_MAIL, ""))
                 .findFirst();
         if (register != null) mUserData = register;
@@ -60,7 +60,7 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void setDiet() {
-        RealmList<DietNutrientModel> diet = mUserData.getDietModel().getDiet();
+        RealmList<DBDietNutrientModel> diet = mUserData.getDietModel().getDiet();
         mAdapter.setDiet(diet);
     }
 

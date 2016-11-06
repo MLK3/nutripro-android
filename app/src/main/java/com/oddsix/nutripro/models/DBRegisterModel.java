@@ -9,7 +9,7 @@ import io.realm.annotations.PrimaryKey;
  * Created by Filippe on 16/10/16.
  */
 
-public class RegisterModel extends RealmObject implements Serializable{
+public class DBRegisterModel extends RealmObject implements Serializable{
     @PrimaryKey
     private String mail;
 
@@ -20,9 +20,9 @@ public class RegisterModel extends RealmObject implements Serializable{
     private String gender;
     private float height;
     private float weight;
-    private DietModel dietModel;
+    private DBDietModel dietModel;
 
-    public RegisterModel(String mail, String password, String name, int age, String gender, float height, float weight) {
+    public DBRegisterModel(String mail, String password, String name, int age, String gender, float height, float weight) {
         this.mail = mail;
         this.password = password;
         this.name = name;
@@ -32,7 +32,7 @@ public class RegisterModel extends RealmObject implements Serializable{
         this.weight = weight;
     }
 
-    public RegisterModel() {
+    public DBRegisterModel() {
     }
 
     public void setName(String name) {
@@ -55,11 +55,11 @@ public class RegisterModel extends RealmObject implements Serializable{
         this.weight = weight;
     }
 
-    public void setDietModel(DietModel dietModel) {
+    public void setDietModel(DBDietModel dietModel) {
         this.dietModel = dietModel;
     }
 
-    public DietModel getDietModel() {
+    public DBDietModel getDietModel() {
         return dietModel;
     }
 

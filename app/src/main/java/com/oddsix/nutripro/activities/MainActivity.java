@@ -1,13 +1,9 @@
 package com.oddsix.nutripro.activities;
 
-import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,7 +20,7 @@ import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.fragments.AnalysedPictureFragment;
 import com.oddsix.nutripro.fragments.DayResumeFragment;
 import com.oddsix.nutripro.fragments.ProfileFragment;
-import com.oddsix.nutripro.models.RegisterModel;
+import com.oddsix.nutripro.models.DBRegisterModel;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.helpers.UpdatePhotoHelper;
 
@@ -65,7 +61,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void verifyUserLogin(){
-        RegisterModel register = mRealm.where(RegisterModel.class)
+        DBRegisterModel register = mRealm.where(DBRegisterModel.class)
                 .equalTo("mail", getSharedPreferences(Constants.PACKAGE_NAME, Context.MODE_PRIVATE).getString(Constants.PREF_MAIL, ""))
                 .findFirst();
 

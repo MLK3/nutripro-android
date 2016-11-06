@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.oddsix.nutripro.BaseActivity;
 import com.oddsix.nutripro.R;
-import com.oddsix.nutripro.models.RegisterModel;
+import com.oddsix.nutripro.models.DBRegisterModel;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.validations.HasMinLength;
 import com.oddsix.nutripro.utils.validations.IsEmail;
@@ -41,7 +41,7 @@ public class RegisterActivity extends BaseActivity {
     private Realm mRealm;
 
     private boolean mIsEditingRegister;
-    private RegisterModel mRegisterModel;
+    private DBRegisterModel mRegisterModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +81,7 @@ public class RegisterActivity extends BaseActivity {
         setGenderSpinner();
         setTextInputLayouts();
         if(mIsEditingRegister) {
-            mRegisterModel = Realm.getDefaultInstance().where(RegisterModel.class)
+            mRegisterModel = Realm.getDefaultInstance().where(DBRegisterModel.class)
                     .equalTo("mail", getSharedPreferences(Constants.PACKAGE_NAME, Context.MODE_PRIVATE).getString(Constants.PREF_MAIL, ""))
                     .findFirst();
             populateViews();
@@ -165,7 +165,7 @@ public class RegisterActivity extends BaseActivity {
             } else {
                 showProgressdialog();
                 mRealm.beginTransaction();
-                mRealm.copyToRealmOrUpdate(new RegisterModel(mMailTil.getEditText().getText().toString(), mPassTil.getEditText().getText().toString(), mNameTil.getEditText().getText().toString(),
+                mRealm.copyToRealmOrUpdate(new DBRegisterModel(mMailTil.getEditText().getText().toString(), mPassTil.getEditText().getText().toString(), mNameTil.getEditText().getText().toString(),
                         Integer.valueOf(mAgeTil.getEditText().getText().toString()), mGenderArray[mGenderSp.getSelectedItemPosition()], Float.valueOf(mHeightTil.getEditText().getText().toString().replaceAll(",", ".")),
                         Float.valueOf(mWeightTil.getEditText().getText().toString().replaceAll(",", "."))));
                 mRealm.commitTransaction();
