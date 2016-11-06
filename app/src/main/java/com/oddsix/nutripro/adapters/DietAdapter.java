@@ -64,7 +64,7 @@ public class DietAdapter extends BaseAdapter {
         } else {
             // we've just avoided calling findViewById() on resource everytime
             // just use the viewHolder
-            viewHolder = (DietViewHolder) viewGroup.getTag();
+            viewHolder = (DietViewHolder) view.getTag();
         }
 
 

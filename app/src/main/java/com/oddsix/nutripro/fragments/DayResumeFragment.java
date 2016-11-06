@@ -165,7 +165,7 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
         barValue.getLayoutParams().width = (int) (((quantity * metrics.widthPixels)) / (1.5 * dietNutrient.getMax()));
 
         ((TextView) bar.findViewById(R.id.chart_item_name)).setText(dietNutrient.getName());
-        ((TextView) bar.findViewById(R.id.chart_item_value)).setText(String.valueOf(quantity));
+        ((TextView) bar.findViewById(R.id.chart_item_value)).setText(getString(R.string.food_info_quantity, quantity, dietNutrient.getUnit()));
     }
 
     private void setDayLabel(View view) {

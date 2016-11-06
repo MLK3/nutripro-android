@@ -49,7 +49,7 @@ public class DayResumeAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         DayResumeViewHolder viewHolder;
 
-//        if (view == null) {
+        if (view == null) {
 
             LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
             view = inflater.inflate(R.layout.item_day_resume, viewGroup, false);
@@ -60,11 +60,11 @@ public class DayResumeAdapter extends BaseAdapter {
             // store the holder with the view.
             view.setTag(viewHolder);
 
-//        } else {
+        } else {
             // we've just avoided calling findViewById() on resource everytime
             // just use the viewHolder
-//            viewHolder = (DayResumeViewHolder) viewGroup.getTag();
-//        }
+            viewHolder = (DayResumeViewHolder) view.getTag();
+        }
 
 
         // get the TextView from the ViewHolder and then set the text (item name) and tag (item ID) values

@@ -54,7 +54,7 @@ public class AnalysedImgAdapter extends BaseAdapter {
     public View getView(final int i, View view, ViewGroup viewGroup) {
         NutrientsViewHolder viewHolder;
 
-//        if (view == null) {
+        if (view == null) {
 
             LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
             view = inflater.inflate(R.layout.item_analysed_photo, viewGroup, false);
@@ -90,11 +90,11 @@ public class AnalysedImgAdapter extends BaseAdapter {
             // store the holder with the view.
             view.setTag(viewHolder);
 
-//        } else {
-            // we've just avoided calling findViewById() on resource everytime
-            // just use the viewHolder
-//            viewHolder = (NutrientsViewHolder) viewGroup.getTag();
-//        }
+        } else {
+//             we've just avoided calling findViewById() on resource everytime
+//             just use the viewHolder
+            viewHolder = (NutrientsViewHolder) view.getTag();
+        }
 
         // get the TextView from the ViewHolder and then set the text (item name) and tag (item ID) values
         viewHolder.name.setText(mFoods.get(i).getFoodName());
