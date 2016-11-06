@@ -1,22 +1,20 @@
 package com.oddsix.nutripro.models;
 
-import io.realm.RealmObject;
+import java.io.Serializable;
 
 /**
- * Created by filippecl on 02/11/16.
+ * Created by filippecl on 06/11/16.
  */
 
-public class MealNutrientModel extends RealmObject {
+public class NutrientModel implements Serializable {
     private String name;
     private int quantity;
     private String unit;
 
-    public MealNutrientModel() {
-    }
-
-    public MealNutrientModel(String name, int quantity, String unit) {
+    public NutrientModel(String name, int quantity, String unit) {
         this.name = name;
         this.quantity = quantity;
+        this.unit = unit;
     }
 
     public String getName() {

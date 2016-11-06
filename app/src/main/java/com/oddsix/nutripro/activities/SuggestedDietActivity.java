@@ -11,19 +11,18 @@ import android.widget.ListView;
 import com.oddsix.nutripro.BaseActivity;
 import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.adapters.DietAdapter;
-import com.oddsix.nutripro.models.DietModel;
-import com.oddsix.nutripro.models.RegisterModel;
+import com.oddsix.nutripro.models.DBDietModel;
+import com.oddsix.nutripro.models.DBRegisterModel;
 import com.oddsix.nutripro.utils.Constants;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
 
 /**
  * Created by Filippe on 22/10/16.
  */
 
 public class SuggestedDietActivity extends BaseActivity {
-    private DietModel mSuggestedDiet;
+    private DBDietModel mSuggestedDiet;
     private DietAdapter mAdapter;
     private Realm mRealm;
 
@@ -48,7 +47,7 @@ public class SuggestedDietActivity extends BaseActivity {
     }
 
     private void setSuggestedDiet() {
-        mSuggestedDiet = Realm.getDefaultInstance().where(DietModel.class)
+        mSuggestedDiet = Realm.getDefaultInstance().where(DBDietModel.class)
                 .findFirst();
         if (mSuggestedDiet != null) {
             mAdapter.setDiet(mSuggestedDiet.getDiet());
@@ -66,7 +65,7 @@ public class SuggestedDietActivity extends BaseActivity {
         footerView.findViewById(R.id.footer_suggested_diet_conclude).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RegisterModel register = mRealm.where(RegisterModel.class)
+                DBRegisterModel register = mRealm.where(DBRegisterModel.class)
                         .equalTo("mail", getSharedPreferences(Constants.PACKAGE_NAME, Context.MODE_PRIVATE).getString(Constants.PREF_MAIL, ""))
                         .findFirst();
 

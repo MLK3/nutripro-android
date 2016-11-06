@@ -5,11 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -18,14 +16,13 @@ import android.widget.TextView;
 import com.oddsix.nutripro.BaseFragment;
 import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.adapters.DayResumeAdapter;
-import com.oddsix.nutripro.adapters.DietAdapter;
-import com.oddsix.nutripro.models.DayMealModel;
-import com.oddsix.nutripro.models.DietModel;
-import com.oddsix.nutripro.models.DietNutrientModel;
-import com.oddsix.nutripro.models.MealFoodModel;
-import com.oddsix.nutripro.models.MealModel;
-import com.oddsix.nutripro.models.MealNutrientModel;
-import com.oddsix.nutripro.models.RegisterModel;
+import com.oddsix.nutripro.models.DBDayMealModel;
+import com.oddsix.nutripro.models.DBDietModel;
+import com.oddsix.nutripro.models.DBDietNutrientModel;
+import com.oddsix.nutripro.models.DBMealFoodModel;
+import com.oddsix.nutripro.models.DBMealModel;
+import com.oddsix.nutripro.models.DBMealNutrientModel;
+import com.oddsix.nutripro.models.DBRegisterModel;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.DateHelper;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -35,7 +32,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
 
 /**
  * Created by Filippe on 21/10/16.
@@ -89,17 +85,17 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
         Calendar cal = Calendar.getInstance();
         cal.set(2016, 10, 2);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        DayMealModel day = mRealm.where(DayMealModel.class)
+        DBDayMealModel day = mRealm.where(DBDayMealModel.class)
                 .equalTo("dateString", dateFormat.format(cal.getTime()))
                 .findFirst();
 
         mAdapter.setMeals(day.getMeals());
 
-        DietModel diet = mRealm.where(RegisterModel.class)
+        DBDietModel diet = mRealm.where(DBRegisterModel.class)
                 .equalTo("mail", getActivity().getSharedPreferences(Constants.PACKAGE_NAME, Context.MODE_PRIVATE).getString(Constants.PREF_MAIL, ""))
                 .findFirst().getDietModel();
 
-        for (DietNutrientModel dietNutrient : diet.getDiet()) {
+        for (DBDietNutrientModel dietNutrient : diet.getDiet()) {
             View bar = getActivity().getLayoutInflater().inflate(R.layout.partial_horizontal_bar_chart, container, false);
 
             setBar(bar, day, dietNutrient);
@@ -113,11 +109,11 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
         maxBar.setLayoutParams(params);
     }
 
-    private void setBar(View bar, DayMealModel day, DietNutrientModel dietNutrient) {
+    private void setBar(View bar, DBDayMealModel day, DBDietNutrientModel dietNutrient) {
         int quantity = 0;
-        for (MealModel meal : day.getMeals()) {
-            for (MealFoodModel food : meal.getFoods()) {
-                for (MealNutrientModel nutrient : food.getNutrients()) {
+        for (DBMealModel meal : day.getMeals()) {
+            for (DBMealFoodModel food : meal.getFoods()) {
+                for (DBMealNutrientModel nutrient : food.getNutrients()) {
                     if (dietNutrient.getName().equals(nutrient.getName())) {
                         quantity += nutrient.getQuantity();
                     }

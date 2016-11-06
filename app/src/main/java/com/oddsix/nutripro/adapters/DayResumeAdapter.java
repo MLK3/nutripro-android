@@ -9,9 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.oddsix.nutripro.R;
-import com.oddsix.nutripro.models.MealModel;
-
-import java.util.ArrayList;
+import com.oddsix.nutripro.models.DBMealModel;
 
 import io.realm.RealmList;
 
@@ -21,13 +19,13 @@ import io.realm.RealmList;
 
 public class DayResumeAdapter extends BaseAdapter {
     private Context mContext;
-    private RealmList<MealModel> mMeals = new RealmList<>();
+    private RealmList<DBMealModel> mMeals = new RealmList<>();
 
     public DayResumeAdapter(Context context) {
         mContext = context;
     }
 
-    public void setMeals(RealmList<MealModel> meals) {
+    public void setMeals(RealmList<DBMealModel> meals) {
         mMeals = meals;
         notifyDataSetChanged();
     }

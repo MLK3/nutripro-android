@@ -7,19 +7,19 @@ import io.realm.RealmObject;
  * Created by filippecl on 02/11/16.
  */
 
-public class MealFoodModel extends RealmObject {
-    private RealmList<MealNutrientModel> nutrients;
+public class DBMealFoodModel extends RealmObject {
+    private RealmList<DBMealNutrientModel> nutrients;
     private String foodName;
 
-    public MealFoodModel() {
+    public DBMealFoodModel() {
     }
 
-    public MealFoodModel(RealmList<MealNutrientModel> nutrients, String foodName) {
+    public DBMealFoodModel(RealmList<DBMealNutrientModel> nutrients, String foodName) {
         this.nutrients = nutrients;
         this.foodName = foodName;
     }
 
-    public RealmList<MealNutrientModel> getNutrients() {
+    public RealmList<DBMealNutrientModel> getNutrients() {
         return nutrients;
     }
 

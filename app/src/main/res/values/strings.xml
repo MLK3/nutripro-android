@@ -80,4 +80,8 @@
     <!--DIET ITEM-->
     <string name="diet_item_range_label">de %1$d à %2$d %3$s</string> //de {min} à {max} {unit}
 
+    <!--FOOD INFO-->
+    <string name="food_info_activity_title">Valores Nutricionais</string>
+    <string name="food_info_quantity">%d$1 %s$2</string> //{quantity} {unit}
+
 </resources>
