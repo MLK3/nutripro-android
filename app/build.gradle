@@ -46,7 +46,7 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.0.0-beta4'
     compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta4'
     compile 'com.wdullaer:materialdatetimepicker:2.5.0'
-    compile 'com.github.hotchemi:permissionsdispatcher:2.2.0'
+    compile 'com.github.google:cameraview:d0b508a5ea'
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.2.0'
     compile 'com.github.PhilJay:MPAndroidChart-Realm:v1.1.0@aar'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.0-beta1'
