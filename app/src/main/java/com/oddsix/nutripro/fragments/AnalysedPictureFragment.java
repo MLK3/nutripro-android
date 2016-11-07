@@ -1,5 +1,6 @@
 package com.oddsix.nutripro.fragments;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,7 +13,22 @@ import android.widget.ListView;
 
 import com.oddsix.nutripro.BaseFragment;
 import com.oddsix.nutripro.R;
+import com.oddsix.nutripro.activities.FoodInfoActivity;
 import com.oddsix.nutripro.adapters.AnalysedImgAdapter;
+import com.oddsix.nutripro.models.DBDayMealModel;
+import com.oddsix.nutripro.models.DBDietNutrientModel;
+import com.oddsix.nutripro.models.DBMealFoodModel;
+import com.oddsix.nutripro.models.DBMealNutrientModel;
+import com.oddsix.nutripro.models.FoodModel;
+import com.oddsix.nutripro.models.NutrientModel;
+import com.oddsix.nutripro.utils.Constants;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+import io.realm.Realm;
 
 /**
  * Created by Filippe on 21/10/16.
@@ -21,14 +37,36 @@ import com.oddsix.nutripro.adapters.AnalysedImgAdapter;
 public class AnalysedPictureFragment extends BaseFragment {
     private AnalysedImgAdapter mAnalysedImgAdapter;
     private View mHeaderView;
+    private Realm mRealm;
+    private List<FoodModel> mFoods = new ArrayList<>();
+    private DBDayMealModel mDay;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_listview, container, false);
+        mRealm = Realm.getDefaultInstance();
+
+        setMockData();
 
         setListView(view, inflater);
         return view;
+    }
+
+    private void setMockData() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(2016, 10, 2);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        mDay = mRealm.where(DBDayMealModel.class)
+                .equalTo("dateString", dateFormat.format(cal.getTime()))
+                .findFirst();
+        for (DBMealFoodModel dbFoods: mDay.getMeals().get(0).getFoods()) {
+            List<NutrientModel> nutrients = new ArrayList<>();
+            for (DBMealNutrientModel dbNutrients: dbFoods.getNutrients()) {
+                nutrients.add(new NutrientModel(dbNutrients.getName(), dbNutrients.getQuantity(), dbNutrients.getUnit()));
+            }
+            mFoods.add(new FoodModel(nutrients, dbFoods.getFoodName(), dbFoods.getQuantity()));
+        }
     }
 
     private void setListView(View view, LayoutInflater inflater) {
@@ -45,9 +83,12 @@ public class AnalysedPictureFragment extends BaseFragment {
 
             @Override
             public void onEditInfoClicked(int position) {
-                functionNotImplemented();
+                Intent infoIntent = new Intent(getActivity(), FoodInfoActivity.class);
+                infoIntent.putExtra(Constants.EXTRA_FOOD_MODEL, mFoods.get(position));
+                startActivity(infoIntent);
             }
         });
+        mAnalysedImgAdapter.setFoods(mFoods);
         ListView listView = (ListView) view.findViewById(R.id.listview);
         listView.setAdapter(mAnalysedImgAdapter);
         mHeaderView = inflateHeader(inflater);

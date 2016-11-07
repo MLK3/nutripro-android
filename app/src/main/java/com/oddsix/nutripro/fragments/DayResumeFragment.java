@@ -1,22 +1,45 @@
 package com.oddsix.nutripro.fragments;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
+import android.widget.AdapterView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.oddsix.nutripro.BaseFragment;
 import com.oddsix.nutripro.R;
+import com.oddsix.nutripro.activities.MealDetailActivity;
+import com.oddsix.nutripro.adapters.DayResumeAdapter;
+import com.oddsix.nutripro.models.DBDayMealModel;
+import com.oddsix.nutripro.models.DBDietModel;
+import com.oddsix.nutripro.models.DBDietNutrientModel;
+import com.oddsix.nutripro.models.DBMealFoodModel;
+import com.oddsix.nutripro.models.DBMealModel;
+import com.oddsix.nutripro.models.DBMealNutrientModel;
+import com.oddsix.nutripro.models.DBRegisterModel;
+import com.oddsix.nutripro.models.FoodModel;
+import com.oddsix.nutripro.models.MealModel;
+import com.oddsix.nutripro.models.NutrientModel;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.DateHelper;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+
+import io.realm.Realm;
 
 /**
  * Created by Filippe on 21/10/16.
@@ -24,6 +47,11 @@ import java.util.Calendar;
 
 public class DayResumeFragment extends BaseFragment implements DatePickerDialog.OnDateSetListener {
     private TextView mDayTv;
+    private DayResumeAdapter mAdapter;
+    private View mHeaderView;
+    private Realm mRealm;
+    private ListView mListView;
+    private DisplayMetrics metrics;
 
     @Nullable
     @Override
@@ -32,7 +60,112 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
 
         setDayLabel(view);
 
+        mRealm = Realm.getDefaultInstance();
+
+        metrics = new DisplayMetrics();
+
+        setListView(view);
+
         return view;
+    }
+
+    private MealModel dbMealtoMealModel(DBMealModel meal) {
+
+        List<FoodModel> foods = new ArrayList<>();
+        for (DBMealFoodModel food : meal.getFoods()) {
+            List<NutrientModel> nutrients = new ArrayList<>();
+            for (DBMealNutrientModel nutrient : food.getNutrients()) {
+                nutrients.add(new NutrientModel(nutrient.getName(), nutrient.getQuantity(), nutrient.getUnit()));
+            }
+            foods.add(new FoodModel(nutrients, food.getFoodName(), food.getQuantity()));
+        }
+        return new MealModel(foods, meal.getName(), meal.getImagePath());
+    }
+
+    private void setListView(View view) {
+        mListView = (ListView) view.findViewById(R.id.day_resume_lv);
+        mAdapter = new DayResumeAdapter(getActivity());
+        mListView.setAdapter(mAdapter);
+        mListView.addHeaderView(getHeader());
+        mListView.setHeaderDividersEnabled(false);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //header position
+                if(i != 0) {
+                    int arrayPosition = --i;
+                    startMealDetailActivity(dbMealtoMealModel(mDay.getMeals().get(arrayPosition)));
+                }
+            }
+        });
+        mHeaderView.setClickable(false);
+    }
+
+    private void startMealDetailActivity(MealModel meal){
+        Intent mealDetailIntent = new Intent(getActivity(), MealDetailActivity.class);
+        mealDetailIntent.putExtra(Constants.EXTRA_MEAL_MODEL, meal);
+        startActivity(mealDetailIntent);
+    }
+
+
+    private View getHeader() {
+        mHeaderView = getActivity().getLayoutInflater().inflate(R.layout.header_day_resume, null);
+
+        setHeader(mHeaderView);
+
+        return mHeaderView;
+    }
+
+
+    DBDayMealModel mDay;
+    private void setHeader(View headerView) {
+        LinearLayout container = (LinearLayout) headerView.findViewById(R.id.chart_container);
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(2016, 10, 2);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        mDay = mRealm.where(DBDayMealModel.class)
+                .equalTo("dateString", dateFormat.format(cal.getTime()))
+                .findFirst();
+
+        mAdapter.setMeals(mDay.getMeals());
+
+        DBDietModel diet = mRealm.where(DBRegisterModel.class)
+                .equalTo("mail", getActivity().getSharedPreferences(Constants.PACKAGE_NAME, Context.MODE_PRIVATE).getString(Constants.PREF_MAIL, ""))
+                .findFirst().getDietModel();
+
+        for (DBDietNutrientModel dietNutrient : diet.getDiet()) {
+            View bar = getActivity().getLayoutInflater().inflate(R.layout.partial_horizontal_bar_chart, container, false);
+
+            setBar(bar, mDay, dietNutrient);
+
+            container.addView(bar);
+        }
+
+        View maxBar = headerView.findViewById(R.id.chart_max_bar);
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) maxBar.getLayoutParams();
+        params.setMargins((metrics.widthPixels * 100) / 150, 0, 0, 0);
+        maxBar.setLayoutParams(params);
+    }
+
+    private void setBar(View bar, DBDayMealModel day, DBDietNutrientModel dietNutrient) {
+        int quantity = 0;
+        for (DBMealModel meal : day.getMeals()) {
+            for (DBMealFoodModel food : meal.getFoods()) {
+                for (DBMealNutrientModel nutrient : food.getNutrients()) {
+                    if (dietNutrient.getName().equals(nutrient.getName())) {
+                        quantity += nutrient.getQuantity();
+                    }
+                }
+            }
+        }
+
+        View barValue = bar.findViewById(R.id.chart_bar);
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        barValue.getLayoutParams().width = (int) (((quantity * metrics.widthPixels)) / (1.5 * dietNutrient.getMax()));
+
+        ((TextView) bar.findViewById(R.id.chart_item_name)).setText(dietNutrient.getName());
+        ((TextView) bar.findViewById(R.id.chart_item_value)).setText(getString(R.string.food_info_quantity, quantity, dietNutrient.getUnit()));
     }
 
     private void setDayLabel(View view) {
@@ -61,7 +194,7 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH));
         //TODO DISABLE DAYS WITHOUT DATA
-        Calendar[] calendars = {calendar};
+//        Calendar[] calendars = {calendar};
 //        dpd.setDisabledDays(calendars);
         dpd.setAccentColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
         dpd.show(getActivity().getFragmentManager(), "dpd");

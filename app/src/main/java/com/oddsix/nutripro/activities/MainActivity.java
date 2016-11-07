@@ -1,12 +1,12 @@
 package com.oddsix.nutripro.activities;
 
-import android.app.Activity;
-import android.app.Dialog;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
-import android.net.Uri;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,11 +23,18 @@ import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.fragments.AnalysedPictureFragment;
 import com.oddsix.nutripro.fragments.DayResumeFragment;
 import com.oddsix.nutripro.fragments.ProfileFragment;
+import com.oddsix.nutripro.models.DBRegisterModel;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.helpers.UpdatePhotoHelper;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
 
 /**
  * Created by Filippe on 21/10/16.
@@ -39,20 +46,17 @@ public class MainActivity extends BaseActivity {
     private TabLayout mTabLayout;
     private UpdatePhotoHelper mUpdatePhotoHelper;
     private AnalysedPictureFragment mPictureFragment;
+    private Realm mRealm;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE).getBoolean(Constants.PREF_IS_LOGGED, false)) {
-            Intent loginIntent = new Intent(this, LoginActivity.class);
-            startActivity(loginIntent);
-            finish();
-        }
+        mRealm = Realm.getDefaultInstance();
+
+        verifyUserLogin();
 
         setContentView(R.layout.activity_main);
-
-        mUpdatePhotoHelper = new UpdatePhotoHelper(this, mOnRequestReady);
 
         setToolbar(false);
 
@@ -61,17 +65,21 @@ public class MainActivity extends BaseActivity {
         setTabLayout();
     }
 
-    private UpdatePhotoHelper.OnRequestReady mOnRequestReady = new UpdatePhotoHelper.OnRequestReady() {
-        @Override
-        public void photoReady(String photo_64, Bitmap photo) {
-            mPictureFragment.setImage(photo);
-        }
+    private void verifyUserLogin() {
+        DBRegisterModel register = mRealm.where(DBRegisterModel.class)
+                .equalTo("mail", getSharedPreferences(Constants.PACKAGE_NAME, Context.MODE_PRIVATE).getString(Constants.PREF_MAIL, ""))
+                .findFirst();
 
-        @Override
-        public void photoFailed() {
-            mTabLayout.getTabAt(0).select();
+        if (!getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE).getBoolean(Constants.PREF_IS_LOGGED, false) || register == null) {
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            startActivity(loginIntent);
+            finish();
+        } else if (register.getDietModel() == null) {
+            Intent suggestedDietActivity = new Intent(this, SuggestedDietActivity.class);
+            startActivity(suggestedDietActivity);
+            finish();
         }
-    };
+    }
 
     private void setViewPager() {
         mTabTitles = getResources().getStringArray(R.array.tab_titles);
@@ -91,7 +99,8 @@ public class MainActivity extends BaseActivity {
             public void onPageSelected(int position) {
                 switch (position) {
                     case 1:
-                        mUpdatePhotoHelper.initiate(false, Constants.PIC_UPLOAD_MAX_SIZE);
+                        startCameraActivity();
+//                        mUpdatePhotoHelper.initiate(false, Constants.PIC_UPLOAD_MAX_SIZE);
                         break;
                 }
                 setTitle(mTabTitles[position]);
@@ -101,6 +110,11 @@ public class MainActivity extends BaseActivity {
             public void onPageScrollStateChanged(int state) {
             }
         });
+    }
+
+    private void startCameraActivity() {
+        Intent intent = new Intent(this, CameraActivity.class);
+        startActivityForResult(intent, 10);
     }
 
     private void setTabLayout() {
@@ -142,6 +156,7 @@ public class MainActivity extends BaseActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -151,7 +166,88 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mUpdatePhotoHelper.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 10 && resultCode == RESULT_OK) {
+            Bitmap bm;
+            try {
+                bm = rotateImage(data.getStringExtra("PATH"));
+            } catch (Exception e) {
+                e.printStackTrace();
+                bm = BitmapFactory.decodeFile(data.getStringExtra("PATH"));
+            }
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] b = baos.toByteArray();
+            mPictureFragment.setImage(bm);
+        }
+    }
+
+    private Bitmap loadPrescaledBitmap(String filename) throws IOException {
+        // Facebook image size
+        int mPhotoMaxSize = 400;
+
+        File file = null;
+        FileInputStream fis;
+
+        BitmapFactory.Options opts;
+        int resizeScale;
+        Bitmap bmp;
+
+        file = new File(filename);
+
+        // This bit determines only the width/height of the bitmap without loading the contents
+        opts = new BitmapFactory.Options();
+        opts.inJustDecodeBounds = true;
+        fis = new FileInputStream(file);
+        BitmapFactory.decodeStream(fis, null, opts);
+        fis.close();
+
+        // Find the correct scale value. It should be a power of 2
+        resizeScale = 1;
+
+        if (opts.outHeight > mPhotoMaxSize || opts.outWidth > mPhotoMaxSize) {
+            resizeScale = (int)Math.pow(2, (int) Math.round(Math.log(mPhotoMaxSize / (double) Math.max(opts.outHeight, opts.outWidth)) / Math.log(0.5)));
+        }
+
+        // Load pre-scaled bitmap
+        opts = new BitmapFactory.Options();
+        opts.inSampleSize = resizeScale;
+        fis = new FileInputStream(file);
+        bmp = BitmapFactory.decodeStream(fis, null, opts);
+
+        fis.close();
+
+        return bmp;
+    }
+
+    public Bitmap rotateImage(String photoPath) throws IOException {
+        int rotate = 0;
+        Bitmap bm;
+        File imageFile = new File(photoPath);
+        ExifInterface exif = new ExifInterface(
+                imageFile.getAbsolutePath());
+        int orientation = exif.getAttributeInt(
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_NORMAL);
+
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                rotate = 270;
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                rotate = 180;
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                rotate = 90;
+                break;
+        }
+        Matrix matrix = new Matrix();
+        matrix.postRotate(rotate);
+
+//        Bitmap bpm = BitmapFactory.decodeStream(new FileInputStream(imageFile), null, null);
+        Bitmap bpm = loadPrescaledBitmap(photoPath);
+        bm = Bitmap.createBitmap(bpm, 0, 0, bpm.getWidth(), bpm.getHeight(), matrix, true);
+        return bm;
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {

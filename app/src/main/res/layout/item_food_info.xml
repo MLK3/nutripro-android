@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:paddingBottom="@dimen/vertical_margin"
+              android:paddingTop="@dimen/vertical_margin"
+              android:paddingRight="@dimen/horizontal_margin"
+              android:paddingLeft="@dimen/horizontal_margin"
+              android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <TextView
+            android:id="@+id/food_info_nutrient_name_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:lines="1"
+            android:ellipsize="end"
+            android:textColor="@color/color_black"
+            android:textSize="@dimen/text_large_body"/>
+
+        <TextView
+            android:id="@+id/food_info_nutrient_quantity_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/text_title"
+            />
+
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_black"
+        />
+</LinearLayout>

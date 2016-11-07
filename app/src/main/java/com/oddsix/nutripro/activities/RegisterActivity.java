@@ -1,5 +1,6 @@
 package com.oddsix.nutripro.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -14,7 +15,7 @@ import android.widget.TextView;
 
 import com.oddsix.nutripro.BaseActivity;
 import com.oddsix.nutripro.R;
-import com.oddsix.nutripro.models.RegisterModel;
+import com.oddsix.nutripro.models.DBRegisterModel;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.validations.HasMinLength;
 import com.oddsix.nutripro.utils.validations.IsEmail;
@@ -39,11 +40,17 @@ public class RegisterActivity extends BaseActivity {
     private String[] mGenderArray;
     private Realm mRealm;
 
+    private boolean mIsEditingRegister;
+    private DBRegisterModel mRegisterModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        setToolbar(true);
+
+        mIsEditingRegister = getIntent().getBooleanExtra(Constants.EXTRA_BOOL_EDIT_REGISTER, false);
+
+        setRegisterToolbar();
         findViews();
         setViews();
         mRealm = Realm.getDefaultInstance();
@@ -61,10 +68,39 @@ public class RegisterActivity extends BaseActivity {
         mButton = (Button) findViewById(R.id.register_send_btn);
     }
 
+    private void setRegisterToolbar(){
+        if(mIsEditingRegister) {
+            setToolbar(true, getString(R.string.edit_register_title));
+        } else {
+            setToolbar(true);
+        }
+    }
+
     private void setViews() {
-        setButtonClickListener();
+        setButton();
         setGenderSpinner();
         setTextInputLayouts();
+        if(mIsEditingRegister) {
+            mRegisterModel = Realm.getDefaultInstance().where(DBRegisterModel.class)
+                    .equalTo("mail", getSharedPreferences(Constants.PACKAGE_NAME, Context.MODE_PRIVATE).getString(Constants.PREF_MAIL, ""))
+                    .findFirst();
+            populateViews();
+        }
+    }
+
+    private void populateViews() {
+        mMailTil.setVisibility(View.GONE);
+        mPassTil.setVisibility(View.GONE);
+        mPassConfirmationTil.setVisibility(View.GONE);
+        mNameTil.getEditText().setText(mRegisterModel.getName());
+        mAgeTil.getEditText().setText(String.valueOf(mRegisterModel.getAge()));
+        mWeightTil.getEditText().setText(String.valueOf(mRegisterModel.getWeight()));
+        mHeightTil.getEditText().setText(String.valueOf(mRegisterModel.getHeight()));
+        for (int i = 0; i < mGenderArray.length; i++) {
+            if(mGenderArray[i].equals(mRegisterModel.getGender())) {
+                mGenderSp.setSelection(i);
+            }
+        }
     }
 
     private void setTextInputLayouts() {
@@ -87,16 +123,24 @@ public class RegisterActivity extends BaseActivity {
 
     private void createTextInputLayoutArray() {
         mTilList = new ArrayList<>();
-        mTilList.add(mMailTil);
-        mTilList.add(mPassTil);
-        mTilList.add(mPassConfirmationTil);
+        if(!mIsEditingRegister) {
+            mTilList.add(mMailTil);
+            mTilList.add(mPassTil);
+            mTilList.add(mPassConfirmationTil);
+        }
         mTilList.add(mNameTil);
         mTilList.add(mAgeTil);
         mTilList.add(mWeightTil);
         mTilList.add(mHeightTil);
     }
 
-    private void setButtonClickListener() {
+    private void setButton() {
+        if(mIsEditingRegister) {
+            mButton.setText(getString(R.string.edit_register_btn_save));
+        } else {
+            mButton.setText(getString(R.string.register_btn_send));
+        }
+
         mButton.setOnClickListener(new View.OnClickListener() {
                                        @Override
                                        public void onClick(View view) {
@@ -109,23 +153,39 @@ public class RegisterActivity extends BaseActivity {
     public void onSendClicked(View view) {
         validateFields();
         if (areAllFieldsValid()) {
-            showProgressdialog();
-            mRealm.beginTransaction();
-            mRealm.copyToRealmOrUpdate(new RegisterModel(mMailTil.getEditText().getText().toString(), mPassTil.getEditText().getText().toString(), mNameTil.getEditText().getText().toString(),
-                    Integer.valueOf(mAgeTil.getEditText().getText().toString()), mGenderArray[mGenderSp.getSelectedItemPosition()], Float.valueOf(mHeightTil.getEditText().getText().toString().replaceAll(",", ".")),
-                    Float.valueOf(mWeightTil.getEditText().getText().toString().replaceAll(",", "."))));
-            mRealm.commitTransaction();
-            SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE);
-            sharedPreferences.edit().putString(Constants.PREF_MAIL, mMailTil.getEditText().getText().toString()).apply();
-            sharedPreferences.edit().putBoolean(Constants.PREF_IS_LOGGED, true).apply();
-            dismissProgressDialog();
-            startSuggestedDietActivity();
+            if(mIsEditingRegister) {
+                mRealm.beginTransaction();
+                mRegisterModel.setName(mNameTil.getEditText().getText().toString());
+                mRegisterModel.setAge(Integer.valueOf(mAgeTil.getEditText().getText().toString()));
+                mRegisterModel.setGender(mGenderArray[mGenderSp.getSelectedItemPosition()]);
+                mRegisterModel.setHeight(Float.valueOf(mHeightTil.getEditText().getText().toString().replaceAll(",", ".")));
+                mRegisterModel.setWeight(Float.valueOf(mWeightTil.getEditText().getText().toString().replaceAll(",", ".")));
+                mRealm.commitTransaction();
+                finishWithResult();
+            } else {
+                showProgressdialog();
+                mRealm.beginTransaction();
+                mRealm.copyToRealmOrUpdate(new DBRegisterModel(mMailTil.getEditText().getText().toString(), mPassTil.getEditText().getText().toString(), mNameTil.getEditText().getText().toString(),
+                        Integer.valueOf(mAgeTil.getEditText().getText().toString()), mGenderArray[mGenderSp.getSelectedItemPosition()], Float.valueOf(mHeightTil.getEditText().getText().toString().replaceAll(",", ".")),
+                        Float.valueOf(mWeightTil.getEditText().getText().toString().replaceAll(",", "."))));
+                mRealm.commitTransaction();
+                SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE);
+                sharedPreferences.edit().putString(Constants.PREF_MAIL, mMailTil.getEditText().getText().toString()).apply();
+                dismissProgressDialog();
+                sharedPreferences.edit().putBoolean(Constants.PREF_IS_LOGGED, true).apply();
+                startSuggestedDietActivity();
+            }
         }
     }
 
     private void startSuggestedDietActivity(){
         Intent intent = new Intent(this, SuggestedDietActivity.class);
         startActivity(intent);
+        finish();
+    }
+
+    private void finishWithResult() {
+        setResult(RESULT_OK);
         finish();
     }
 

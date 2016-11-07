@@ -27,7 +27,6 @@
             android:textSize="@dimen/text_large_body"
             android:paddingLeft="@dimen/list_internal_horizontal_margin"
             android:paddingRight="@dimen/list_internal_horizontal_margin"
-            android:text="Item da Dieta"
             android:layout_weight="1" />
 
         <TextView
@@ -36,7 +35,6 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_large_body"
             android:textStyle="bold"
-            android:text="de {min} à {max} {unit}"
             android:paddingLeft="@dimen/list_internal_horizontal_margin"
             android:paddingRight="@dimen/list_internal_horizontal_margin"
             android:textColor="@color/colorPrimary"

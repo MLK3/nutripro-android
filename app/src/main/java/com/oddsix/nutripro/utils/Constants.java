@@ -18,9 +18,13 @@ public class Constants {
 
     //REQUEST CODES
     public final static int REQ_REGISTER = 0;
+    public final static int REQ_EDIT_REGISTER = 1;
 
     //EXTRA
     public final static String EXTRA_REGISTER_MODEL = "EXTRA_REGISTER_MODEL";
+    public final static String EXTRA_BOOL_EDIT_REGISTER = "EXTRA_BOOL_EDIT_REGISTER";
+    public final static String EXTRA_FOOD_MODEL = "EXTRA_FOOD_MODEL";
+    public final static String EXTRA_MEAL_MODEL = "EXTRA_MEAL_MODEL";
 
     //PREF
     public final static String PREF_MAIL = PACKAGE_NAME + ".PREF_MAIL";

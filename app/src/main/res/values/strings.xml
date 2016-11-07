@@ -30,6 +30,8 @@
 
     <!--REGISTER-->
     <string name="register_info">Cadastro de Informações</string>
+    <string name="register_btn_send">Enviar</string>
+    <!--HINT-->
     <string name="register_hint_mail">E-mail</string>
     <string name="register_hint_password">Senha</string>
     <string name="register_hint_password_confirmation">Confirmação de Senha</string>
@@ -38,9 +40,10 @@
     <string name="register_hint_age">Idade</string>
     <string name="register_hint_weight_in_kg">Peso em kg</string>
     <string name="register_hint_height_in_meters">Altura em metros</string>
-    <string name="register_btn_send">Enviar</string>
+        <!--GENDER OPTIONS-->
     <string name="register_gender_option_male">Masculino</string>
     <string name="register_gender_option_female">Feminino</string>
+        <!--ERRORS-->
     <string name="register_error_invalid_mail">E-mail inválido.</string>
     <string name="register_error_empty_field">O campo não pode estar vazio.</string>
     <string name="register_error_password_length">A senha deve possuir no mínimo 6 caracteres.</string>
@@ -48,8 +51,7 @@
     <string name="register_error_gender_not_selected">É necessário escolher um sexo.</string>
     <string name="register_error_invalid_weight">Peso inválido.</string>
     <string name="register_error_invalid_height">Altura inválida.</string>
-
-
+    
     <!--SUGGESTED DIET-->
     <string name="suggested_diet_header_info">Dieta diária sugerida:</string>
     <string name="suggested_diet_btn_edit">Editar</string>
@@ -70,5 +72,29 @@
     <string name="settings_logout_dialog_title">Tem certeza que deseja sair?</string>
     <string name="settings_logout_dialog_positive">Sair</string>
     <string name="settings_logout_dialog_negative">Não</string>
+
+    <!--EDIT REGISTER-->
+    <string name="edit_register_title">Editar Cadastro</string>
+    <string name="edit_register_btn_save">Salvar</string>
+    
+    <!--DIET ITEM-->
+    <string name="diet_item_range_label">de %1$d à %2$d %3$s</string> //de {min} à {max} {unit}
+
+    <!--FOOD INFO-->
+    <string name="food_info_activity_title">Valores Nutricionais</string>
+    <string name="food_info_quantity">%1$d %2$s</string> //{quantity} {unit}
+    <!--MEAL DETAIL-->
+    <string name="meal_detail_activity_title">Detalhe da Refeição</string>
+    <string name="meal_detail_btn_save">Salvar Edição</string>
+
+    <!--CAMERA-->
+    <string name="camera_permission_confirmation">This app demonstrates the usage of CameraView. In order to do that, it needs permission to access camera.</string>
+    <string name="camera_permission_not_granted">Camera app cannot do anything without camera permission.</string>
+    <string name="picture_taken">Picture taken</string>
+    <string name="switch_flash">Switch flash</string>
+    <string name="switch_camera">Switch camera</string>
+    <string name="flash_auto">Flash auto</string>
+    <string name="flash_off">Flash off</string>
+    <string name="flash_on">Flash on</string>
 
 </resources>

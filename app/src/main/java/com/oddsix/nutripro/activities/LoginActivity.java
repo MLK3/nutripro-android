@@ -8,7 +8,7 @@ import android.view.View;
 
 import com.oddsix.nutripro.BaseActivity;
 import com.oddsix.nutripro.R;
-import com.oddsix.nutripro.models.RegisterModel;
+import com.oddsix.nutripro.models.DBRegisterModel;
 import com.oddsix.nutripro.utils.Constants;
 
 import io.realm.Realm;
@@ -44,7 +44,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     public void onEnterClicked(View view) {
-        RealmResults<RegisterModel> registers = Realm.getDefaultInstance().where(RegisterModel.class)
+        RealmResults<DBRegisterModel> registers = Realm.getDefaultInstance().where(DBRegisterModel.class)
                 .equalTo("mail", mLoginTil.getEditText().getText().toString())
                 .findAll();
 
