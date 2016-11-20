@@ -18,6 +18,18 @@ public class FoodModel implements Serializable {
         this.quantity = quantity;
     }
 
+    public void setNutrients(List<NutrientModel> nutrients) {
+        this.nutrients = nutrients;
+    }
+
+    public void setFoodName(String foodName) {
+        this.foodName = foodName;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
     public List<NutrientModel> getNutrients() {
         return nutrients;
     }

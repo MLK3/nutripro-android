@@ -96,5 +96,10 @@
     <string name="flash_auto">Flash auto</string>
     <string name="flash_off">Flash off</string>
     <string name="flash_on">Flash on</string>
+    
+    <!--SEARCH-->
+    <string name="search_activity_title">Lista de Alimentos</string>
+    <string name="search_header_list">Selecione o alimento:</string>
+    <string name="search_button_register_food">Cadastrar Alimento</string>
 
 </resources>

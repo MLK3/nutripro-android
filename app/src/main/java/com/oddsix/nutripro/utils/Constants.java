@@ -19,6 +19,7 @@ public class Constants {
     //REQUEST CODES
     public final static int REQ_REGISTER = 0;
     public final static int REQ_EDIT_REGISTER = 1;
+    public final static int REQ_SEARCH = 2;
 
     //EXTRA
     public final static String EXTRA_REGISTER_MODEL = "EXTRA_REGISTER_MODEL";

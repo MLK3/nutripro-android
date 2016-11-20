@@ -1,5 +1,6 @@
 package com.oddsix.nutripro.fragments;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.ListView;
 import com.oddsix.nutripro.BaseFragment;
 import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.activities.FoodInfoActivity;
+import com.oddsix.nutripro.activities.SearchActivity;
 import com.oddsix.nutripro.adapters.AnalysedImgAdapter;
 import com.oddsix.nutripro.models.DBDayMealModel;
 import com.oddsix.nutripro.models.DBDietNutrientModel;
@@ -22,6 +24,7 @@ import com.oddsix.nutripro.models.DBMealNutrientModel;
 import com.oddsix.nutripro.models.FoodModel;
 import com.oddsix.nutripro.models.NutrientModel;
 import com.oddsix.nutripro.utils.Constants;
+import com.oddsix.nutripro.utils.helpers.DialogHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,6 +40,7 @@ import io.realm.Realm;
 public class AnalysedPictureFragment extends BaseFragment {
     private AnalysedImgAdapter mAnalysedImgAdapter;
     private View mHeaderView;
+    private DialogHelper mDialogHelper;
     private Realm mRealm;
     private List<FoodModel> mFoods = new ArrayList<>();
     private DBDayMealModel mDay;
@@ -46,6 +50,7 @@ public class AnalysedPictureFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_listview, container, false);
         mRealm = Realm.getDefaultInstance();
+        mDialogHelper = new DialogHelper(getActivity());
 
         setMockData();
 
@@ -77,8 +82,20 @@ public class AnalysedPictureFragment extends BaseFragment {
             }
 
             @Override
-            public void onEditNameClicked(int position) {
-                functionNotImplemented();
+            public void onEditNameClicked(final int position) {
+                final String[] options = {"Arroz Branco", "Arroz integral", "Outro"};
+                mDialogHelper.showListDialog("Selecione a opção correta", options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if(i == options.length - 1) {
+                            Intent searchIntent = new Intent(getActivity(), SearchActivity.class);
+                            startActivityForResult(searchIntent, Constants.REQ_SEARCH);
+                        } else {
+                            mFoods.get(position).setFoodName(options[i]);
+                            mAnalysedImgAdapter.setFoods(mFoods);
+                        }
+                    }
+                });
             }
 
             @Override
@@ -107,6 +124,8 @@ public class AnalysedPictureFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 functionNotImplemented();
+                //todo send meal
+
             }
         });
         return footerView;
