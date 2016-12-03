@@ -138,7 +138,7 @@ public class RegisterActivity extends BaseActivity {
         if(mIsEditingRegister) {
             mButton.setText(getString(R.string.edit_register_btn_save));
         } else {
-            mButton.setText(getString(R.string.register_btn_send));
+            mButton.setText(getString(R.string.register_btn_continue));
         }
 
         mButton.setOnClickListener(new View.OnClickListener() {
@@ -164,11 +164,11 @@ public class RegisterActivity extends BaseActivity {
                 finishWithResult();
             } else {
                 showProgressdialog();
-                mRealm.beginTransaction();
-                mRealm.copyToRealmOrUpdate(new DBRegisterModel(mMailTil.getEditText().getText().toString(), mPassTil.getEditText().getText().toString(), mNameTil.getEditText().getText().toString(),
-                        Integer.valueOf(mAgeTil.getEditText().getText().toString()), mGenderArray[mGenderSp.getSelectedItemPosition()], Float.valueOf(mHeightTil.getEditText().getText().toString().replaceAll(",", ".")),
-                        Float.valueOf(mWeightTil.getEditText().getText().toString().replaceAll(",", "."))));
-                mRealm.commitTransaction();
+//                mRealm.beginTransaction();
+//                mRealm.copyToRealmOrUpdate(new DBRegisterModel(mMailTil.getEditText().getText().toString(), mPassTil.getEditText().getText().toString(), mNameTil.getEditText().getText().toString(),
+//                        Integer.valueOf(mAgeTil.getEditText().getText().toString()), mGenderArray[mGenderSp.getSelectedItemPosition()], Float.valueOf(mHeightTil.getEditText().getText().toString().replaceAll(",", ".")),
+//                        Float.valueOf(mWeightTil.getEditText().getText().toString().replaceAll(",", "."))));
+//                mRealm.commitTransaction();
                 SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE);
                 sharedPreferences.edit().putString(Constants.PREF_MAIL, mMailTil.getEditText().getText().toString()).apply();
                 dismissProgressDialog();
@@ -179,7 +179,7 @@ public class RegisterActivity extends BaseActivity {
     }
 
     private void startSuggestedDietActivity(){
-        Intent intent = new Intent(this, SuggestedDietActivity.class);
+        Intent intent = new Intent(this, ActivityLevelActivity.class);
         startActivity(intent);
         finish();
     }

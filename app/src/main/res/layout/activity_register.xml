@@ -163,7 +163,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/large_spacing_between_items"
                 app:backgroundTint="@color/colorPrimary"
-                android:text="@string/register_btn_send"
+                android:text="@string/register_btn_continue"
                 android:textColor="@color/color_white" />
 
 

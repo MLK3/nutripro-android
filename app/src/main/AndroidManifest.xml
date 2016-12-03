@@ -29,6 +29,7 @@
         <activity android:name=".activities.MealDetailActivity"/>
         <activity android:name=".activities.CameraActivity"/>
         <activity android:name=".activities.SearchActivity"/>
+        <activity android:name=".activities.ActivityLevelActivity"/>
 
         <meta-data
             android:name="io.fabric.ApiKey"

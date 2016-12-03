@@ -30,7 +30,18 @@
 
     <!--REGISTER-->
     <string name="register_info">Cadastro de Informações</string>
-    <string name="register_btn_send">Enviar</string>
+    <string name="register_btn_continue">Continuar</string>
+
+    <!--ACTIVITY LEVEL-->
+    <string name="activity_level_title">Nível de Atividade</string>
+    <string name="activity_level_btn_send">Enviar</string>
+    <string name="activity_level_description">Escolha o nível de atividade que mais se assemelha ao seu:</string>
+    <string name="activity_level_rb_sedendary">Sedentário: Trabalhos domésticos de esforço leve a moderado, caminhadas para atividades relacionadas com o cotidiano, ficar sentado por várias horas.</string>
+    <string name="activity_level_rb_low_activity">Pouco ativo: Caminhadas leves (até 6,4 Km/hora), além das mesmas atividades relacionadas ao nível “sedentário”.</string>
+    <string name="activity_level_rb_medium_activity">Ativo: Ginástica aeróbica, corrida moderada, natação, jogar tênis, além das mesmas atividades relacionadas ao nível “sedentário”.</string>
+    <string name="activity_level_rb_high_activity">Muito ativo: Ciclismo de intensidade moderada, corrida intensa, pular corda, jogar tênis, além de atividades relacionadas ao nível “sedentário”.</string>
+    <string name="activity_level_error_not_selected">É necessário escolher um nivel de atividade para prosseguir.</string>
+
     <!--HINT-->
     <string name="register_hint_mail">E-mail</string>
     <string name="register_hint_password">Senha</string>

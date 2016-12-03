@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:app="http://schemas.android.com/apk/res-auto"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical">
+
+        <include layout="@layout/partial_default_toolbar"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:scrollbarStyle="insideOverlay">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/horizontal_margin"
+                android:layout_marginRight="@dimen/horizontal_margin"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/list_internal_vertical_margin"
+                    android:paddingBottom="@dimen/list_internal_vertical_margin"
+                    android:text="@string/activity_level_description"/>
+
+                <RadioGroup
+                    android:id="@+id/rg_activity_level"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+
+                    <RadioButton
+                        android:id="@+id/rb_sedentary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/list_internal_vertical_margin"
+                        android:paddingBottom="@dimen/list_internal_vertical_margin"
+                        android:text="@string/activity_level_rb_sedendary"/>
+
+                    <RadioButton
+                        android:id="@+id/rb_low"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/list_internal_vertical_margin"
+                        android:paddingBottom="@dimen/list_internal_vertical_margin"
+                        android:text="@string/activity_level_rb_low_activity"/>
+
+                    <RadioButton
+                        android:id="@+id/rb_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/list_internal_vertical_margin"
+                        android:paddingBottom="@dimen/list_internal_vertical_margin"
+                        android:text="@string/activity_level_rb_medium_activity"/>
+
+                    <RadioButton
+                        android:id="@+id/rb_high"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/list_internal_vertical_margin"
+                        android:paddingBottom="@dimen/list_internal_vertical_margin"
+                        android:hint="TESTE"
+                        android:text="@string/activity_level_rb_high_activity"/>
+                </RadioGroup>
+
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/register_send_btn"
+                    android:onClick="onSendClicked"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/large_spacing_between_items"
+                    android:text="@string/activity_level_btn_send"
+                    android:textColor="@color/color_white"
+                    app:backgroundTint="@color/colorPrimary"/>
+
+
+            </LinearLayout>
+        </ScrollView>
+
+
+    </LinearLayout>
+
+</LinearLayout>
