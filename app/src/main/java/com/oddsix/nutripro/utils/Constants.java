@@ -10,6 +10,9 @@ public class Constants {
 
     public static final String BASE_DB_PATH = PACKAGE_NAME + ".DB";
 
+    //MOCK URL
+    public static final String MOCK_URL = "https://private-1efe0b-nutripro.apiary-mock.com/";
+
     //PICTURE TO UPLOAD MAX SIZE
     public static final int PIC_UPLOAD_MAX_SIZE = 500;
 
