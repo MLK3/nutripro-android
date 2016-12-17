@@ -79,6 +79,8 @@ public class LoginActivity extends BaseActivity {
                         public void onResponseSuccess(GeneralResponse response) {
                             dismissProgressDialog();
                             Intent intent = new Intent(view.getContext(), MainActivity.class);
+                            SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE);
+                            sharedPreferences.edit().putBoolean(Constants.PREF_IS_LOGGED, true).apply();
                             startActivity(intent);
                             finish();
                         }
@@ -90,25 +92,6 @@ public class LoginActivity extends BaseActivity {
                         }
                     });
         }
-
-//        RealmResults<DBRegisterModel> registers = Realm.getDefaultInstance().where(DBRegisterModel.class)
-//                .equalTo("mail", mLoginTil.getEditText().getText().toString())
-//                .findAll();
-//
-//        if (registers.isEmpty()) {
-//            showToast(getString(R.string.login_error_user_not_found));
-//        } else {
-//            if (mPassTil.getEditText().getText().toString().equals(registers.get(0).getPassword())) {
-//                SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE);
-//                sharedPreferences.edit().putString(Constants.PREF_MAIL, mLoginTil.getEditText().getText().toString()).apply();
-//                sharedPreferences.edit().putBoolean(Constants.PREF_IS_LOGGED, true).apply();
-//                Intent intent = new Intent(view.getContext(), MainActivity.class);
-//                startActivity(intent);
-//                finish();
-//            } else {
-//                showToast(getString(R.string.login_error_user_unauthorized));
-//            }
-//        }
     }
 
     public void onRegisterClicked(View view) {

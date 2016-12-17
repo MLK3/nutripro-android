@@ -15,9 +15,8 @@ import retrofit2.http.POST;
 
 public interface NutriproService {
 
-    @FormUrlEncoded
     @POST("register")
-    Call<GeneralResponse> postRegister(@Body RegisterRequest request);
+    Call<GeneralResponse> createRegister(@Body RegisterRequest request);
 
     @FormUrlEncoded
     @POST("signin")

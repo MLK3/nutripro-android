@@ -3,6 +3,7 @@ package com.oddsix.nutripro.rest;
 import android.app.Activity;
 
 import com.oddsix.nutripro.BuildConfig;
+import com.oddsix.nutripro.rest.models.requests.RegisterRequest;
 import com.oddsix.nutripro.rest.models.responses.GeneralResponse;
 import com.oddsix.nutripro.utils.Constants;
 
@@ -35,18 +36,13 @@ public class NutriproProvider {
     }
 
     public void signIn(String mail, String password, final OnResponseListener<GeneralResponse> callback) {
-        mNutriproService.postSignin(mail, password).enqueue(new Callback<GeneralResponse>() {
-            @Override
-            public void onResponse(Call<GeneralResponse> call, Response<GeneralResponse> response) {
-                if(response.isSuccess()) callback.onResponseSuccess(response.body());
-                else callback.onResponseFailure("", response.code());
-            }
+        mNutriproService.postSignin(mail, password)
+                .enqueue(new ResponseHandler<GeneralResponse>(mActivity, callback));
+    }
 
-            @Override
-            public void onFailure(Call<GeneralResponse> call, Throwable t) {
-                callback.onResponseFailure("Não foi possível completar sua requisição, tente novamente", 0);
-            }
-        });
+    public void createRegister(String name, String gender, int age, String email, String activity, int peso, int altura, OnResponseListener<GeneralResponse> callback) {
+        mNutriproService.createRegister(new RegisterRequest(name, gender, age, email, activity, peso, altura))
+                .enqueue(new ResponseHandler<GeneralResponse>(mActivity, callback));
     }
 
     private Retrofit getRetrofit(List<Interceptor> interceptors) {

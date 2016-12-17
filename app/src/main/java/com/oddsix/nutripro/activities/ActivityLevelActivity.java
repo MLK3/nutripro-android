@@ -32,7 +32,7 @@ public class ActivityLevelActivity extends BaseActivity {
         if(mActivityLevelRg.getCheckedRadioButtonId() != UNCHECKED_RG_ID) {
             startSuggestedDietActivity();
         } else {
-            showToast(getString(R.string.activity_level_error_not_selected));
+//            showToast(getString(R.string.activity_level_error_not_selected));
         }
     }
 
