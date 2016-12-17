@@ -61,7 +61,7 @@ public class ProfileFragment extends BaseFragment {
 
     private void setDiet() {
         RealmList<DBDietNutrientModel> diet = mUserData.getDietModel().getDiet();
-        mAdapter.setDiet(diet);
+//        mAdapter.setDiet(diet);
     }
 
     private View getHeader() {

@@ -2,10 +2,12 @@ package com.oddsix.nutripro.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.IntentCompat;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.oddsix.nutripro.BaseActivity;
@@ -13,6 +15,8 @@ import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.adapters.DietAdapter;
 import com.oddsix.nutripro.models.DBDietModel;
 import com.oddsix.nutripro.models.DBRegisterModel;
+import com.oddsix.nutripro.rest.NutriproProvider;
+import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
 import com.oddsix.nutripro.utils.Constants;
 
 import io.realm.Realm;
@@ -22,9 +26,11 @@ import io.realm.Realm;
  */
 
 public class SuggestedDietActivity extends BaseActivity {
-    private DBDietModel mSuggestedDiet;
     private DietAdapter mAdapter;
     private Realm mRealm;
+    private NutriproProvider mProvider;
+
+    private LinearLayout mFeedbackContainer;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,10 +38,35 @@ public class SuggestedDietActivity extends BaseActivity {
         setContentView(R.layout.activity_listview);
 
         mRealm = Realm.getDefaultInstance();
+        mProvider = new NutriproProvider(this);
+
+        mFeedbackContainer = (LinearLayout) findViewById(R.id.feedback_container);
 
         setListView();
 
-        setSuggestedDiet();
+        setBtn();
+
+        getSuggestedDiet();
+    }
+
+
+    private void getSuggestedDiet() {
+        showProgressdialog();
+        mProvider.getDiet(new NutriproProvider.OnResponseListener<SuggestedDietResponse>() {
+            @Override
+            public void onResponseSuccess(SuggestedDietResponse response) {
+                dismissProgressDialog();
+                mFeedbackContainer.setVisibility(View.GONE);
+                setSuggestedDiet(response);
+            }
+
+            @Override
+            public void onResponseFailure(String msg, int code) {
+                dismissProgressDialog();
+                mFeedbackContainer.setVisibility(View.VISIBLE);
+                showToast(msg);
+            }
+        });
     }
 
     private void setListView() {
@@ -46,13 +77,8 @@ public class SuggestedDietActivity extends BaseActivity {
         list.addFooterView(setFooter());
     }
 
-    private void setSuggestedDiet() {
-        mSuggestedDiet = Realm.getDefaultInstance().where(DBDietModel.class)
-                .findFirst();
-        if (mSuggestedDiet != null) {
-            mAdapter.setDiet(mSuggestedDiet.getDiet());
-        }
-
+    private void setSuggestedDiet(SuggestedDietResponse response) {
+        mAdapter.setDiet(response.getNutrients());
     }
 
     private View setHeader() {
@@ -60,19 +86,29 @@ public class SuggestedDietActivity extends BaseActivity {
         return headerView;
     }
 
+    private void setBtn() {
+        findViewById(R.id.feedback_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getSuggestedDiet();
+            }
+        });
+    }
+
     private View setFooter() {
         View footerView = getLayoutInflater().inflate(R.layout.footer_suggested_diet, null);
         footerView.findViewById(R.id.footer_suggested_diet_conclude).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DBRegisterModel register = mRealm.where(DBRegisterModel.class)
-                        .equalTo("mail", getSharedPreferences(Constants.PACKAGE_NAME, Context.MODE_PRIVATE).getString(Constants.PREF_MAIL, ""))
-                        .findFirst();
-
-                mRealm.beginTransaction();
-                if (register != null) register.setDietModel(mSuggestedDiet);
-                mRealm.commitTransaction();
-
+//                DBRegisterModel register = mRealm.where(DBRegisterModel.class)
+//                        .equalTo("mail", getSharedPreferences(Constants.PACKAGE_NAME, Context.MODE_PRIVATE).getString(Constants.PREF_MAIL, ""))
+//                        .findFirst();
+//
+//                mRealm.beginTransaction();
+//                if (register != null) register.setDietModel(mSuggestedDiet);
+//                mRealm.commitTransaction();
+                SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE);
+                sharedPreferences.edit().putBoolean(Constants.PREF_IS_LOGGED, true).apply();
                 Intent intent = new Intent(view.getContext(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);

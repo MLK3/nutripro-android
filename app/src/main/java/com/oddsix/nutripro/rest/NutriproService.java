@@ -2,11 +2,13 @@ package com.oddsix.nutripro.rest;
 
 import com.oddsix.nutripro.rest.models.requests.RegisterRequest;
 import com.oddsix.nutripro.rest.models.responses.GeneralResponse;
+import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 /**
@@ -22,5 +24,8 @@ public interface NutriproService {
     @POST("signin")
     Call<GeneralResponse> postSignin(@Field("email") String email,
                                      @Field("password") String password);
+
+    @GET("diet")
+    Call<SuggestedDietResponse> getSuggestedDiet();
 
 }

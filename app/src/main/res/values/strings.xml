@@ -1,5 +1,11 @@
 <resources>
     <string name="app_name">Nutripro</string>
+
+    <!--ACTIONS-->
+    <string name="action_retry">Tentar Novamente</string>
+
+    <!--ERROR-->
+    <string name="unknown_error">Não foi possível completar sua requisição, tente novamente.</string>
     <!--DIALOG MESSAGES-->
     <string name="progress_dialog_standard_msg">Aguarde um momento.</string>
     <string name="dialog_title_select_an_option">Selecione uma opção</string>

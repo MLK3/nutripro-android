@@ -20,6 +20,7 @@ import com.oddsix.nutripro.models.DBRegisterModel;
 import com.oddsix.nutripro.models.NutrientModel;
 import com.oddsix.nutripro.rest.NutriproProvider;
 import com.oddsix.nutripro.rest.models.responses.GeneralResponse;
+import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.validations.HasMinLength;
 import com.oddsix.nutripro.utils.validations.IsEmail;
@@ -201,11 +202,13 @@ public class RegisterActivity extends BaseActivity {
                         new NutriproProvider.OnResponseListener<GeneralResponse>() {
                             @Override
                             public void onResponseSuccess(GeneralResponse response) {
+                                dismissProgressDialog();
                                 startSuggestedDietActivity();
                             }
 
                             @Override
                             public void onResponseFailure(String msg, int code) {
+                                dismissProgressDialog();
                                 showToast(msg);
                             }
                         }

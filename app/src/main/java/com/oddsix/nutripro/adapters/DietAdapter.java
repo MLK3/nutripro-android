@@ -10,6 +10,10 @@ import android.widget.TextView;
 
 import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.models.DBDietNutrientModel;
+import com.oddsix.nutripro.rest.models.responses.NutrientResponse;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.realm.RealmList;
 
@@ -18,14 +22,14 @@ import io.realm.RealmList;
  */
 
 public class DietAdapter extends BaseAdapter {
-    private RealmList<DBDietNutrientModel> diet = new RealmList<>();
+    private List<NutrientResponse> diet = new ArrayList<>();
     private Context mContext;
 
     public DietAdapter(Context mContext) {
         this.mContext = mContext;
     }
 
-    public void setDiet(RealmList<DBDietNutrientModel> diet) {
+    public void setDiet(List<NutrientResponse> diet) {
         this.diet = diet;
         notifyDataSetChanged();
     }

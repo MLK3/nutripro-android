@@ -5,6 +5,7 @@ import android.app.Activity;
 import com.oddsix.nutripro.BuildConfig;
 import com.oddsix.nutripro.rest.models.requests.RegisterRequest;
 import com.oddsix.nutripro.rest.models.responses.GeneralResponse;
+import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
 import com.oddsix.nutripro.utils.Constants;
 
 import java.util.ArrayList;
@@ -43,6 +44,11 @@ public class NutriproProvider {
     public void createRegister(String name, String gender, int age, String email, String activity, int peso, int altura, OnResponseListener<GeneralResponse> callback) {
         mNutriproService.createRegister(new RegisterRequest(name, gender, age, email, activity, peso, altura))
                 .enqueue(new ResponseHandler<GeneralResponse>(mActivity, callback));
+    }
+
+    public void getDiet(OnResponseListener<SuggestedDietResponse> callback){
+        mNutriproService.getSuggestedDiet()
+                .enqueue(new ResponseHandler<SuggestedDietResponse>(mActivity, callback));
     }
 
     private Retrofit getRetrofit(List<Interceptor> interceptors) {

@@ -24,6 +24,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.SuggestedDietActivity"/>
+        <activity android:name=".activities.EditSuggestedDietActivity"/>
         <activity android:name=".activities.SettingsActivity"/>
         <activity android:name=".activities.FoodInfoActivity"/>
         <activity android:name=".activities.MealDetailActivity"/>
