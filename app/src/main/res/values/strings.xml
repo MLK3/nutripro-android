@@ -27,6 +27,8 @@
         <!--ERRORS-->
     <string name="login_error_user_not_found">Usuário não encontrado, verifique seu e-mail.</string>
     <string name="login_error_user_unauthorized">Senha inválida</string>
+    <string name="login_error_invalid_mail">E-mail inválido</string>
+    <string name="login_error_password_length_error">A senha deve possuir pelo menos %1$d caracteres.</string>
 
     <!--REGISTER-->
     <string name="register_info">Cadastro de Informações</string>

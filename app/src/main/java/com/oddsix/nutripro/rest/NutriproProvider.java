@@ -34,7 +34,7 @@ public class NutriproProvider {
         mNutriproService = getRetrofit(new ArrayList<Interceptor>()).create(NutriproService.class);
     }
 
-    private void signIn(String mail, String password, final OnResponseListener<GeneralResponse> callback) {
+    public void signIn(String mail, String password, final OnResponseListener<GeneralResponse> callback) {
         mNutriproService.postSignin(mail, password).enqueue(new Callback<GeneralResponse>() {
             @Override
             public void onResponse(Call<GeneralResponse> call, Response<GeneralResponse> response) {
@@ -49,7 +49,7 @@ public class NutriproProvider {
         });
     }
 
-    public Retrofit getRetrofit(List<Interceptor> interceptors) {
+    private Retrofit getRetrofit(List<Interceptor> interceptors) {
         Retrofit.Builder retroBuilder = new Retrofit.Builder().baseUrl(Constants.MOCK_URL).addConverterFactory(GsonConverterFactory.create());
         OkHttpClient.Builder httpClient = getClient(interceptors);
         retroBuilder.client(httpClient.build());

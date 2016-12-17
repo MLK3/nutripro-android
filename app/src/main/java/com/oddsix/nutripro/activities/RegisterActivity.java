@@ -205,7 +205,7 @@ public class RegisterActivity extends BaseActivity {
             mMailTil.setErrorEnabled(false);
         }
 
-        if (!HasMinLength.isValid(mPassTil.getEditText().getText().toString(), getResources().getInteger(R.integer.password_max_lengt))) {
+        if (!HasMinLength.isValid(mPassTil.getEditText().getText().toString(), getResources().getInteger(R.integer.password_min_length))) {
             mPassTil.setError(getString(R.string.register_error_password_length));
         } else {
             mPassTil.setErrorEnabled(false);
