@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.oddsix.nutripro.BaseFragment;
 import com.oddsix.nutripro.R;
+import com.oddsix.nutripro.activities.MainActivity;
 import com.oddsix.nutripro.activities.RegisterActivity;
 import com.oddsix.nutripro.adapters.DietAdapter;
 import com.oddsix.nutripro.models.DBDietNutrientModel;
@@ -37,7 +38,6 @@ public class ProfileFragment extends BaseFragment {
     private NutriproProvider mProvider;
     private FeedbackHelper mFeedbackHelper;
     private RegisterResponse mRegister;
-    private SuggestedDietResponse mDiet;
     private View mView;
 
     @Nullable
@@ -55,9 +55,6 @@ public class ProfileFragment extends BaseFragment {
         mProvider = new NutriproProvider(getActivity());
 
         if(mRegister == null) getRegister();
-
-        getSuggestedDiet();
-
 
         return mView    ;
     }
@@ -80,25 +77,11 @@ public class ProfileFragment extends BaseFragment {
         });
     }
 
-    private void getSuggestedDiet() {
-        mProvider.getDiet(new NutriproProvider.OnResponseListener<SuggestedDietResponse>() {
-            @Override
-            public void onResponseSuccess(SuggestedDietResponse response) {
-                mDiet = response;
-                mAdapter.setDiet(mDiet.getNutrients());
-            }
-
-            @Override
-            public void onResponseFailure(String msg, int code) {
-                mFeedbackHelper.showErrorPlaceHolder();
-            }
-        });
-    }
-
     private void setListView(View view) {
         ListView list = (ListView) view.findViewById(R.id.listview);
         mAdapter = new DietAdapter(getActivity());
         list.setAdapter(mAdapter);
+        mAdapter.setDiet(((MainActivity) getActivity()).getSuggestedDiet().getNutrients());
         list.addHeaderView(getHeader());
     }
 

@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.oddsix.nutripro.BaseFragment;
 import com.oddsix.nutripro.R;
+import com.oddsix.nutripro.activities.MainActivity;
 import com.oddsix.nutripro.activities.MealDetailActivity;
 import com.oddsix.nutripro.adapters.DayResumeAdapter;
 import com.oddsix.nutripro.models.DBDayMealModel;
@@ -64,7 +65,6 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
 
     private View mView;
     private DayResumeResponse mDay;
-    private SuggestedDietResponse mDiet;
     private Calendar mDate;
 
     @Nullable
@@ -77,8 +77,7 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
         mFeedbackHelper = new FeedbackHelper(getActivity(), (LinearLayout) mView.findViewById(R.id.container), new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mDiet == null) getSuggestedDiet();
-                else getMealByDay(mDate);
+                if (mDay == null) getMealByDay(mDate);
             }
         });
         setDayLabel(mView);
@@ -89,39 +88,14 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
 
 //        setListView(mView);
 
-        if(mDate == null) {
+        if (mDate == null) {
             mDate = Calendar.getInstance();
             getMealByDay(mDate);
-        } else if(mDay == null ) {
+        } else if (mDay == null) {
             getMealByDay(mDate);
-        }
-        if(mDiet == null) {
-            getSuggestedDiet();
         }
 
         return mView;
-    }
-
-    private boolean isDataReady() {
-        return mDay != null && mDiet != null;
-    }
-
-    private void getSuggestedDiet() {
-        mProvider.getDiet(new NutriproProvider.OnResponseListener<SuggestedDietResponse>() {
-            @Override
-            public void onResponseSuccess(SuggestedDietResponse response) {
-                mDiet = response;
-                if(isDataReady()) {
-                    setListView(mView);
-                    mFeedbackHelper.dismissFeedback();
-                }
-            }
-
-            @Override
-            public void onResponseFailure(String msg, int code) {
-                mFeedbackHelper.showErrorPlaceHolder();
-            }
-        });
     }
 
     private void getMealByDay(Calendar date) {
@@ -132,10 +106,8 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
                 @Override
                 public void onResponseSuccess(DayResumeResponse response) {
                     mDay = response;
-                    if(isDataReady()) {
-                        setListView(mView);
-                        mFeedbackHelper.dismissFeedback();
-                    }
+                    setListView(mView);
+                    mFeedbackHelper.dismissFeedback();
                 }
 
                 @Override
@@ -201,8 +173,8 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
 //                .findFirst().getDietModel();
 
         for (NutrientResponse nutrient : mDay.getNutrients()) {
-            for (DietNutrientResponse dietNutrient : mDiet.getNutrients()) {
-                if(nutrient.getName().equalsIgnoreCase(dietNutrient.getName())) {
+            for (DietNutrientResponse dietNutrient : ((MainActivity) getActivity()).getSuggestedDiet().getNutrients()) {
+                if (nutrient.getName().equalsIgnoreCase(dietNutrient.getName())) {
                     View bar = getActivity().getLayoutInflater().inflate(R.layout.partial_horizontal_bar_chart, container, false);
 
                     setBar(bar, dietNutrient, nutrient);

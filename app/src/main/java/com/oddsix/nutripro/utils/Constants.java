@@ -30,6 +30,7 @@ public class Constants {
     public final static String EXTRA_BOOL_EDIT_REGISTER = "EXTRA_BOOL_EDIT_REGISTER";
     public final static String EXTRA_FOOD_MODEL = "EXTRA_FOOD_MODEL";
     public final static String EXTRA_MEAL_MODEL = "EXTRA_MEAL_MODEL";
+    public final static String EXTRA_DIET = "EXTRA_DIET";
 
     //PREF
     public final static String PREF_MAIL = PACKAGE_NAME + ".PREF_MAIL";

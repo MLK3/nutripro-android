@@ -24,6 +24,7 @@ import com.oddsix.nutripro.fragments.AnalysedPictureFragment;
 import com.oddsix.nutripro.fragments.DayResumeFragment;
 import com.oddsix.nutripro.fragments.ProfileFragment;
 import com.oddsix.nutripro.models.DBRegisterModel;
+import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.helpers.UpdatePhotoHelper;
 
@@ -46,12 +47,15 @@ public class MainActivity extends BaseActivity {
     private TabLayout mTabLayout;
     private UpdatePhotoHelper mUpdatePhotoHelper;
     private AnalysedPictureFragment mPictureFragment;
+    private SuggestedDietResponse mSuggestedDiet;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        verifyUserLogin();
+//        verifyUserLogin();
+
+        mSuggestedDiet = (SuggestedDietResponse) getIntent().getSerializableExtra(Constants.EXTRA_DIET);
 
         setContentView(R.layout.activity_main);
 
@@ -68,6 +72,10 @@ public class MainActivity extends BaseActivity {
             startActivity(loginIntent);
             finish();
         }
+    }
+
+    public SuggestedDietResponse getSuggestedDiet() {
+        return mSuggestedDiet;
     }
 
     private void setViewPager() {

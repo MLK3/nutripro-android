@@ -1,10 +1,12 @@
 package com.oddsix.nutripro.rest.models.responses;
 
+import java.io.Serializable;
+
 /**
  * Created by filippecl on 17/12/16.
  */
 
-public class DietNutrientResponse {
+public class DietNutrientResponse implements Serializable {
     private String name;
     private int max;
     private int min;
