@@ -29,14 +29,21 @@ import com.oddsix.nutripro.models.DBRegisterModel;
 import com.oddsix.nutripro.models.FoodModel;
 import com.oddsix.nutripro.models.MealModel;
 import com.oddsix.nutripro.models.NutrientModel;
+import com.oddsix.nutripro.rest.NutriproProvider;
+import com.oddsix.nutripro.rest.models.responses.DayResumeResponse;
+import com.oddsix.nutripro.rest.models.responses.DietNutrientResponse;
+import com.oddsix.nutripro.rest.models.responses.NutrientResponse;
+import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.DateHelper;
+import com.oddsix.nutripro.utils.helpers.FeedbackHelper;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
@@ -52,34 +59,94 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
     private Realm mRealm;
     private ListView mListView;
     private DisplayMetrics metrics;
+    private FeedbackHelper mFeedbackHelper;
+    private NutriproProvider mProvider;
+
+    private View mView;
+    private DayResumeResponse mDay;
+    private SuggestedDietResponse mDiet;
+    private Calendar mDate;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_day_resume, container, false);
+        mView = inflater.inflate(R.layout.fragment_day_resume, container, false);
 
-        setDayLabel(view);
+        mProvider = new NutriproProvider(getActivity());
 
-        mRealm = Realm.getDefaultInstance();
+        mFeedbackHelper = new FeedbackHelper(getActivity(), (LinearLayout) mView.findViewById(R.id.container), new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mDiet == null) getSuggestedDiet();
+                else getMealByDay(mDate);
+            }
+        });
+        setDayLabel(mView);
+
+//        mRealm = Realm.getDefaultInstance();
 
         metrics = new DisplayMetrics();
 
-        setListView(view);
+//        setListView(mView);
 
-        return view;
+        if(mDate == null) {
+            mDate = Calendar.getInstance();
+            getMealByDay(mDate);
+        } else if(mDay == null ) {
+            getMealByDay(mDate);
+        }
+        if(mDiet == null) {
+            getSuggestedDiet();
+        }
+
+        return mView;
     }
 
-    private MealModel dbMealtoMealModel(DBMealModel meal) {
+    private boolean isDataReady() {
+        return mDay != null && mDiet != null;
+    }
 
-        List<FoodModel> foods = new ArrayList<>();
-        for (DBMealFoodModel food : meal.getFoods()) {
-            List<NutrientModel> nutrients = new ArrayList<>();
-            for (DBMealNutrientModel nutrient : food.getNutrients()) {
-                nutrients.add(new NutrientModel(nutrient.getName(), nutrient.getQuantity(), nutrient.getUnit()));
+    private void getSuggestedDiet() {
+        mProvider.getDiet(new NutriproProvider.OnResponseListener<SuggestedDietResponse>() {
+            @Override
+            public void onResponseSuccess(SuggestedDietResponse response) {
+                mDiet = response;
+                if(isDataReady()) {
+                    setListView(mView);
+                    mFeedbackHelper.dismissFeedback();
+                }
             }
-            foods.add(new FoodModel(nutrients, food.getFoodName(), food.getQuantity()));
+
+            @Override
+            public void onResponseFailure(String msg, int code) {
+                mFeedbackHelper.showErrorPlaceHolder();
+            }
+        });
+    }
+
+    private void getMealByDay(Calendar date) {
+        setDateLabel(date);
+        mFeedbackHelper.startLoading();
+        try {
+            mProvider.getMealsByDay(date.getTime(), new NutriproProvider.OnResponseListener<DayResumeResponse>() {
+                @Override
+                public void onResponseSuccess(DayResumeResponse response) {
+                    mDay = response;
+                    if(isDataReady()) {
+                        setListView(mView);
+                        mFeedbackHelper.dismissFeedback();
+                    }
+                }
+
+                @Override
+                public void onResponseFailure(String msg, int code) {
+                    mFeedbackHelper.showErrorPlaceHolder();
+                }
+            });
+        } catch (ParseException e) {
+            e.printStackTrace();
+            mFeedbackHelper.showErrorPlaceHolder();
         }
-        return new MealModel(foods, meal.getName(), meal.getImagePath());
     }
 
     private void setListView(View view) {
@@ -92,16 +159,16 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //header position
-                if(i != 0) {
+                if (i != 0) {
                     int arrayPosition = --i;
-                    startMealDetailActivity(dbMealtoMealModel(mDay.getMeals().get(arrayPosition)));
+//                    startMealDetailActivity(dbMealtoMealModel(mDay.getMeals().get(arrayPosition)));
                 }
             }
         });
         mHeaderView.setClickable(false);
     }
 
-    private void startMealDetailActivity(MealModel meal){
+    private void startMealDetailActivity(MealModel meal) {
         Intent mealDetailIntent = new Intent(getActivity(), MealDetailActivity.class);
         mealDetailIntent.putExtra(Constants.EXTRA_MEAL_MODEL, meal);
         startActivity(mealDetailIntent);
@@ -111,66 +178,57 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
     private View getHeader() {
         mHeaderView = getActivity().getLayoutInflater().inflate(R.layout.header_day_resume, null);
 
-        setHeader(mHeaderView);
+        setHeader();
 
         return mHeaderView;
     }
 
 
-    DBDayMealModel mDay;
-    private void setHeader(View headerView) {
-        LinearLayout container = (LinearLayout) headerView.findViewById(R.id.chart_container);
+    private void setHeader() {
+        LinearLayout container = (LinearLayout) mHeaderView.findViewById(R.id.chart_container);
 
-        Calendar cal = Calendar.getInstance();
-        cal.set(2016, 10, 2);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        mDay = mRealm.where(DBDayMealModel.class)
-                .equalTo("dateString", dateFormat.format(cal.getTime()))
-                .findFirst();
+//        Calendar cal = Calendar.getInstance();
+//        cal.set(2016, 10, 2);
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+//        mDay = mRealm.where(DBDayMealModel.class)
+//                .equalTo("dateString", dateFormat.format(cal.getTime()))
+//                .findFirst();
 
         mAdapter.setMeals(mDay.getMeals());
 
-        DBDietModel diet = mRealm.where(DBRegisterModel.class)
-                .equalTo("mail", getActivity().getSharedPreferences(Constants.PACKAGE_NAME, Context.MODE_PRIVATE).getString(Constants.PREF_MAIL, ""))
-                .findFirst().getDietModel();
+//        DBDietModel diet = mRealm.where(DBRegisterModel.class)
+//                .equalTo("mail", getActivity().getSharedPreferences(Constants.PACKAGE_NAME, Context.MODE_PRIVATE).getString(Constants.PREF_MAIL, ""))
+//                .findFirst().getDietModel();
 
-        for (DBDietNutrientModel dietNutrient : diet.getDiet()) {
-            View bar = getActivity().getLayoutInflater().inflate(R.layout.partial_horizontal_bar_chart, container, false);
+        for (NutrientResponse nutrient : mDay.getNutrients()) {
+            for (DietNutrientResponse dietNutrient : mDiet.getNutrients()) {
+                if(nutrient.getName().equalsIgnoreCase(dietNutrient.getName())) {
+                    View bar = getActivity().getLayoutInflater().inflate(R.layout.partial_horizontal_bar_chart, container, false);
 
-            setBar(bar, mDay, dietNutrient);
+                    setBar(bar, dietNutrient, nutrient);
 
-            container.addView(bar);
+                    container.addView(bar);
+                }
+            }
         }
 
-        View maxBar = headerView.findViewById(R.id.chart_max_bar);
+        View maxBar = mHeaderView.findViewById(R.id.chart_max_bar);
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) maxBar.getLayoutParams();
         params.setMargins((metrics.widthPixels * 100) / 150, 0, 0, 0);
         maxBar.setLayoutParams(params);
     }
 
-    private void setBar(View bar, DBDayMealModel day, DBDietNutrientModel dietNutrient) {
-        int quantity = 0;
-        for (DBMealModel meal : day.getMeals()) {
-            for (DBMealFoodModel food : meal.getFoods()) {
-                for (DBMealNutrientModel nutrient : food.getNutrients()) {
-                    if (dietNutrient.getName().equals(nutrient.getName())) {
-                        quantity += nutrient.getQuantity();
-                    }
-                }
-            }
-        }
-
+    private void setBar(View bar, DietNutrientResponse dietNutrient, NutrientResponse nutrient) {
         View barValue = bar.findViewById(R.id.chart_bar);
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        barValue.getLayoutParams().width = (int) (((quantity * metrics.widthPixels)) / (1.5 * dietNutrient.getMax()));
+        barValue.getLayoutParams().width = (int) (((nutrient.getQuantity() * metrics.widthPixels)) / (1.5 * dietNutrient.getMax()));
 
         ((TextView) bar.findViewById(R.id.chart_item_name)).setText(dietNutrient.getName());
-        ((TextView) bar.findViewById(R.id.chart_item_value)).setText(getString(R.string.food_info_quantity, quantity, dietNutrient.getUnit()));
+        ((TextView) bar.findViewById(R.id.chart_item_value)).setText(getString(R.string.food_info_quantity, nutrient.getQuantity(), dietNutrient.getUnit()));
     }
 
     private void setDayLabel(View view) {
         mDayTv = (TextView) view.findViewById(R.id.resume_day_label);
-        setDateLabel(Calendar.getInstance());
         mDayTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -207,5 +265,6 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
         selectedCal.set(Calendar.MONTH, monthOfYear);
         selectedCal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         setDateLabel(selectedCal);
+        getMealByDay(selectedCal);
     }
 }

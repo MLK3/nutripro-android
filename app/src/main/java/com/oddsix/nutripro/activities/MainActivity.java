@@ -46,13 +46,10 @@ public class MainActivity extends BaseActivity {
     private TabLayout mTabLayout;
     private UpdatePhotoHelper mUpdatePhotoHelper;
     private AnalysedPictureFragment mPictureFragment;
-    private Realm mRealm;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mRealm = Realm.getDefaultInstance();
 
         verifyUserLogin();
 
@@ -66,17 +63,9 @@ public class MainActivity extends BaseActivity {
     }
 
     private void verifyUserLogin() {
-        DBRegisterModel register = mRealm.where(DBRegisterModel.class)
-                .equalTo("mail", getSharedPreferences(Constants.PACKAGE_NAME, Context.MODE_PRIVATE).getString(Constants.PREF_MAIL, ""))
-                .findFirst();
-
-        if (!getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE).getBoolean(Constants.PREF_IS_LOGGED, false) || register == null) {
+        if (!getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE).getBoolean(Constants.PREF_IS_LOGGED, false)) {
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
-            finish();
-        } else if (register.getDietModel() == null) {
-            Intent suggestedDietActivity = new Intent(this, SuggestedDietActivity.class);
-            startActivity(suggestedDietActivity);
             finish();
         }
     }

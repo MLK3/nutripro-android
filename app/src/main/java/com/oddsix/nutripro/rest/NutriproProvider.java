@@ -4,11 +4,15 @@ import android.app.Activity;
 
 import com.oddsix.nutripro.BuildConfig;
 import com.oddsix.nutripro.rest.models.requests.RegisterRequest;
+import com.oddsix.nutripro.rest.models.responses.DayResumeResponse;
 import com.oddsix.nutripro.rest.models.responses.GeneralResponse;
 import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
 import com.oddsix.nutripro.utils.Constants;
+import com.oddsix.nutripro.utils.DateHelper;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -49,6 +53,11 @@ public class NutriproProvider {
     public void getDiet(OnResponseListener<SuggestedDietResponse> callback){
         mNutriproService.getSuggestedDiet()
                 .enqueue(new ResponseHandler<SuggestedDietResponse>(mActivity, callback));
+    }
+
+    public void getMealsByDay(Date date, OnResponseListener<DayResumeResponse> callback) throws ParseException {
+        mNutriproService.getMealsByDay(DateHelper.parseDate(Constants.REQUEST_DATE_FORMAT, date))
+                .enqueue(new ResponseHandler<DayResumeResponse>(mActivity, callback));
     }
 
     private Retrofit getRetrofit(List<Interceptor> interceptors) {

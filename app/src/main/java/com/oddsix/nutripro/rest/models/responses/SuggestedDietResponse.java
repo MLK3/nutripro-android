@@ -8,13 +8,13 @@ import java.util.List;
 
 public class SuggestedDietResponse {
     private String status;
-    private List<NutrientResponse> nutrients;
+    private List<DietNutrientResponse> nutrients;
 
     public String getStatus() {
         return status;
     }
 
-    public List<NutrientResponse> getNutrients() {
+    public List<DietNutrientResponse> getNutrients() {
         return nutrients;
     }
 }

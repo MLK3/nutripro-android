@@ -78,9 +78,9 @@ public class LoginActivity extends BaseActivity {
                         @Override
                         public void onResponseSuccess(GeneralResponse response) {
                             dismissProgressDialog();
-                            Intent intent = new Intent(view.getContext(), MainActivity.class);
                             SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE);
                             sharedPreferences.edit().putBoolean(Constants.PREF_IS_LOGGED, true).apply();
+                            Intent intent = new Intent(view.getContext(), MainActivity.class);
                             startActivity(intent);
                             finish();
                         }

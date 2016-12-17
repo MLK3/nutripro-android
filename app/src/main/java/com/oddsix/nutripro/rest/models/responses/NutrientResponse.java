@@ -6,23 +6,18 @@ package com.oddsix.nutripro.rest.models.responses;
 
 public class NutrientResponse {
     private String name;
-    private int max;
-    private int min;
+    private int quantity;
     private String unit;
-
-    public String getUnit() {
-        return unit;
-    }
 
     public String getName() {
         return name;
     }
 
-    public int getMax() {
-        return max;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public int getMin() {
-        return min;
+    public String getUnit() {
+        return unit;
     }
 }

@@ -17,6 +17,7 @@ import com.oddsix.nutripro.activities.RegisterActivity;
 import com.oddsix.nutripro.adapters.DietAdapter;
 import com.oddsix.nutripro.models.DBDietNutrientModel;
 import com.oddsix.nutripro.models.DBRegisterModel;
+import com.oddsix.nutripro.rest.NutriproProvider;
 import com.oddsix.nutripro.utils.Constants;
 
 import io.realm.Realm;
@@ -30,6 +31,7 @@ public class ProfileFragment extends BaseFragment {
     private DBRegisterModel mUserData;
     private DietAdapter mAdapter;
     private View mHeaderView;
+    private NutriproProvider mProvider;
 
     @Nullable
     @Override

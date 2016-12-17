@@ -24,16 +24,25 @@
         android:textSize="@dimen/text_title"
         android:textStyle="bold"/>
 
-
-    <ListView
-        android:id="@+id/day_resume_lv"
+    <LinearLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingLeft="@dimen/list_internal_horizontal_margin"
-        android:paddingRight="@dimen/list_internal_horizontal_margin"
-        android:scrollbarStyle="outsideOverlay"
-        />
+        >
+
+        <ListView
+            android:id="@+id/day_resume_lv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingLeft="@dimen/list_internal_horizontal_margin"
+            android:paddingRight="@dimen/list_internal_horizontal_margin"
+            android:scrollbarStyle="outsideOverlay"
+            />
+    </LinearLayout>
+
+
+
 
 
 </LinearLayout>

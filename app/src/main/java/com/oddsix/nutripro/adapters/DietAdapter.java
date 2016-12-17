@@ -9,27 +9,24 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.oddsix.nutripro.R;
-import com.oddsix.nutripro.models.DBDietNutrientModel;
-import com.oddsix.nutripro.rest.models.responses.NutrientResponse;
+import com.oddsix.nutripro.rest.models.responses.DietNutrientResponse;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.RealmList;
 
 /**
  * Created by Filippe on 22/10/16.
  */
 
 public class DietAdapter extends BaseAdapter {
-    private List<NutrientResponse> diet = new ArrayList<>();
+    private List<DietNutrientResponse> diet = new ArrayList<>();
     private Context mContext;
 
     public DietAdapter(Context mContext) {
         this.mContext = mContext;
     }
 
-    public void setDiet(List<NutrientResponse> diet) {
+    public void setDiet(List<DietNutrientResponse> diet) {
         this.diet = diet;
         notifyDataSetChanged();
     }

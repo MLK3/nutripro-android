@@ -18,6 +18,7 @@ public class Constants {
 
     //DATE FORMATS
     public static final String STANDARD_DATE_FORMAT = "dd/MM/yyyy";
+    public static final String REQUEST_DATE_FORMAT = "ddMMyyyy";
 
     //REQUEST CODES
     public final static int REQ_REGISTER = 0;
