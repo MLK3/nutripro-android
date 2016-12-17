@@ -3,6 +3,7 @@ package com.oddsix.nutripro.rest;
 import com.oddsix.nutripro.rest.models.requests.RegisterRequest;
 import com.oddsix.nutripro.rest.models.responses.DayResumeResponse;
 import com.oddsix.nutripro.rest.models.responses.GeneralResponse;
+import com.oddsix.nutripro.rest.models.responses.MealDetailResponse;
 import com.oddsix.nutripro.rest.models.responses.RegisterResponse;
 import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
 
@@ -37,6 +38,9 @@ public interface NutriproService {
 
     @GET("register")
     Call<RegisterResponse> getRegister();
+
+    @GET("meal-detail")
+    Call<MealDetailResponse> getMealDetail(@Query("id") String id);
 
     @FormUrlEncoded
     @PUT("register")

@@ -136,14 +136,14 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
                 //header position
                 if (i != 0) {
                     int arrayPosition = --i;
-//                    startMealDetailActivity(dbMealtoMealModel(mDay.getMeals().get(arrayPosition)));
+                    startMealDetailActivity(mDay.getMeals().get(arrayPosition));
                 }
             }
         });
         mHeaderView.setClickable(false);
     }
 
-    private void startMealDetailActivity(MealModel meal) {
+    private void startMealDetailActivity(DayResumeResponse.MealResponse meal) {
         Intent mealDetailIntent = new Intent(getActivity(), MealDetailActivity.class);
         mealDetailIntent.putExtra(Constants.EXTRA_MEAL_MODEL, meal);
         startActivity(mealDetailIntent);

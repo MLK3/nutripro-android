@@ -13,7 +13,9 @@ import android.widget.TextView;
 
 import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.models.FoodModel;
+import com.oddsix.nutripro.rest.models.responses.FoodResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,14 +25,14 @@ import java.util.List;
 public class AnalysedImgAdapter extends BaseAdapter {
     private Context mContext;
     private OnNutrientClickListener mOnNutrientClickListener;
-    private List<FoodModel> mFoods;
+    private List<FoodResponse> mFoods = new ArrayList<>();
 
     public AnalysedImgAdapter(Context context, OnNutrientClickListener onNutrientClickListener) {
         mContext = context;
         mOnNutrientClickListener = onNutrientClickListener;
     }
 
-    public void setFoods(List<FoodModel> foods) {
+    public void setFoods(List<FoodResponse> foods) {
         mFoods = foods;
         notifyDataSetChanged();
     }
@@ -97,7 +99,7 @@ public class AnalysedImgAdapter extends BaseAdapter {
         }
 
         // get the TextView from the ViewHolder and then set the text (item name) and tag (item ID) values
-        viewHolder.name.setText(mFoods.get(i).getFoodName());
+        viewHolder.name.setText(mFoods.get(i).getName());
         viewHolder.value.setText(String.valueOf(mFoods.get(i).getQuantity()));
 
         return view;

@@ -92,7 +92,7 @@ public class AnalysedPictureFragment extends BaseFragment {
                             startActivityForResult(searchIntent, Constants.REQ_SEARCH);
                         } else {
                             mFoods.get(position).setFoodName(options[i]);
-                            mAnalysedImgAdapter.setFoods(mFoods);
+//                            mAnalysedImgAdapter.setFoods(mFoods);
                         }
                     }
                 });
@@ -105,7 +105,7 @@ public class AnalysedPictureFragment extends BaseFragment {
                 startActivity(infoIntent);
             }
         });
-        mAnalysedImgAdapter.setFoods(mFoods);
+//        mAnalysedImgAdapter.setFoods(mFoods);
         ListView listView = (ListView) view.findViewById(R.id.listview);
         listView.setAdapter(mAnalysedImgAdapter);
         mHeaderView = inflateHeader(inflater);

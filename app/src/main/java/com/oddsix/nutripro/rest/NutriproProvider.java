@@ -6,6 +6,7 @@ import com.oddsix.nutripro.BuildConfig;
 import com.oddsix.nutripro.rest.models.requests.RegisterRequest;
 import com.oddsix.nutripro.rest.models.responses.DayResumeResponse;
 import com.oddsix.nutripro.rest.models.responses.GeneralResponse;
+import com.oddsix.nutripro.rest.models.responses.MealDetailResponse;
 import com.oddsix.nutripro.rest.models.responses.RegisterResponse;
 import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
 import com.oddsix.nutripro.utils.Constants;
@@ -69,6 +70,11 @@ public class NutriproProvider {
     public void updateRegister(String name, String gender, int age, String email, String activity, int peso, int altura, OnResponseListener<GeneralResponse> callback) {
         mNutriproService.updateRegister(name, gender, age, peso, email, activity, altura)
                 .enqueue(new ResponseHandler<GeneralResponse>(mActivity, callback));
+    }
+
+    public void getMealDetail(String id, OnResponseListener<MealDetailResponse> callback) {
+        mNutriproService.getMealDetail(id)
+                .enqueue(new ResponseHandler<MealDetailResponse>(mActivity, callback));
     }
 
     private Retrofit getRetrofit(List<Interceptor> interceptors) {
