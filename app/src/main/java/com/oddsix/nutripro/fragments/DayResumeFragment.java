@@ -186,17 +186,22 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
                 }
             }
         }
-
-        View maxBar = mHeaderView.findViewById(R.id.chart_max_bar);
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) maxBar.getLayoutParams();
-        params.setMargins((metrics.widthPixels * 100) / 150, 0, 0, 0);
-        maxBar.setLayoutParams(params);
     }
 
     private void setBar(View bar, DietNutrientResponse dietNutrient, NutrientResponse nutrient) {
         View barValue = bar.findViewById(R.id.chart_bar);
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
         barValue.getLayoutParams().width = (int) (((nutrient.getQuantity() * metrics.widthPixels)) / (1.5 * dietNutrient.getMax()));
+
+        View maxBar = bar.findViewById(R.id.chart_max_bar);
+        RelativeLayout.LayoutParams maxParams = (RelativeLayout.LayoutParams) maxBar.getLayoutParams();
+        maxParams.setMargins((metrics.widthPixels * 100) / 150, 0, 0, 0);
+        maxBar.setLayoutParams(maxParams);
+
+        View minBar = bar.findViewById(R.id.chart_min_bar);
+        RelativeLayout.LayoutParams minParams = (RelativeLayout.LayoutParams) minBar.getLayoutParams();
+        minParams.setMargins((metrics.widthPixels * (dietNutrient.getMin()) * 100 / (dietNutrient.getMax())) / 150, 0, 0, 0);
+        minBar.setLayoutParams(minParams);
 
         ((TextView) bar.findViewById(R.id.chart_item_name)).setText(dietNutrient.getName());
         ((TextView) bar.findViewById(R.id.chart_item_value)).setText(getString(R.string.food_info_quantity, nutrient.getQuantity(), dietNutrient.getUnit()));
