@@ -6,6 +6,7 @@ import com.oddsix.nutripro.BuildConfig;
 import com.oddsix.nutripro.rest.models.requests.RegisterRequest;
 import com.oddsix.nutripro.rest.models.responses.DayResumeResponse;
 import com.oddsix.nutripro.rest.models.responses.GeneralResponse;
+import com.oddsix.nutripro.rest.models.responses.RegisterResponse;
 import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.DateHelper;
@@ -58,6 +59,11 @@ public class NutriproProvider {
     public void getMealsByDay(Date date, OnResponseListener<DayResumeResponse> callback) throws ParseException {
         mNutriproService.getMealsByDay(DateHelper.parseDate(Constants.REQUEST_DATE_FORMAT, date))
                 .enqueue(new ResponseHandler<DayResumeResponse>(mActivity, callback));
+    }
+
+    public void getRegister(OnResponseListener<RegisterResponse> callback) {
+        mNutriproService.getRegister()
+                .enqueue(new ResponseHandler<RegisterResponse>(mActivity, callback));
     }
 
     private Retrofit getRetrofit(List<Interceptor> interceptors) {

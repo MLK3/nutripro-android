@@ -3,6 +3,7 @@ package com.oddsix.nutripro.rest;
 import com.oddsix.nutripro.rest.models.requests.RegisterRequest;
 import com.oddsix.nutripro.rest.models.responses.DayResumeResponse;
 import com.oddsix.nutripro.rest.models.responses.GeneralResponse;
+import com.oddsix.nutripro.rest.models.responses.RegisterResponse;
 import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
 
 import retrofit2.Call;
@@ -32,5 +33,8 @@ public interface NutriproService {
 
     @GET("meals")
     Call<DayResumeResponse> getMealsByDay(@Query("date") String date);
+
+    @GET("register")
+    Call<RegisterResponse> getRegister();
 
 }
