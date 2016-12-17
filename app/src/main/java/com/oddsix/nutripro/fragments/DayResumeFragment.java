@@ -93,6 +93,9 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
             getMealByDay(mDate);
         } else if (mDay == null) {
             getMealByDay(mDate);
+        } else {
+            setListView(mView);
+            setDateLabel(mDate);
         }
 
         return mView;
@@ -237,6 +240,7 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
         selectedCal.set(Calendar.MONTH, monthOfYear);
         selectedCal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         setDateLabel(selectedCal);
+        mDate = selectedCal;
         getMealByDay(selectedCal);
     }
 }

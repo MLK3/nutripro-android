@@ -55,6 +55,7 @@ public class ProfileFragment extends BaseFragment {
         mProvider = new NutriproProvider(getActivity());
 
         if(mRegister == null) getRegister();
+        else setListView(mView);
 
         return mView;
     }
