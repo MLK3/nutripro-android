@@ -56,7 +56,7 @@ public class ProfileFragment extends BaseFragment {
 
         if(mRegister == null) getRegister();
 
-        return mView    ;
+        return mView;
     }
 
     private void getRegister() {
@@ -112,6 +112,7 @@ public class ProfileFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), RegisterActivity.class);
+                intent.putExtra(Constants.EXTRA_REGISTER_MODEL, mRegister);
                 intent.putExtra(Constants.EXTRA_BOOL_EDIT_REGISTER, true);
                 startActivityForResult(intent, Constants.REQ_EDIT_REGISTER);
             }

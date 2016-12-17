@@ -12,6 +12,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Query;
 
 /**
@@ -36,5 +37,15 @@ public interface NutriproService {
 
     @GET("register")
     Call<RegisterResponse> getRegister();
+
+    @FormUrlEncoded
+    @PUT("register")
+    Call<GeneralResponse> updateRegister(@Field("name") String name,
+                                         @Field("gender") String gender,
+                                         @Field("age") int age,
+                                         @Field("peso") int weight,
+                                         @Field("email") String mail,
+                                         @Field("activity") String activity,
+                                         @Field("altura") int height);
 
 }

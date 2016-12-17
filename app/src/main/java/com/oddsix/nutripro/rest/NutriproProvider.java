@@ -66,6 +66,11 @@ public class NutriproProvider {
                 .enqueue(new ResponseHandler<RegisterResponse>(mActivity, callback));
     }
 
+    public void updateRegister(String name, String gender, int age, String email, String activity, int peso, int altura, OnResponseListener<GeneralResponse> callback) {
+        mNutriproService.updateRegister(name, gender, age, peso, email, activity, altura)
+                .enqueue(new ResponseHandler<GeneralResponse>(mActivity, callback));
+    }
+
     private Retrofit getRetrofit(List<Interceptor> interceptors) {
         Retrofit.Builder retroBuilder = new Retrofit.Builder().baseUrl(Constants.MOCK_URL).addConverterFactory(GsonConverterFactory.create());
         OkHttpClient.Builder httpClient = getClient(interceptors);
