@@ -2,6 +2,10 @@ package com.oddsix.nutripro.activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -13,6 +17,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
 import com.oddsix.nutripro.BaseActivity;
 import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.adapters.AnalysedImgAdapter;
@@ -105,6 +115,7 @@ public class MealDetailActivity extends BaseActivity {
     private View inflateHeader(LayoutInflater inflater) {
         View headerView = inflater.inflate(R.layout.header_analysed_photo, null);
         ((TextView) headerView.findViewById(R.id.header_analysed_meal_name_tv)).setText(mMeal.getName());
+
         setImage(headerView);
         return headerView;
     }
@@ -121,7 +132,35 @@ public class MealDetailActivity extends BaseActivity {
         return footerView;
     }
 
-    public void setImage(View headerView) {
-        Glide.with(this).load(mMeal.getPictureUrl()).into((ImageView) headerView.findViewById(R.id.header_analysed_photo_img));
+    public void setImage(final View headerView) {
+        Glide.with(this).load(mMeal.getPictureUrl()).asBitmap().into(new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                ((ImageView) headerView.findViewById(R.id.header_analysed_photo_img)).setImageBitmap(resource);
+                setDrawing(headerView, resource);
+            }
+        });
+    }
+
+
+    private void setDrawing(View headerView, Bitmap resource) {
+//        ImageView image = ((ImageView) headerView.findViewById(R.id.header_analysed_photo_img));
+        ImageView imageView = (ImageView) headerView.findViewById(R.id.header_analysed_drawing);
+        Bitmap bitmap = Bitmap.createBitmap(resource.getWidth(), resource.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+
+        Paint wallpaint = new Paint();
+        wallpaint.setColor(Color.GRAY);
+        wallpaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        wallpaint.setAlpha(80);
+        Path wallpath = new Path();
+        wallpath.reset(); // only needed when reusing this path for a new build
+        wallpath.moveTo(0, 0); // used for first point
+        wallpath.lineTo(100, 0);
+        wallpath.lineTo(0, 100);
+        wallpath.lineTo(0, 0); // there is a setLastPoint action but i found it not to work as expected
+
+        canvas.drawPath(wallpath, wallpaint);
+        imageView.setImageBitmap(bitmap);
     }
 }

@@ -1,25 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
 
     <ImageView
-        android:layout_marginTop="@dimen/vertical_margin"
-        android:layout_marginLeft="@dimen/horizontal_margin"
-        android:layout_marginRight="@dimen/horizontal_margin"
         android:id="@+id/header_analysed_photo_img"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/analyzed_image_size"/>
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/horizontal_margin"
+        android:layout_marginRight="@dimen/horizontal_margin"
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:adjustViewBounds="true"
+        android:maxHeight="@dimen/analyzed_image_size"
+        android:scaleType="centerCrop"/>
+
+    <ImageView
+        android:id="@+id/header_analysed_drawing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/header_analysed_photo_img"
+        android:layout_alignEnd="@id/header_analysed_photo_img"
+        android:layout_alignLeft="@id/header_analysed_photo_img"
+        android:layout_alignRight="@id/header_analysed_photo_img"
+        android:layout_alignStart="@id/header_analysed_photo_img"
+        android:layout_alignTop="@id/header_analysed_photo_img"
+        android:adjustViewBounds="true"
+        />
 
     <TextView
         android:id="@+id/header_analysed_meal_name_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="almoço"
+        android:layout_below="@id/header_analysed_photo_img"
         android:gravity="center"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/text_title"
         android:textStyle="bold"/>
 
-</LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,40 @@
+package com.oddsix.nutripro.utils.helpers;
+
+import android.content.Context;
+import android.support.annotation.ColorRes;
+
+import com.oddsix.nutripro.R;
+
+/**
+ * Created by filippecl on 18/12/16.
+ */
+
+public class AppColorHelper {
+    private Context mContext;
+    private int[] mAppColors;
+    private int mCounter = 0;
+
+    public AppColorHelper(Context context) {
+        mContext = context;
+        mAppColors = context.getResources().getIntArray(R.array.app_colors);
+    }
+
+    @ColorRes
+    public int getNextColor() {
+        int color = mAppColors[mCounter];
+        addOneToCounter();
+        return color;
+    }
+
+    private void addOneToCounter() {
+        if (mCounter + 1 < mAppColors.length - 1) {
+            mCounter++;
+        } else {
+            mCounter = 0;
+        }
+    }
+
+    public int getMaximumNumberOfColors() {
+        return mAppColors.length;
+    }
+}
