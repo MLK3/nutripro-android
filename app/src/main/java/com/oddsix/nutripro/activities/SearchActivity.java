@@ -46,12 +46,12 @@ public class SearchActivity extends BaseActivity {
     private View.OnClickListener mOnTryAgainClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mFeedbackHelper.startLoading();
             sendRequest(mSearchView.getQuery().toString());
         }
     };
 
     private void sendRequest(String query) {
+        mFeedbackHelper.startLoading();
         mNutriproProvider.searchFood(query, new NutriproProvider.OnResponseListener<SearchResponse>() {
             @Override
             public void onResponseSuccess(SearchResponse response) {

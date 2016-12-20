@@ -3,6 +3,7 @@ package com.oddsix.nutripro.rest;
 import android.app.Activity;
 
 import com.oddsix.nutripro.BuildConfig;
+import com.oddsix.nutripro.rest.models.requests.EditMealRequest;
 import com.oddsix.nutripro.rest.models.requests.RegisterRequest;
 import com.oddsix.nutripro.rest.models.responses.DayResumeResponse;
 import com.oddsix.nutripro.rest.models.responses.FoodFromMealResponse;
@@ -83,6 +84,11 @@ public class NutriproProvider {
     public void searchFood(String query, OnResponseListener<SearchResponse> callback){
         mNutriproService.searchFoods(query)
                 .enqueue(new ResponseHandler<SearchResponse>(mActivity, callback));
+    }
+
+    public void editMeal(EditMealRequest request, OnResponseListener<GeneralResponse> callback) {
+        mNutriproService.editMeal(request)
+                .enqueue(new ResponseHandler<GeneralResponse>(mActivity, callback));
     }
 
     private Retrofit getRetrofit(List<Interceptor> interceptors) {

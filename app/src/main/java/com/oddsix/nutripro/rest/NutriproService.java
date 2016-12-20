@@ -1,5 +1,6 @@
 package com.oddsix.nutripro.rest;
 
+import com.oddsix.nutripro.rest.models.requests.EditMealRequest;
 import com.oddsix.nutripro.rest.models.requests.RegisterRequest;
 import com.oddsix.nutripro.rest.models.responses.DayResumeResponse;
 import com.oddsix.nutripro.rest.models.responses.FoodFromMealResponse;
@@ -8,6 +9,8 @@ import com.oddsix.nutripro.rest.models.responses.MealDetailResponse;
 import com.oddsix.nutripro.rest.models.responses.RegisterResponse;
 import com.oddsix.nutripro.rest.models.responses.SearchResponse;
 import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
+
+import java.util.Calendar;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -59,5 +62,8 @@ public interface NutriproService {
 
     @GET("search-food")
     Call<SearchResponse> searchFoods(@Query("name") String name);
+
+    @PUT("meal")
+    Call<GeneralResponse> editMeal(@Body EditMealRequest request);
 
 }

@@ -100,7 +100,7 @@ public class AnalysedImgAdapter extends BaseAdapter {
         // get the TextView from the ViewHolder and then set the text (item name) and tag (item ID) values
         viewHolder.name.setText(mFoods.get(i).getName());
         viewHolder.value.setText(String.valueOf(mFoods.get(i).getQuantity()) + "g");
-        if(mFoods.get(i).getPoints() != null){
+        if(mFoods.get(i).getArea() != null){
             viewHolder.underline.setBackgroundColor(mAppColorHelper.getColorAtIndex(i));
         }
         return view;

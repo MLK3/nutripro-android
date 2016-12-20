@@ -35,6 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/header_analysed_photo_img"
         android:gravity="center"
+        android:padding="@dimen/small_spacing_between_items"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/text_title"
         android:textStyle="bold"/>

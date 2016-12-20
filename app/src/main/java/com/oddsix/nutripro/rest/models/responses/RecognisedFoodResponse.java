@@ -11,7 +11,11 @@ public class RecognisedFoodResponse implements Serializable {
     private String id;
     private String name;
     private int quantity;
-    private List<Point> points;
+    private Area area;
+
+    public Area getArea() {
+        return area;
+    }
 
     public RecognisedFoodResponse(String id, String name) {
         this.id = id;
@@ -42,20 +46,30 @@ public class RecognisedFoodResponse implements Serializable {
         return name;
     }
 
-    public List<Point> getPoints() {
-        return points;
-    }
+    public class Area implements Serializable {
+        private String area_id;
+        private List<Point> points;
 
-    public class Point implements Serializable {
-        float x;
-        float y;
-
-        public float getX() {
-            return x;
+        public List<Point> getPoints() {
+            return points;
         }
 
-        public float getY() {
-            return y;
+        public String getArea_id() {
+            return area_id;
         }
+
+        public class Point implements Serializable {
+            float x;
+            float y;
+
+            public float getX() {
+                return x;
+            }
+
+            public float getY() {
+                return y;
+            }
+        }
+
     }
 }

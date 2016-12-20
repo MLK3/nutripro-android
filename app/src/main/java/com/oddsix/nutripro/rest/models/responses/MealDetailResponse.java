@@ -12,6 +12,11 @@ public class MealDetailResponse implements Serializable{
     private List<RecognisedFoodResponse> foods;
     private List<NutrientResponse> nutrients;
     private String pictureUrl;
+    private String meal_id;
+
+    public String getMeal_id() {
+        return meal_id;
+    }
 
     public String getPictureUrl() {
         return pictureUrl;

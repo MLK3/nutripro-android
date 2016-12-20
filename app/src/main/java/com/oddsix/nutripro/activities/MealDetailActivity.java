@@ -27,8 +27,11 @@ import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.adapters.AnalysedImgAdapter;
 import com.oddsix.nutripro.models.AreaModel;
 import com.oddsix.nutripro.rest.NutriproProvider;
+import com.oddsix.nutripro.rest.models.requests.EditMealRequest;
 import com.oddsix.nutripro.rest.models.responses.DayResumeResponse;
+import com.oddsix.nutripro.rest.models.responses.EditMealFoodResponse;
 import com.oddsix.nutripro.rest.models.responses.FoodResponse;
+import com.oddsix.nutripro.rest.models.responses.GeneralResponse;
 import com.oddsix.nutripro.rest.models.responses.RecognisedFoodResponse;
 import com.oddsix.nutripro.rest.models.responses.MealDetailResponse;
 import com.oddsix.nutripro.utils.Constants;
@@ -164,7 +167,7 @@ public class MealDetailActivity extends BaseActivity {
         footerView.findViewById(R.id.footer_analysed_photo_conclude).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                functionNotImplemented();
+                sendSaveChangesRequest();
             }
         });
         ((Button) footerView.findViewById(R.id.footer_analysed_photo_conclude)).setText(getString(R.string.meal_detail_btn_save));
@@ -176,6 +179,29 @@ public class MealDetailActivity extends BaseActivity {
             }
         });
         return footerView;
+    }
+
+    public void sendSaveChangesRequest() {
+        EditMealRequest editMealRequest = new EditMealRequest(mMeal.getMeal_id(), mMeal.getName());
+        for (RecognisedFoodResponse food : mMeal.getFoods()) {
+            editMealRequest.getFoods().add(
+                    new EditMealFoodResponse(
+                            food.getArea().getArea_id(),
+                            food.getId(),
+                            food.getQuantity()));
+        }
+        mProvider.editMeal(editMealRequest, new NutriproProvider.OnResponseListener<GeneralResponse>() {
+            @Override
+            public void onResponseSuccess(GeneralResponse response) {
+                showToast(getString(R.string.meal_detail_edit_success));
+                finish();
+            }
+
+            @Override
+            public void onResponseFailure(String msg, int code) {
+                showToast(msg);
+            }
+        });
     }
 
     public void setImage(final View headerView) {
@@ -214,15 +240,16 @@ public class MealDetailActivity extends BaseActivity {
             //Draw polygon
             Path wallPath = new Path();
             wallPath.reset();
-            List<RecognisedFoodResponse.Point> points = recognisedFood.getPoints();
+            List<RecognisedFoodResponse.Area.Point> points = recognisedFood.getArea().getPoints();
             //Initial point
             wallPath.moveTo(points.get(0).getX(), points.get(0).getY());
-            for (int i = 1; i < recognisedFood.getPoints().size(); i++) {
+            for (int i = 1; i < recognisedFood.getArea().getPoints().size(); i++) {
                 //Rest of the points
                 wallPath.lineTo(points.get(i).getX(), points.get(i).getY());
             }
             wallPath.lineTo(points.get(0).getX(), points.get(0).getY());
 
+            //Draw
             canvas.drawPath(wallPath, wallPaint);
 
             //Create a region
