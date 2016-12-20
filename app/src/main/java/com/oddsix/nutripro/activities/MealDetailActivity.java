@@ -190,15 +190,18 @@ public class MealDetailActivity extends BaseActivity {
                             food.getId(),
                             food.getQuantity()));
         }
+        showProgressdialog();
         mProvider.editMeal(editMealRequest, new NutriproProvider.OnResponseListener<GeneralResponse>() {
             @Override
             public void onResponseSuccess(GeneralResponse response) {
+                dismissProgressDialog();
                 showToast(getString(R.string.meal_detail_edit_success));
                 finish();
             }
 
             @Override
             public void onResponseFailure(String msg, int code) {
+                dismissProgressDialog();
                 showToast(msg);
             }
         });
