@@ -3,6 +3,8 @@
 
     <!--ACTIONS-->
     <string name="action_retry">Tentar Novamente</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="action_confirm">Confirmar</string>
 
     <!--ERROR-->
     <string name="unknown_error">Não foi possível completar sua requisição, tente novamente.</string>
@@ -122,6 +124,8 @@
     <string name="meal_detail_activity_title">Detalhe da Refeição</string>
     <string name="meal_detail_btn_save">Salvar Edição</string>
     <string name="meal_detail_add_item">Adicionar um novo alimento nesta refeição</string>
+        <!--EDIT QUANTITY DIALOG-->
+    <string name="meal_detail_quantity_dialog_title">Adicione a nova quantidade em gramas</string>
 
     <!--CAMERA-->
     <string name="camera_permission_confirmation">This app demonstrates the usage of CameraView. In order to do that, it needs permission to access camera.</string>

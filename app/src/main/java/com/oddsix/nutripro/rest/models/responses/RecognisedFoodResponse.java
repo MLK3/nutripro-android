@@ -13,6 +13,10 @@ public class RecognisedFoodResponse implements Serializable {
     private int quantity;
     private List<Point> points;
 
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
     public int getQuantity() {
         return quantity;
     }

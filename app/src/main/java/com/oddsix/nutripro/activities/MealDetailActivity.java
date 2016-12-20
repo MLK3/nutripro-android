@@ -31,7 +31,9 @@ import com.oddsix.nutripro.rest.models.responses.DayResumeResponse;
 import com.oddsix.nutripro.rest.models.responses.RecognisedFoodResponse;
 import com.oddsix.nutripro.rest.models.responses.MealDetailResponse;
 import com.oddsix.nutripro.utils.Constants;
+import com.oddsix.nutripro.utils.base.BaseDialogHelper;
 import com.oddsix.nutripro.utils.helpers.AppColorHelper;
+import com.oddsix.nutripro.utils.helpers.DialogHelper;
 import com.oddsix.nutripro.utils.helpers.FeedbackHelper;
 
 import java.util.ArrayList;
@@ -47,6 +49,7 @@ public class MealDetailActivity extends BaseActivity {
     private FeedbackHelper mFeedbackHelper;
     private MealDetailResponse mMeal;
     private AppColorHelper mColorHelper;
+    private DialogHelper mDialogHelper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,6 +59,7 @@ public class MealDetailActivity extends BaseActivity {
         final DayResumeResponse.MealResponse meal = (DayResumeResponse.MealResponse) getIntent().getSerializableExtra(Constants.EXTRA_MEAL_MODEL);
 
         mColorHelper = new AppColorHelper(this);
+        mDialogHelper = new DialogHelper(this);
 
         mFeedbackHelper = new FeedbackHelper(this, (LinearLayout) findViewById(R.id.container), new View.OnClickListener() {
             @Override
@@ -93,7 +97,7 @@ public class MealDetailActivity extends BaseActivity {
         mAnalysedImgAdapter = new AnalysedImgAdapter(this, new AnalysedImgAdapter.OnNutrientClickListener() {
             @Override
             public void onEditValueClicked(int position) {
-                functionNotImplemented();
+                showInputDialog(position);
             }
 
             @Override
@@ -111,6 +115,19 @@ public class MealDetailActivity extends BaseActivity {
         listView.setAdapter(mAnalysedImgAdapter);
         listView.addHeaderView(inflateHeader(getLayoutInflater()));
         listView.addFooterView(inflateFooter(getLayoutInflater()));
+    }
+
+    private void showInputDialog(final int position) {
+        mDialogHelper.showEditTextDialog(getString(R.string.meal_detail_quantity_dialog_title),
+                getString(R.string.action_confirm),
+                getString(R.string.action_cancel),
+                new BaseDialogHelper.OnEditTextDialogClickListener() {
+                    @Override
+                    public void onInputConfirmed(int value) {
+                        mMeal.getFoods().get(position).setQuantity(value);
+                        mAnalysedImgAdapter.setFoods(mMeal.getFoods());
+                    }
+                });
     }
 
     public void startFoodInfoActivity(int position) {
