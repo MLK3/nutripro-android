@@ -6,9 +6,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Point;
+import android.graphics.RectF;
+import android.graphics.Region;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -26,12 +31,18 @@ import com.bumptech.glide.request.target.Target;
 import com.oddsix.nutripro.BaseActivity;
 import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.adapters.AnalysedImgAdapter;
+import com.oddsix.nutripro.models.AreaModel;
 import com.oddsix.nutripro.models.MealModel;
 import com.oddsix.nutripro.rest.NutriproProvider;
 import com.oddsix.nutripro.rest.models.responses.DayResumeResponse;
+import com.oddsix.nutripro.rest.models.responses.FoodResponse;
 import com.oddsix.nutripro.rest.models.responses.MealDetailResponse;
 import com.oddsix.nutripro.utils.Constants;
+import com.oddsix.nutripro.utils.helpers.AppColorHelper;
 import com.oddsix.nutripro.utils.helpers.FeedbackHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by filippecl on 06/11/16.
@@ -42,6 +53,7 @@ public class MealDetailActivity extends BaseActivity {
     private NutriproProvider mProvider;
     private FeedbackHelper mFeedbackHelper;
     private MealDetailResponse mMeal;
+    private AppColorHelper mColorHelper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,6 +61,8 @@ public class MealDetailActivity extends BaseActivity {
         setContentView(R.layout.activity_listview_with_toolbar);
 
         final DayResumeResponse.MealResponse meal = (DayResumeResponse.MealResponse) getIntent().getSerializableExtra(Constants.EXTRA_MEAL_MODEL);
+
+        mColorHelper = new AppColorHelper(this);
 
         mFeedbackHelper = new FeedbackHelper(this, (LinearLayout) findViewById(R.id.container), new View.OnClickListener() {
             @Override
@@ -142,25 +156,68 @@ public class MealDetailActivity extends BaseActivity {
         });
     }
 
-
     private void setDrawing(View headerView, Bitmap resource) {
-//        ImageView image = ((ImageView) headerView.findViewById(R.id.header_analysed_photo_img));
         ImageView imageView = (ImageView) headerView.findViewById(R.id.header_analysed_drawing);
+
+        // Get picture dimensions
+        final int resWidth = resource.getWidth();
+        final int resHeight = resource.getHeight();
+
+        // Create a canvas for the drawings
         Bitmap bitmap = Bitmap.createBitmap(resource.getWidth(), resource.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
 
-        Paint wallpaint = new Paint();
-        wallpaint.setColor(Color.GRAY);
-        wallpaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        wallpaint.setAlpha(80);
-        Path wallpath = new Path();
-        wallpath.reset(); // only needed when reusing this path for a new build
-        wallpath.moveTo(0, 0); // used for first point
-        wallpath.lineTo(100, 0);
-        wallpath.lineTo(0, 100);
-        wallpath.lineTo(0, 0); // there is a setLastPoint action but i found it not to work as expected
+        // Create a list of regions
+        final List<AreaModel> areas = new ArrayList<>();
 
-        canvas.drawPath(wallpath, wallpaint);
+        for (FoodResponse recognisedFood : mMeal.getFoods()) {
+
+            //Set color, width and alpha
+            Paint wallPaint = new Paint();
+            wallPaint.setColor(mColorHelper.getNextColor());
+            wallPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+            wallPaint.setStrokeWidth(2);
+            wallPaint.setAlpha(200);
+
+            //Draw polygon
+            Path wallPath = new Path();
+            wallPath.reset();
+            List<FoodResponse.Point> points = recognisedFood.getPoints();
+            //Initial point
+            wallPath.moveTo(points.get(0).getX(), points.get(0).getY());
+            for (int i = 1; i < recognisedFood.getPoints().size(); i++) {
+                //Rest of the points
+                wallPath.lineTo(points.get(i).getX(), points.get(i).getY());
+            }
+            wallPath.lineTo(points.get(0).getX(), points.get(0).getY());
+
+            canvas.drawPath(wallPath, wallPaint);
+
+            //Create a region
+            RectF rectF = new RectF();
+            wallPath.computeBounds(rectF, true);
+            final Region r = new Region();
+            r.setPath(wallPath, new Region((int) rectF.left, (int) rectF.top, (int) rectF.right, (int) rectF.bottom));
+
+            areas.add(new AreaModel(r, recognisedFood));
+        }
+
         imageView.setImageBitmap(bitmap);
+
+        imageView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                Point point = new Point();
+                point.x = (int) ((motionEvent.getX() * resWidth) / view.getWidth());
+                point.y = (int) ((motionEvent.getY() * resHeight) / view.getHeight());
+
+                for (AreaModel area : areas) {
+                    if (area.getRegion().contains(point.x, point.y)) {
+                        showToast("Dentro" + area.getFood().getName());
+                    }
+                }
+                return true;
+            }
+        });
     }
 }

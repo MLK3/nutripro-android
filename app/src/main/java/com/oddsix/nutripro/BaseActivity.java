@@ -46,7 +46,7 @@ public class BaseActivity extends AppCompatActivity {
     //TOAST METHODS
 
     public void showToast(String string) {
-        Toast.makeText(this, string, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, string, Toast.LENGTH_SHORT).show();
     }
 
     public void functionNotImplemented(){

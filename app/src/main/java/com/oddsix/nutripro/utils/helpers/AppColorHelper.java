@@ -2,6 +2,7 @@ package com.oddsix.nutripro.utils.helpers;
 
 import android.content.Context;
 import android.support.annotation.ColorRes;
+import android.support.v4.content.ContextCompat;
 
 import com.oddsix.nutripro.R;
 
@@ -19,11 +20,10 @@ public class AppColorHelper {
         mAppColors = context.getResources().getIntArray(R.array.app_colors);
     }
 
-    @ColorRes
     public int getNextColor() {
         int color = mAppColors[mCounter];
         addOneToCounter();
-        return color;
+        return  color;
     }
 
     private void addOneToCounter() {
