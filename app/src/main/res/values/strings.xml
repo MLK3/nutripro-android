@@ -5,6 +5,7 @@
     <string name="action_retry">Tentar Novamente</string>
     <string name="action_cancel">Cancelar</string>
     <string name="action_confirm">Confirmar</string>
+    <string name="action_register">Cadastrar</string>
 
     <!--ERROR-->
     <string name="unknown_error">Não foi possível completar sua requisição, tente novamente.</string>
@@ -137,7 +138,19 @@
     <string name="flash_auto">Flash auto</string>
     <string name="flash_off">Flash off</string>
     <string name="flash_on">Flash on</string>
-    
+
+    <!--REGISTER FOOD-->
+    <string name="register_food_activity_title">Cadastro de Alimento</string>
+    <string name="register_food_name">Nome do Alimento</string>
+    <string name="register_food_quantity">Quantidade</string>
+    <string name="register_food_energetic_value">Valor Energético</string>
+    <string name="register_food_carbs">Carboidratos</string>
+    <string name="register_food_proteins">Proteínas</string>
+    <string name="register_food_total_fat">Gorduras Totais</string>
+    <string name="register_food_saturated_fat">Gorduras Saturadas</string>
+    <string name="register_food_fibers">Fibras Alimentares</string>
+    <string name="register_food_sodium">Sódio</string>
+
     <!--SEARCH-->
     <string name="search_activity_title">Lista de Alimentos</string>
     <string name="search_header_list">Selecione o alimento:</string>

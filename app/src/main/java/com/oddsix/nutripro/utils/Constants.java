@@ -26,6 +26,7 @@ public class Constants {
     public final static int REQ_REPLACE_FOOD = 2;
     public final static int REQ_ADD_FOOD = 3;
     public final static int REQ_REPLACE_BY_AREA = 4;
+    public final static int REQ_REGISTER_FOOD = 5;
 
     //EXTRA
     public final static String EXTRA_REGISTER_MODEL = "EXTRA_REGISTER_MODEL";
@@ -34,6 +35,8 @@ public class Constants {
     public final static String EXTRA_MEAL_MODEL = "EXTRA_MEAL_MODEL";
     public final static String EXTRA_FOOD = "EXTRA_FOOD";
     public final static String EXTRA_DIET = "EXTRA_DIET";
+    public final static String EXTRA_FOOD_ID = "EXTRA_FOOD_ID";
+    public final static String EXTRA_FOOD_NAME = "EXTRA_FOOD_NAME";
 
     //PREF
     public final static String PREF_MAIL = PACKAGE_NAME + ".PREF_MAIL";

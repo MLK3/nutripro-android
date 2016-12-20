@@ -1,7 +1,9 @@
 package com.oddsix.nutripro.rest;
 
 import com.oddsix.nutripro.rest.models.requests.EditMealRequest;
+import com.oddsix.nutripro.rest.models.requests.RegisterFoodRequest;
 import com.oddsix.nutripro.rest.models.requests.RegisterRequest;
+import com.oddsix.nutripro.rest.models.responses.CreateFoodResponse;
 import com.oddsix.nutripro.rest.models.responses.DayResumeResponse;
 import com.oddsix.nutripro.rest.models.responses.FoodFromMealResponse;
 import com.oddsix.nutripro.rest.models.responses.GeneralResponse;
@@ -65,5 +67,8 @@ public interface NutriproService {
 
     @PUT("meal")
     Call<GeneralResponse> editMeal(@Body EditMealRequest request);
+
+    @POST("food")
+    Call<CreateFoodResponse> registerFood(@Body RegisterFoodRequest request);
 
 }

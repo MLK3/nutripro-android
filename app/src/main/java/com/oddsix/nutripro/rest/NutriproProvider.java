@@ -4,7 +4,9 @@ import android.app.Activity;
 
 import com.oddsix.nutripro.BuildConfig;
 import com.oddsix.nutripro.rest.models.requests.EditMealRequest;
+import com.oddsix.nutripro.rest.models.requests.RegisterFoodRequest;
 import com.oddsix.nutripro.rest.models.requests.RegisterRequest;
+import com.oddsix.nutripro.rest.models.responses.CreateFoodResponse;
 import com.oddsix.nutripro.rest.models.responses.DayResumeResponse;
 import com.oddsix.nutripro.rest.models.responses.FoodFromMealResponse;
 import com.oddsix.nutripro.rest.models.responses.GeneralResponse;
@@ -89,6 +91,11 @@ public class NutriproProvider {
     public void editMeal(EditMealRequest request, OnResponseListener<GeneralResponse> callback) {
         mNutriproService.editMeal(request)
                 .enqueue(new ResponseHandler<GeneralResponse>(mActivity, callback));
+    }
+
+    public void registerFood(RegisterFoodRequest registerFoodRequest, OnResponseListener<CreateFoodResponse> callback) {
+        mNutriproService.registerFood(registerFoodRequest)
+                .enqueue(new ResponseHandler<CreateFoodResponse>(mActivity, callback));
     }
 
     private Retrofit getRetrofit(List<Interceptor> interceptors) {

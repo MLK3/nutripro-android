@@ -56,7 +56,6 @@ public class MealDetailActivity extends BaseActivity {
     private DialogHelper mDialogHelper;
 
     private int mMealIndexEditing = 0;
-    private AreaModel mArea;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -283,7 +282,6 @@ public class MealDetailActivity extends BaseActivity {
                 if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                     for (AreaModel area : areas) {
                         if (area.getRegion().contains(point.x, point.y)) {
-                            mArea = area;
                             mMealIndexEditing = area.getArrayIndex();
                             startSearchActivityReplacingArea();
                             break;

@@ -34,6 +34,7 @@
         <activity android:name=".activities.CameraActivity"/>
         <activity android:name=".activities.SearchActivity"/>
         <activity android:name=".activities.ActivityLevelActivity"/>
+        <activity android:name=".activities.AddNewFoodActivity"/>
 
         <meta-data
             android:name="io.fabric.ApiKey"
