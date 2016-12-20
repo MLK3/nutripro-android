@@ -149,6 +149,7 @@
     <string name="register_food_total_fat">Gorduras Totais</string>
     <string name="register_food_saturated_fat">Gorduras Saturadas</string>
     <string name="register_food_fibers">Fibras Alimentares</string>
+    <string name="register_food_error">O campo não pode estar vazio."</string>
     <string name="register_food_sodium">Sódio</string>
 
     <!--SEARCH-->

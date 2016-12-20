@@ -102,7 +102,7 @@ public class AddNewFoodActivity extends BaseActivity {
         boolean isValid = true;
         for (TextInputLayout til : mTilList) {
             if (til.getEditText().getText().toString().isEmpty()) {
-                til.setError("O campo não pode estar vazio.");
+                til.setError(getString(R.string.register_food_error));
                 isValid = false;
             }
         }
