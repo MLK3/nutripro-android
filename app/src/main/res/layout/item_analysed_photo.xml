@@ -1,56 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:paddingBottom="@dimen/small_spacing_between_items"
-              android:paddingLeft="@dimen/horizontal_margin"
-              android:paddingRight="@dimen/horizontal_margin"
-              android:paddingTop="@dimen/small_spacing_between_items"
-              android:gravity="center_vertical"
-              android:orientation="horizontal">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/small_spacing_between_items"
+                android:paddingLeft="@dimen/horizontal_margin"
+                android:paddingRight="@dimen/horizontal_margin"
+                android:paddingTop="@dimen/small_spacing_between_items">
 
-    <EditText
+    <TextView
         android:id="@+id/analysed_photo_name_et"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:clickable="false"
-        android:focusable="false"/>
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/analysed_photo_value_et"
+        android:drawablePadding="1dp"
+        android:drawableRight="@drawable/ic_edit"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:lines="1"
+        android:paddingRight="@dimen/small_spacing_between_items"
+        android:textColor="@color/color_black"
+        android:textSize="@dimen/text_large_body"
+        />
 
-    <ImageView
-        android:id="@+id/analysed_photo_edit_name_ic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingBottom="1dp"
-        android:paddingLeft="2dp"
-        android:paddingRight="2dp"
-        android:paddingTop="1dp"
-        android:src="@drawable/ic_edit"/>
+    <View
+        android:id="@+id/analysed_photo_name_underline"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignBottom="@id/analysed_photo_name_et"
+        android:layout_alignLeft="@id/analysed_photo_name_et"
+        android:layout_alignRight="@id/analysed_photo_name_et"
+        android:layout_marginRight="40dp"
+        android:background="@color/color_gray"
+        />
 
-    <EditText
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignBottom="@id/analysed_photo_value_et"
+        android:layout_alignLeft="@id/analysed_photo_value_et"
+        android:layout_alignRight="@id/analysed_photo_value_et"
+        android:layout_marginRight="35dp"
+        android:background="@color/color_gray"/>
+
+    <TextView
         android:id="@+id/analysed_photo_value_et"
         android:layout_width="70dp"
         android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/analysed_photo_info_ic"
+        android:drawablePadding="1dp"
+        android:drawableRight="@drawable/ic_edit"
+        android:gravity="center_horizontal"
+        android:lines="1"
+        android:paddingRight="@dimen/small_spacing_between_items"
+        android:textColor="@color/color_black"
+        android:textSize="@dimen/text_large_body"
         />
-
-    <ImageView
-        android:id="@+id/analysed_photo_edit_value_ic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingBottom="1dp"
-        android:paddingLeft="2dp"
-        android:paddingRight="2dp"
-        android:paddingTop="1dp"
-        android:src="@drawable/ic_edit"/>
 
     <ImageView
         android:id="@+id/analysed_photo_info_ic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
         android:paddingBottom="1dp"
         android:paddingLeft="2dp"
         android:paddingRight="2dp"
         android:paddingTop="1dp"
         android:src="@drawable/ic_info"/>
 
-</LinearLayout>
+</RelativeLayout>

@@ -136,9 +136,15 @@ public class MealDetailActivity extends BaseActivity {
 
     private View inflateFooter(LayoutInflater inflater) {
         View footerView = inflater.inflate(R.layout.footer_analysed_photo, null);
-        ((Button) footerView.findViewById(R.id.footer_analysed_photo_conclude)).setOnClickListener(new View.OnClickListener() {
+        footerView.findViewById(R.id.footer_analysed_photo_conclude).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                functionNotImplemented();
+            }
+        });
+        footerView.findViewById(R.id.footer_analysed_photo_add_item).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 functionNotImplemented();
             }
         });
@@ -176,8 +182,8 @@ public class MealDetailActivity extends BaseActivity {
             Paint wallPaint = new Paint();
             wallPaint.setColor(mColorHelper.getNextColor());
             wallPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-            wallPaint.setStrokeWidth(2);
-            wallPaint.setAlpha(200);
+            wallPaint.setStrokeWidth(1);
+            wallPaint.setAlpha(80);
 
             //Draw polygon
             Path wallPath = new Path();
@@ -213,7 +219,8 @@ public class MealDetailActivity extends BaseActivity {
 
                 for (AreaModel area : areas) {
                     if (area.getRegion().contains(point.x, point.y)) {
-                        showToast("Dentro" + area.getFood().getName());
+                        functionNotImplemented();
+//                        showToast("Dentro" + area.getFood().getName());
                     }
                 }
                 return true;

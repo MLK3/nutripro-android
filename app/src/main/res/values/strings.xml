@@ -121,6 +121,7 @@
     <!--MEAL DETAIL-->
     <string name="meal_detail_activity_title">Detalhe da Refeição</string>
     <string name="meal_detail_btn_save">Salvar Edição</string>
+    <string name="meal_detail_add_item">Adicionar um novo alimento nesta refeição</string>
 
     <!--CAMERA-->
     <string name="camera_permission_confirmation">This app demonstrates the usage of CameraView. In order to do that, it needs permission to access camera.</string>

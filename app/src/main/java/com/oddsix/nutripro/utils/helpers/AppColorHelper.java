@@ -23,7 +23,16 @@ public class AppColorHelper {
     public int getNextColor() {
         int color = mAppColors[mCounter];
         addOneToCounter();
-        return  color;
+        return color;
+    }
+
+    public int getColorAtIndex(int index) {
+        if(index > mAppColors.length){
+            index = index % mAppColors.length;
+        }
+        int color = mAppColors[index];
+        addOneToCounter();
+        return color;
     }
 
     private void addOneToCounter() {
