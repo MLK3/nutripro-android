@@ -3,7 +3,6 @@ package com.oddsix.nutripro.activities;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
@@ -11,7 +10,6 @@ import android.graphics.RectF;
 import android.graphics.Region;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,20 +20,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.target.Target;
 import com.oddsix.nutripro.BaseActivity;
 import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.adapters.AnalysedImgAdapter;
 import com.oddsix.nutripro.models.AreaModel;
-import com.oddsix.nutripro.models.MealModel;
 import com.oddsix.nutripro.rest.NutriproProvider;
 import com.oddsix.nutripro.rest.models.responses.DayResumeResponse;
-import com.oddsix.nutripro.rest.models.responses.FoodResponse;
+import com.oddsix.nutripro.rest.models.responses.RecognisedFoodResponse;
 import com.oddsix.nutripro.rest.models.responses.MealDetailResponse;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.helpers.AppColorHelper;
@@ -122,7 +115,7 @@ public class MealDetailActivity extends BaseActivity {
 
     public void startFoodInfoActivity(int position) {
         Intent infoIntent = new Intent(this, FoodInfoActivity.class);
-//        infoIntent.putExtra(Constants.EXTRA_FOOD_MODEL, mMeal.getFoods().get(position));
+        infoIntent.putExtra(Constants.EXTRA_FOOD_MODEL, mMeal.getFoods().get(position));
         startActivity(infoIntent);
     }
 
@@ -176,7 +169,7 @@ public class MealDetailActivity extends BaseActivity {
         // Create a list of regions
         final List<AreaModel> areas = new ArrayList<>();
 
-        for (FoodResponse recognisedFood : mMeal.getFoods()) {
+        for (RecognisedFoodResponse recognisedFood : mMeal.getFoods()) {
 
             //Set color, width and alpha
             Paint wallPaint = new Paint();
@@ -188,7 +181,7 @@ public class MealDetailActivity extends BaseActivity {
             //Draw polygon
             Path wallPath = new Path();
             wallPath.reset();
-            List<FoodResponse.Point> points = recognisedFood.getPoints();
+            List<RecognisedFoodResponse.Point> points = recognisedFood.getPoints();
             //Initial point
             wallPath.moveTo(points.get(0).getX(), points.get(0).getY());
             for (int i = 1; i < recognisedFood.getPoints().size(); i++) {

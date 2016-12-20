@@ -5,6 +5,8 @@ import android.app.Activity;
 import com.oddsix.nutripro.BuildConfig;
 import com.oddsix.nutripro.rest.models.requests.RegisterRequest;
 import com.oddsix.nutripro.rest.models.responses.DayResumeResponse;
+import com.oddsix.nutripro.rest.models.responses.FoodResponse;
+import com.oddsix.nutripro.rest.models.responses.RecognisedFoodResponse;
 import com.oddsix.nutripro.rest.models.responses.GeneralResponse;
 import com.oddsix.nutripro.rest.models.responses.MealDetailResponse;
 import com.oddsix.nutripro.rest.models.responses.RegisterResponse;
@@ -16,14 +18,10 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -75,6 +73,11 @@ public class NutriproProvider {
     public void getMealDetail(String id, OnResponseListener<MealDetailResponse> callback) {
         mNutriproService.getMealDetail(id)
                 .enqueue(new ResponseHandler<MealDetailResponse>(mActivity, callback));
+    }
+
+    public void getFoodById(String id, OnResponseListener<FoodResponse> callback) {
+        mNutriproService.getFoodById(id)
+                .enqueue(new ResponseHandler<FoodResponse>(mActivity, callback));
     }
 
     private Retrofit getRetrofit(List<Interceptor> interceptors) {

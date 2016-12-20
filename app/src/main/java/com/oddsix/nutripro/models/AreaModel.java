@@ -2,7 +2,7 @@ package com.oddsix.nutripro.models;
 
 import android.graphics.Region;
 
-import com.oddsix.nutripro.rest.models.responses.FoodResponse;
+import com.oddsix.nutripro.rest.models.responses.RecognisedFoodResponse;
 
 /**
  * Created by filippecl on 19/12/16.
@@ -10,9 +10,9 @@ import com.oddsix.nutripro.rest.models.responses.FoodResponse;
 
 public class AreaModel {
     private Region mRegion;
-    private FoodResponse mFood;
+    private RecognisedFoodResponse mFood;
 
-    public AreaModel(Region region, FoodResponse food) {
+    public AreaModel(Region region, RecognisedFoodResponse food) {
         mRegion = region;
         mFood = food;
     }
@@ -21,7 +21,7 @@ public class AreaModel {
         return mRegion;
     }
 
-    public FoodResponse getFood() {
+    public RecognisedFoodResponse getFood() {
         return mFood;
     }
 }

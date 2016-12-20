@@ -2,19 +2,15 @@ package com.oddsix.nutripro.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.oddsix.nutripro.R;
-import com.oddsix.nutripro.models.FoodModel;
-import com.oddsix.nutripro.rest.models.responses.FoodResponse;
+import com.oddsix.nutripro.rest.models.responses.RecognisedFoodResponse;
 import com.oddsix.nutripro.utils.helpers.AppColorHelper;
 
 import java.util.ArrayList;
@@ -27,7 +23,7 @@ import java.util.List;
 public class AnalysedImgAdapter extends BaseAdapter {
     private Context mContext;
     private OnNutrientClickListener mOnNutrientClickListener;
-    private List<FoodResponse> mFoods = new ArrayList<>();
+    private List<RecognisedFoodResponse> mFoods = new ArrayList<>();
     private AppColorHelper mAppColorHelper;
 
     public AnalysedImgAdapter(Context context, OnNutrientClickListener onNutrientClickListener) {
@@ -36,7 +32,7 @@ public class AnalysedImgAdapter extends BaseAdapter {
         mAppColorHelper = new AppColorHelper(context);
     }
 
-    public void setFoods(List<FoodResponse> foods) {
+    public void setFoods(List<RecognisedFoodResponse> foods) {
         mFoods = foods;
         notifyDataSetChanged();
     }

@@ -1,14 +1,15 @@
 package com.oddsix.nutripro.rest.models.responses;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by filippecl on 17/12/16.
  */
 
-public class MealDetailResponse {
+public class MealDetailResponse implements Serializable{
     private String name;
-    private List<FoodResponse> foods;
+    private List<RecognisedFoodResponse> foods;
     private List<NutrientResponse> nutrients;
     private String pictureUrl;
 
@@ -20,7 +21,7 @@ public class MealDetailResponse {
         return name;
     }
 
-    public List<FoodResponse> getFoods() {
+    public List<RecognisedFoodResponse> getFoods() {
         return foods;
     }
 
