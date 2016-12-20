@@ -186,7 +186,7 @@ public class MealDetailActivity extends BaseActivity {
         for (RecognisedFoodResponse food : mMeal.getFoods()) {
             editMealRequest.getFoods().add(
                     new EditMealFoodResponse(
-                            food.getArea().getArea_id(),
+                            food.getArea() == null ? null : food.getArea().getArea_id(),
                             food.getId(),
                             food.getQuantity()));
         }
