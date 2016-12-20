@@ -18,7 +18,6 @@ import com.oddsix.nutripro.activities.FoodInfoActivity;
 import com.oddsix.nutripro.activities.SearchActivity;
 import com.oddsix.nutripro.adapters.AnalysedImgAdapter;
 import com.oddsix.nutripro.models.DBDayMealModel;
-import com.oddsix.nutripro.models.DBDietNutrientModel;
 import com.oddsix.nutripro.models.DBMealFoodModel;
 import com.oddsix.nutripro.models.DBMealNutrientModel;
 import com.oddsix.nutripro.models.FoodModel;
@@ -89,7 +88,7 @@ public class AnalysedPictureFragment extends BaseFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if(i == options.length - 1) {
                             Intent searchIntent = new Intent(getActivity(), SearchActivity.class);
-                            startActivityForResult(searchIntent, Constants.REQ_SEARCH);
+                            startActivityForResult(searchIntent, Constants.REQ_REPLACE_FOOD);
                         } else {
                             mFoods.get(position).setFoodName(options[i]);
 //                            mAnalysedImgAdapter.setFoods(mFoods);

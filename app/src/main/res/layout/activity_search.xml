@@ -7,44 +7,53 @@
 
     <include layout="@layout/partial_default_toolbar"/>
 
-    <android.support.v7.widget.SearchView
-        android:id="@+id/search_sv"
+    <LinearLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/small_spacing_between_items"
-        android:layout_marginLeft="@dimen/horizontal_margin"
-        android:layout_marginRight="@dimen/horizontal_margin"
-        android:layout_marginTop="@dimen/small_spacing_between_items"
-        android:background="@drawable/bg_stroke_green"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/small_spacing_between_items"
-        android:layout_marginLeft="@dimen/horizontal_margin"
-        android:layout_marginRight="@dimen/horizontal_margin"
-        android:gravity="center"
-        android:text="@string/search_header_list"
-        android:textColor="@color/color_black"
-        android:textSize="@dimen/text_title"/>
+        <android.support.v7.widget.SearchView
+            android:id="@+id/search_sv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/small_spacing_between_items"
+            android:layout_marginLeft="@dimen/horizontal_margin"
+            android:layout_marginRight="@dimen/horizontal_margin"
+            android:layout_marginTop="@dimen/small_spacing_between_items"
+            android:background="@drawable/bg_stroke_green"/>
 
-    <ListView
-        android:id="@+id/listview"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:clipToPadding="false"
-        android:paddingLeft="@dimen/list_internal_horizontal_margin"
-        android:paddingRight="@dimen/list_internal_horizontal_margin"
-        android:scrollbarStyle="outsideOverlay"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/small_spacing_between_items"
+            android:layout_marginLeft="@dimen/horizontal_margin"
+            android:layout_marginRight="@dimen/horizontal_margin"
+            android:gravity="center"
+            android:text="@string/search_header_list"
+            android:textColor="@color/color_black"
+            android:textSize="@dimen/text_title"/>
 
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/register_send_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/horizontal_margin"
-        android:layout_marginRight="@dimen/horizontal_margin"
-        android:text="@string/search_button_register_food"
-        android:textColor="@color/color_white"
-        app:backgroundTint="@color/colorPrimary"/>
+        <ListView
+            android:id="@+id/listview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:paddingLeft="@dimen/list_internal_horizontal_margin"
+            android:paddingRight="@dimen/list_internal_horizontal_margin"
+            android:scrollbarStyle="outsideOverlay"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/register_send_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/horizontal_margin"
+            android:layout_marginRight="@dimen/horizontal_margin"
+            android:text="@string/search_button_register_food"
+            android:textColor="@color/color_white"
+            app:backgroundTint="@color/colorPrimary"/>
+
+    </LinearLayout>
+
 </LinearLayout>

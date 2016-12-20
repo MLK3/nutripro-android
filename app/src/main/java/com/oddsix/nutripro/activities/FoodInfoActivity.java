@@ -11,7 +11,7 @@ import com.oddsix.nutripro.BaseActivity;
 import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.adapters.FoodInfoAdapter;
 import com.oddsix.nutripro.rest.NutriproProvider;
-import com.oddsix.nutripro.rest.models.responses.FoodResponse;
+import com.oddsix.nutripro.rest.models.responses.FoodFromMealResponse;
 import com.oddsix.nutripro.rest.models.responses.RecognisedFoodResponse;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.helpers.FeedbackHelper;
@@ -25,7 +25,7 @@ public class FoodInfoActivity extends BaseActivity {
     private NutriproProvider mProvider;
     private FeedbackHelper mFeedbackHelper;
 
-    private FoodResponse mFoodResponse;
+    private FoodFromMealResponse mFoodResponse;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,9 +51,9 @@ public class FoodInfoActivity extends BaseActivity {
 
     private void sendRequest() {
         mFeedbackHelper.startLoading();
-        mProvider.getFoodById(mRecognisedFoodResponse.getId(), new NutriproProvider.OnResponseListener<FoodResponse>() {
+        mProvider.getFoodById(mRecognisedFoodResponse.getId(), new NutriproProvider.OnResponseListener<FoodFromMealResponse>() {
             @Override
-            public void onResponseSuccess(FoodResponse response) {
+            public void onResponseSuccess(FoodFromMealResponse response) {
                 mFoodResponse = response;
                 mFeedbackHelper.dismissFeedback();
                 setListView();

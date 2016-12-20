@@ -2,11 +2,11 @@ package com.oddsix.nutripro.rest;
 
 import com.oddsix.nutripro.rest.models.requests.RegisterRequest;
 import com.oddsix.nutripro.rest.models.responses.DayResumeResponse;
-import com.oddsix.nutripro.rest.models.responses.FoodResponse;
-import com.oddsix.nutripro.rest.models.responses.RecognisedFoodResponse;
+import com.oddsix.nutripro.rest.models.responses.FoodFromMealResponse;
 import com.oddsix.nutripro.rest.models.responses.GeneralResponse;
 import com.oddsix.nutripro.rest.models.responses.MealDetailResponse;
 import com.oddsix.nutripro.rest.models.responses.RegisterResponse;
+import com.oddsix.nutripro.rest.models.responses.SearchResponse;
 import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
 
 import retrofit2.Call;
@@ -55,6 +55,9 @@ public interface NutriproService {
                                          @Field("altura") int height);
 
     @GET("food")
-    Call<FoodResponse> getFoodById(@Query("id") String id);
+    Call<FoodFromMealResponse> getFoodById(@Query("id") String id);
+
+    @GET("search-food")
+    Call<SearchResponse> searchFoods(@Query("name") String name);
 
 }

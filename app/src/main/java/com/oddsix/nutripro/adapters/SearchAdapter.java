@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.oddsix.nutripro.R;
+import com.oddsix.nutripro.rest.models.responses.FoodResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,22 +18,22 @@ import java.util.List;
  * Created by filippecl on 20/11/16.
  */
 
-public class BasicStringAdapter extends BaseAdapter {
+public class SearchAdapter extends BaseAdapter {
     private Context mContext;
-    private List<String> mStrings = new ArrayList<>();
+    private List<FoodResponse> mFoods = new ArrayList<>();
 
-    public BasicStringAdapter(Context context) {
+    public SearchAdapter(Context context) {
         mContext = context;
     }
 
-    public void setStrings(List<String> strings) {
-        mStrings = strings;
+    public void setResults(List<FoodResponse> foods) {
+        mFoods = foods;
         notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return mStrings.size();
+        return mFoods.size();
     }
 
     @Override
@@ -68,7 +69,7 @@ public class BasicStringAdapter extends BaseAdapter {
 
 
         // get the TextView from the ViewHolder and then set the text (item name) and tag (item ID) values
-        viewHolder.name.setText(mStrings.get(i));
+        viewHolder.name.setText(mFoods.get(i).getName());
 //        viewHolder.value.setText(mContext.getString(R.string.diet_item_range_label,
 //                diet.get(i).getMin(), diet.get(i).getMax(), diet.get(i).getUnit()));
 

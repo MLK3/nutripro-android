@@ -1,18 +1,21 @@
 package com.oddsix.nutripro.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.SearchView;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.oddsix.nutripro.BaseActivity;
 import com.oddsix.nutripro.R;
-import com.oddsix.nutripro.adapters.BasicStringAdapter;
-import com.oddsix.nutripro.adapters.DayResumeAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.oddsix.nutripro.adapters.SearchAdapter;
+import com.oddsix.nutripro.rest.NutriproProvider;
+import com.oddsix.nutripro.rest.models.responses.SearchResponse;
+import com.oddsix.nutripro.utils.Constants;
+import com.oddsix.nutripro.utils.helpers.FeedbackHelper;
 
 /**
  * Created by filippecl on 20/11/16.
@@ -20,7 +23,10 @@ import java.util.List;
 
 public class SearchActivity extends BaseActivity {
     private SearchView mSearchView;
-    private BasicStringAdapter mAdapter;
+    private SearchAdapter mAdapter;
+    private NutriproProvider mNutriproProvider;
+    private SearchResponse mSearchResponse;
+    private FeedbackHelper mFeedbackHelper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,36 +34,73 @@ public class SearchActivity extends BaseActivity {
         setContentView(R.layout.activity_search);
         setToolbar(true, getString(R.string.search_activity_title));
 
+        mNutriproProvider = new NutriproProvider(this);
+
+        mFeedbackHelper = new FeedbackHelper(this, (ViewGroup) findViewById(R.id.container), mOnTryAgainClickListener);
+
         setListView();
 
         setSearchView();
-        setMock();
+    }
 
+    private View.OnClickListener mOnTryAgainClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            mFeedbackHelper.startLoading();
+            sendRequest(mSearchView.getQuery().toString());
+        }
+    };
+
+    private void sendRequest(String query) {
+        mNutriproProvider.searchFood(query, new NutriproProvider.OnResponseListener<SearchResponse>() {
+            @Override
+            public void onResponseSuccess(SearchResponse response) {
+                mFeedbackHelper.dismissFeedback();
+                if(response.getFoods().isEmpty()) {
+                    mFeedbackHelper.showEmptyPlaceHolder();
+                }
+                mAdapter.setResults(response.getFoods());
+                mSearchResponse = response;
+            }
+
+            @Override
+            public void onResponseFailure(String msg, int code) {
+                mFeedbackHelper.showErrorPlaceHolder();
+            }
+        });
     }
 
     private void setListView() {
         ListView list = (ListView) findViewById(R.id.listview);
-        mAdapter = new BasicStringAdapter(this);
+        mAdapter = new SearchAdapter(this);
         list.setAdapter(mAdapter);
-    }
-
-    private void setMock() {
-        List<String> strings = new ArrayList<>();
-        strings.add("Lasagna");
-        strings.add("Couve");
-        strings.add("Frango");
-        strings.add("Maminha assada");
-        strings.add("Brócolis");
-        mAdapter.setStrings(strings);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent();
+                intent.putExtra(Constants.EXTRA_FOOD, mSearchResponse.getFoods().get(i));
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
     }
 
     private void setSearchView(){
         mSearchView = (SearchView) findViewById(R.id.search_sv);
-        mSearchView.setOnSearchClickListener(new View.OnClickListener() {
+        mSearchView.setIconified(false);
+        mSearchView.setIconifiedByDefault(false);
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onClick(View view) {
-                //todo search
+            public boolean onQueryTextSubmit(String query) {
+                sendRequest(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
             }
         });
+
     }
 }

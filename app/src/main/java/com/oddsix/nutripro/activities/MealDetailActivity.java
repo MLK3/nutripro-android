@@ -28,6 +28,7 @@ import com.oddsix.nutripro.adapters.AnalysedImgAdapter;
 import com.oddsix.nutripro.models.AreaModel;
 import com.oddsix.nutripro.rest.NutriproProvider;
 import com.oddsix.nutripro.rest.models.responses.DayResumeResponse;
+import com.oddsix.nutripro.rest.models.responses.FoodResponse;
 import com.oddsix.nutripro.rest.models.responses.RecognisedFoodResponse;
 import com.oddsix.nutripro.rest.models.responses.MealDetailResponse;
 import com.oddsix.nutripro.utils.Constants;
@@ -50,6 +51,8 @@ public class MealDetailActivity extends BaseActivity {
     private MealDetailResponse mMeal;
     private AppColorHelper mColorHelper;
     private DialogHelper mDialogHelper;
+
+    private int mMealPositionEditing = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -102,7 +105,8 @@ public class MealDetailActivity extends BaseActivity {
 
             @Override
             public void onEditNameClicked(int position) {
-                functionNotImplemented();
+                startSearchActivityReplacingFood();
+                mMealPositionEditing = position;
             }
 
             @Override
@@ -115,6 +119,16 @@ public class MealDetailActivity extends BaseActivity {
         listView.setAdapter(mAnalysedImgAdapter);
         listView.addHeaderView(inflateHeader(getLayoutInflater()));
         listView.addFooterView(inflateFooter(getLayoutInflater()));
+    }
+
+    private void startSearchActivityReplacingFood() {
+        Intent intent = new Intent(this, SearchActivity.class);
+        startActivityForResult(intent, Constants.REQ_REPLACE_FOOD);
+    }
+
+    private void startSearchActivityAddingFood() {
+        Intent intent = new Intent(this, SearchActivity.class);
+        startActivityForResult(intent, Constants.REQ_ADD_FOOD);
     }
 
     private void showInputDialog(final int position) {
@@ -130,7 +144,7 @@ public class MealDetailActivity extends BaseActivity {
                 });
     }
 
-    public void startFoodInfoActivity(int position) {
+    private void startFoodInfoActivity(int position) {
         Intent infoIntent = new Intent(this, FoodInfoActivity.class);
         infoIntent.putExtra(Constants.EXTRA_FOOD_MODEL, mMeal.getFoods().get(position));
         startActivity(infoIntent);
@@ -145,6 +159,7 @@ public class MealDetailActivity extends BaseActivity {
     }
 
     private View inflateFooter(LayoutInflater inflater) {
+        //Sava changes
         View footerView = inflater.inflate(R.layout.footer_analysed_photo, null);
         footerView.findViewById(R.id.footer_analysed_photo_conclude).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,13 +167,14 @@ public class MealDetailActivity extends BaseActivity {
                 functionNotImplemented();
             }
         });
+        ((Button) footerView.findViewById(R.id.footer_analysed_photo_conclude)).setText(getString(R.string.meal_detail_btn_save));
+        //Add a new Item
         footerView.findViewById(R.id.footer_analysed_photo_add_item).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                functionNotImplemented();
+                startSearchActivityAddingFood();
             }
         });
-        ((Button) footerView.findViewById(R.id.footer_analysed_photo_conclude)).setText(getString(R.string.meal_detail_btn_save));
         return footerView;
     }
 
@@ -236,5 +252,20 @@ public class MealDetailActivity extends BaseActivity {
                 return true;
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == Constants.REQ_REPLACE_FOOD) {
+            FoodResponse foodSelected = (FoodResponse) data.getSerializableExtra(Constants.EXTRA_FOOD);
+            mMeal.getFoods().get(mMealPositionEditing).setId(foodSelected.getId());
+            mMeal.getFoods().get(mMealPositionEditing).setName(foodSelected.getName());
+            mAnalysedImgAdapter.setFoods(mMeal.getFoods());
+        } else if (resultCode == RESULT_OK && requestCode == Constants.REQ_ADD_FOOD) {
+            FoodResponse foodSelected = (FoodResponse) data.getSerializableExtra(Constants.EXTRA_FOOD);
+            mMeal.getFoods().add(new RecognisedFoodResponse(foodSelected.getId(), foodSelected.getName()));
+            mAnalysedImgAdapter.setFoods(mMeal.getFoods());
+        }
     }
 }

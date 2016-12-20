@@ -5,11 +5,11 @@ import android.app.Activity;
 import com.oddsix.nutripro.BuildConfig;
 import com.oddsix.nutripro.rest.models.requests.RegisterRequest;
 import com.oddsix.nutripro.rest.models.responses.DayResumeResponse;
-import com.oddsix.nutripro.rest.models.responses.FoodResponse;
-import com.oddsix.nutripro.rest.models.responses.RecognisedFoodResponse;
+import com.oddsix.nutripro.rest.models.responses.FoodFromMealResponse;
 import com.oddsix.nutripro.rest.models.responses.GeneralResponse;
 import com.oddsix.nutripro.rest.models.responses.MealDetailResponse;
 import com.oddsix.nutripro.rest.models.responses.RegisterResponse;
+import com.oddsix.nutripro.rest.models.responses.SearchResponse;
 import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.DateHelper;
@@ -75,9 +75,14 @@ public class NutriproProvider {
                 .enqueue(new ResponseHandler<MealDetailResponse>(mActivity, callback));
     }
 
-    public void getFoodById(String id, OnResponseListener<FoodResponse> callback) {
+    public void getFoodById(String id, OnResponseListener<FoodFromMealResponse> callback) {
         mNutriproService.getFoodById(id)
-                .enqueue(new ResponseHandler<FoodResponse>(mActivity, callback));
+                .enqueue(new ResponseHandler<FoodFromMealResponse>(mActivity, callback));
+    }
+
+    public void searchFood(String query, OnResponseListener<SearchResponse> callback){
+        mNutriproService.searchFoods(query)
+                .enqueue(new ResponseHandler<SearchResponse>(mActivity, callback));
     }
 
     private Retrofit getRetrofit(List<Interceptor> interceptors) {
