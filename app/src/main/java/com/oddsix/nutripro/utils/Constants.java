@@ -25,6 +25,7 @@ public class Constants {
     public final static int REQ_EDIT_REGISTER = 1;
     public final static int REQ_REPLACE_FOOD = 2;
     public final static int REQ_ADD_FOOD = 3;
+    public final static int REQ_REPLACE_BY_AREA = 4;
 
     //EXTRA
     public final static String EXTRA_REGISTER_MODEL = "EXTRA_REGISTER_MODEL";

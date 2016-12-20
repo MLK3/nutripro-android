@@ -55,7 +55,8 @@ public class MealDetailActivity extends BaseActivity {
     private AppColorHelper mColorHelper;
     private DialogHelper mDialogHelper;
 
-    private int mMealPositionEditing = 0;
+    private int mMealIndexEditing = 0;
+    private AreaModel mArea;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,7 +110,7 @@ public class MealDetailActivity extends BaseActivity {
             @Override
             public void onEditNameClicked(int position) {
                 startSearchActivityReplacingFood();
-                mMealPositionEditing = position;
+                mMealIndexEditing = position;
             }
 
             @Override
@@ -132,6 +133,11 @@ public class MealDetailActivity extends BaseActivity {
     private void startSearchActivityAddingFood() {
         Intent intent = new Intent(this, SearchActivity.class);
         startActivityForResult(intent, Constants.REQ_ADD_FOOD);
+    }
+
+    private void startSearchActivityReplacingArea() {
+        Intent intent = new Intent(this, SearchActivity.class);
+        startActivityForResult(intent, Constants.REQ_REPLACE_BY_AREA);
     }
 
     private void showInputDialog(final int position) {
@@ -231,7 +237,8 @@ public class MealDetailActivity extends BaseActivity {
         // Create a list of regions
         final List<AreaModel> areas = new ArrayList<>();
 
-        for (RecognisedFoodResponse recognisedFood : mMeal.getFoods()) {
+        for (int i = 0; i < mMeal.getFoods().size(); i++) {
+            RecognisedFoodResponse recognisedFood = mMeal.getFoods().get(i);
 
             //Set color, width and alpha
             Paint wallPaint = new Paint();
@@ -246,9 +253,9 @@ public class MealDetailActivity extends BaseActivity {
             List<RecognisedFoodResponse.Area.Point> points = recognisedFood.getArea().getPoints();
             //Initial point
             wallPath.moveTo(points.get(0).getX(), points.get(0).getY());
-            for (int i = 1; i < recognisedFood.getArea().getPoints().size(); i++) {
+            for (int j = 1; j < recognisedFood.getArea().getPoints().size(); j++) {
                 //Rest of the points
-                wallPath.lineTo(points.get(i).getX(), points.get(i).getY());
+                wallPath.lineTo(points.get(j).getX(), points.get(j).getY());
             }
             wallPath.lineTo(points.get(0).getX(), points.get(0).getY());
 
@@ -261,7 +268,7 @@ public class MealDetailActivity extends BaseActivity {
             final Region r = new Region();
             r.setPath(wallPath, new Region((int) rectF.left, (int) rectF.top, (int) rectF.right, (int) rectF.bottom));
 
-            areas.add(new AreaModel(r, recognisedFood));
+            areas.add(new AreaModel(r, recognisedFood, i));
         }
 
         imageView.setImageBitmap(bitmap);
@@ -273,12 +280,17 @@ public class MealDetailActivity extends BaseActivity {
                 point.x = (int) ((motionEvent.getX() * resWidth) / view.getWidth());
                 point.y = (int) ((motionEvent.getY() * resHeight) / view.getHeight());
 
-                for (AreaModel area : areas) {
-                    if (area.getRegion().contains(point.x, point.y)) {
-                        functionNotImplemented();
-//                        showToast("Dentro" + area.getFood().getName());
+                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    for (AreaModel area : areas) {
+                        if (area.getRegion().contains(point.x, point.y)) {
+                            mArea = area;
+                            mMealIndexEditing = area.getArrayIndex();
+                            startSearchActivityReplacingArea();
+                            break;
+                        }
                     }
                 }
+
                 return true;
             }
         });
@@ -287,10 +299,10 @@ public class MealDetailActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == Constants.REQ_REPLACE_FOOD) {
+        if (resultCode == RESULT_OK && (requestCode == Constants.REQ_REPLACE_FOOD || requestCode == Constants.REQ_REPLACE_BY_AREA)) {
             FoodResponse foodSelected = (FoodResponse) data.getSerializableExtra(Constants.EXTRA_FOOD);
-            mMeal.getFoods().get(mMealPositionEditing).setId(foodSelected.getId());
-            mMeal.getFoods().get(mMealPositionEditing).setName(foodSelected.getName());
+            mMeal.getFoods().get(mMealIndexEditing).setId(foodSelected.getId());
+            mMeal.getFoods().get(mMealIndexEditing).setName(foodSelected.getName());
             mAnalysedImgAdapter.setFoods(mMeal.getFoods());
         } else if (resultCode == RESULT_OK && requestCode == Constants.REQ_ADD_FOOD) {
             FoodResponse foodSelected = (FoodResponse) data.getSerializableExtra(Constants.EXTRA_FOOD);
