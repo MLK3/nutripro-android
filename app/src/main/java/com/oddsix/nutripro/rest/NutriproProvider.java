@@ -3,11 +3,13 @@ package com.oddsix.nutripro.rest;
 import android.app.Activity;
 
 import com.oddsix.nutripro.BuildConfig;
+import com.oddsix.nutripro.rest.models.requests.AnalysedPictureRequest;
 import com.oddsix.nutripro.rest.models.requests.DietNutrientRequest;
 import com.oddsix.nutripro.rest.models.requests.EditDietRequest;
 import com.oddsix.nutripro.rest.models.requests.EditMealRequest;
 import com.oddsix.nutripro.rest.models.requests.RegisterFoodRequest;
 import com.oddsix.nutripro.rest.models.requests.RegisterRequest;
+import com.oddsix.nutripro.rest.models.responses.AnalysedPictureResponse;
 import com.oddsix.nutripro.rest.models.responses.CreateFoodResponse;
 import com.oddsix.nutripro.rest.models.responses.DayResumeResponse;
 import com.oddsix.nutripro.rest.models.responses.FoodFromMealResponse;
@@ -109,6 +111,11 @@ public class NutriproProvider {
     public void updateDiet(List<DietNutrientRequest> nutrients, OnResponseListener<GeneralResponse> callback) {
         mNutriproService.updateDiet(new EditDietRequest(nutrients))
                 .enqueue(new ResponseHandler<GeneralResponse>(mActivity, callback));
+    }
+
+    public void analysePicture(String picture, OnResponseListener<AnalysedPictureResponse> callback) {
+        mNutriproService.analysePicture(new AnalysedPictureRequest(picture))
+                .enqueue(new ResponseHandler<AnalysedPictureResponse>(mActivity, callback));
     }
     private Retrofit getRetrofit(List<Interceptor> interceptors) {
         Retrofit.Builder retroBuilder = new Retrofit.Builder().baseUrl(Constants.MOCK_URL).addConverterFactory(GsonConverterFactory.create());

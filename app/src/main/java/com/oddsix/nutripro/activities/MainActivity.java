@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,6 +16,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -123,7 +125,7 @@ public class MainActivity extends BaseActivity {
 
     private void startCameraActivity() {
         Intent intent = new Intent(this, CameraActivity.class);
-        startActivityForResult(intent, 10);
+        startActivityForResult(intent, Constants.REQ_PICTURE);
     }
 
     private void setTabLayout() {
@@ -178,25 +180,6 @@ public class MainActivity extends BaseActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         mUpdatePhotoHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 10 && resultCode == RESULT_OK) {
-            Bitmap bm;
-            try {
-                bm = rotateImage(data.getStringExtra("PATH"));
-            } catch (Exception e) {
-                e.printStackTrace();
-                bm = BitmapFactory.decodeFile(data.getStringExtra("PATH"));
-            }
-
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-            byte[] b = baos.toByteArray();
-            mPictureFragment.setImage(bm);
-        }
     }
 
     private Bitmap loadPrescaledBitmap(String filename) throws IOException {
@@ -265,6 +248,61 @@ public class MainActivity extends BaseActivity {
         Bitmap bpm = loadPrescaledBitmap(photoPath);
         bm = Bitmap.createBitmap(bpm, 0, 0, bpm.getWidth(), bpm.getHeight(), matrix, true);
         return bm;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.REQ_PICTURE) {
+            if(resultCode == RESULT_OK) {
+                Bitmap bm;
+                try {
+                    bm = rotateImage(data.getStringExtra("PATH"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    bm = BitmapFactory.decodeFile(data.getStringExtra("PATH"));
+                }
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] b = baos.toByteArray();
+
+                showProgressdialog();
+                Async async = new Async(b, bm);
+                async.execute();
+            } else {
+                mTabLayout.getTabAt(0).select();
+            }
+        }
+    }
+
+    /**
+     * Async task to send updateImageRequest
+     */
+    private class Async extends AsyncTask {
+        byte[] b;
+        Bitmap bm;
+
+        String mPhoto64;
+
+        public Async(byte[] b, Bitmap bm) {
+            this.b = b;
+            this.bm = bm;
+        }
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            mPhoto64 = Base64.encodeToString(b, Base64.DEFAULT);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
+//            mOnRequestReady.updateImage();
+            dismissProgressDialog();
+            mPictureFragment.setImage(bm,  Base64.encodeToString(b, Base64.DEFAULT));
+        }
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {

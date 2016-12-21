@@ -1,9 +1,11 @@
 package com.oddsix.nutripro.rest;
 
+import com.oddsix.nutripro.rest.models.requests.AnalysedPictureRequest;
 import com.oddsix.nutripro.rest.models.requests.EditDietRequest;
 import com.oddsix.nutripro.rest.models.requests.EditMealRequest;
 import com.oddsix.nutripro.rest.models.requests.RegisterFoodRequest;
 import com.oddsix.nutripro.rest.models.requests.RegisterRequest;
+import com.oddsix.nutripro.rest.models.responses.AnalysedPictureResponse;
 import com.oddsix.nutripro.rest.models.responses.CreateFoodResponse;
 import com.oddsix.nutripro.rest.models.responses.DayResumeResponse;
 import com.oddsix.nutripro.rest.models.responses.FoodFromMealResponse;
@@ -78,5 +80,8 @@ public interface NutriproService {
 
     @PUT("diet")
     Call<GeneralResponse> updateDiet(@Body EditDietRequest request);
+
+    @POST("picture")
+    Call<AnalysedPictureResponse> analysePicture(@Body AnalysedPictureRequest request);
 
 }
