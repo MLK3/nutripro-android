@@ -6,6 +6,7 @@
     <string name="action_cancel">Cancelar</string>
     <string name="action_confirm">Confirmar</string>
     <string name="action_register">Cadastrar</string>
+    <string name="action_save">Salvar</string>
 
     <!--ERROR-->
     <string name="unknown_error">Não foi possível completar sua requisição, tente novamente.</string>
@@ -158,6 +159,10 @@
     <string name="week_resume_max_label">Max</string>
     <string name="week_resume_min_label">Min</string>
     <string name="week_resume_dialog_title">Escolha um nutriente</string>
+
+    <!--EDIT DIET-->
+    <string name="edit_diet_activity_title">Edição de Dieta</string>
+    <string name="edit_diet_activity_toast_success">Dieta editada com sucesso.</string>
 
     <!--SEARCH-->
     <string name="search_activity_title">Lista de Alimentos</string>

@@ -1,5 +1,6 @@
 package com.oddsix.nutripro.rest;
 
+import com.oddsix.nutripro.rest.models.requests.EditDietRequest;
 import com.oddsix.nutripro.rest.models.requests.EditMealRequest;
 import com.oddsix.nutripro.rest.models.requests.RegisterFoodRequest;
 import com.oddsix.nutripro.rest.models.requests.RegisterRequest;
@@ -74,5 +75,8 @@ public interface NutriproService {
 
     @GET("week-meal")
     Call<WeekMealResponse> getWeekMeal(@Query("first_date") String date);
+
+    @PUT("diet")
+    Call<GeneralResponse> updateDiet(@Body EditDietRequest request);
 
 }

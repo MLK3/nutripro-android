@@ -76,6 +76,10 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    public void setSuggestedDiet(SuggestedDietResponse suggestedDiet) {
+        mSuggestedDiet = suggestedDiet;
+    }
+
     public SuggestedDietResponse getSuggestedDiet() {
         return mSuggestedDiet;
     }

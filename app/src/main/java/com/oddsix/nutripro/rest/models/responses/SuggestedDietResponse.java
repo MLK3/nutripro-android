@@ -18,4 +18,5 @@ public class SuggestedDietResponse implements Serializable {
     public List<DietNutrientResponse> getNutrients() {
         return nutrients;
     }
+
 }

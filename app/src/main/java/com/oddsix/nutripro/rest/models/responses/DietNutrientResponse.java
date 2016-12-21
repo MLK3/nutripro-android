@@ -12,6 +12,29 @@ public class DietNutrientResponse implements Serializable {
     private int min;
     private String unit;
 
+    public DietNutrientResponse(String name, int max, int min, String unit) {
+        this.name = name;
+        this.max = max;
+        this.min = min;
+        this.unit = unit;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setMax(int max) {
+        this.max = max;
+    }
+
+    public void setMin(int min) {
+        this.min = min;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
     public String getUnit() {
         return unit;
     }

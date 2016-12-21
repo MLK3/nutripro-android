@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.oddsix.nutripro.BaseFragment;
 import com.oddsix.nutripro.R;
+import com.oddsix.nutripro.activities.EditDietActivity;
 import com.oddsix.nutripro.activities.MainActivity;
 import com.oddsix.nutripro.activities.RegisterActivity;
 import com.oddsix.nutripro.adapters.DietAdapter;
@@ -89,6 +90,14 @@ public class ProfileFragment extends BaseFragment {
     private View getHeader() {
         mHeaderView = getActivity().getLayoutInflater().inflate(R.layout.header_profile, null);
 
+        mHeaderView.findViewById(R.id.register_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), EditDietActivity.class);
+                intent.putExtra(Constants.EXTRA_DIET, ((MainActivity) getActivity()).getSuggestedDiet());
+                startActivityForResult(intent, Constants.REQ_EDIT_DIET);
+            }
+        });
         setHeader(mHeaderView);
 
         return mHeaderView;
@@ -133,6 +142,9 @@ public class ProfileFragment extends BaseFragment {
         if(requestCode == Constants.REQ_EDIT_REGISTER && resultCode == Activity.RESULT_OK) {
             mRegister = (RegisterResponse) data.getSerializableExtra(Constants.EXTRA_REGISTER_MODEL);
             setHeader(mHeaderView);
+        } else if (requestCode == Constants.REQ_EDIT_DIET && resultCode == Activity.RESULT_OK) {
+            ((MainActivity) getActivity()).setSuggestedDiet((SuggestedDietResponse) data.getSerializableExtra(Constants.EXTRA_DIET));
+            mAdapter.setDiet(((MainActivity) getActivity()).getSuggestedDiet().getNutrients());
         }
     }
 }

@@ -3,6 +3,8 @@ package com.oddsix.nutripro.rest;
 import android.app.Activity;
 
 import com.oddsix.nutripro.BuildConfig;
+import com.oddsix.nutripro.rest.models.requests.DietNutrientRequest;
+import com.oddsix.nutripro.rest.models.requests.EditDietRequest;
 import com.oddsix.nutripro.rest.models.requests.EditMealRequest;
 import com.oddsix.nutripro.rest.models.requests.RegisterFoodRequest;
 import com.oddsix.nutripro.rest.models.requests.RegisterRequest;
@@ -104,6 +106,10 @@ public class NutriproProvider {
                 .enqueue(new ResponseHandler<WeekMealResponse>(mActivity, callback));
     }
 
+    public void updateDiet(List<DietNutrientRequest> nutrients, OnResponseListener<GeneralResponse> callback) {
+        mNutriproService.updateDiet(new EditDietRequest(nutrients))
+                .enqueue(new ResponseHandler<GeneralResponse>(mActivity, callback));
+    }
     private Retrofit getRetrofit(List<Interceptor> interceptors) {
         Retrofit.Builder retroBuilder = new Retrofit.Builder().baseUrl(Constants.MOCK_URL).addConverterFactory(GsonConverterFactory.create());
         OkHttpClient.Builder httpClient = getClient(interceptors);
