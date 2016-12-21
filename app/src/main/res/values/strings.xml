@@ -149,8 +149,15 @@
     <string name="register_food_total_fat">Gorduras Totais</string>
     <string name="register_food_saturated_fat">Gorduras Saturadas</string>
     <string name="register_food_fibers">Fibras Alimentares</string>
-    <string name="register_food_error">O campo não pode estar vazio."</string>
+    <string name="register_food_error">O campo não pode estar vazio.</string>
     <string name="register_food_sodium">Sódio</string>
+    
+    <!--WEEK RESUME-->
+    <string name="week_resume_activity_label">Resumo por Semana</string>
+    <string name="week_resume_label">Semana do dia %1$s</string>
+    <string name="week_resume_max_label">Max</string>
+    <string name="week_resume_min_label">Min</string>
+    <string name="week_resume_dialog_title">Escolha um nutriente</string>
 
     <!--SEARCH-->
     <string name="search_activity_title">Lista de Alimentos</string>

@@ -42,6 +42,8 @@ import io.realm.Realm;
  */
 
 public class MainActivity extends BaseActivity {
+    private static final int DAY_RESUME_TAB_POSITION = 0;
+
     private ViewPager mViewPager;
     private String[] mTabTitles;
     private TabLayout mTabLayout;
@@ -100,6 +102,8 @@ public class MainActivity extends BaseActivity {
 //                        mUpdatePhotoHelper.initiate(false, Constants.PIC_UPLOAD_MAX_SIZE);
                         break;
                 }
+                //Enable chart icon only at first tab
+                enabledChart(position == DAY_RESUME_TAB_POSITION);
                 setTitle(mTabTitles[position]);
             }
 
@@ -107,6 +111,10 @@ public class MainActivity extends BaseActivity {
             public void onPageScrollStateChanged(int state) {
             }
         });
+    }
+
+    private void enabledChart(boolean enable) {
+        mChartItem.setVisible(enable);
     }
 
     private void startCameraActivity() {
@@ -130,10 +138,14 @@ public class MainActivity extends BaseActivity {
     }
 
 
+    private MenuItem mChartItem;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        mChartItem = menu.findItem(R.id.action_week_chart);
+        //Need this when the menu just created
+        enabledChart(mTabLayout.getSelectedTabPosition() == DAY_RESUME_TAB_POSITION);
         return true;
     }
 
@@ -148,6 +160,10 @@ public class MainActivity extends BaseActivity {
             case R.id.action_settings:
                 Intent settingsIntent = new Intent(this, SettingsActivity.class);
                 startActivity(settingsIntent);
+                return true;
+            case R.id.action_week_chart:
+                Intent chartIntent = new Intent(this, WeekResumeActivity.class);
+                startActivity(chartIntent);
                 return true;
         }
 

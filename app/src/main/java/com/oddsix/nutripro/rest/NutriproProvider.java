@@ -14,6 +14,7 @@ import com.oddsix.nutripro.rest.models.responses.MealDetailResponse;
 import com.oddsix.nutripro.rest.models.responses.RegisterResponse;
 import com.oddsix.nutripro.rest.models.responses.SearchResponse;
 import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
+import com.oddsix.nutripro.rest.models.responses.WeekMealResponse;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.DateHelper;
 
@@ -96,6 +97,11 @@ public class NutriproProvider {
     public void registerFood(RegisterFoodRequest registerFoodRequest, OnResponseListener<CreateFoodResponse> callback) {
         mNutriproService.registerFood(registerFoodRequest)
                 .enqueue(new ResponseHandler<CreateFoodResponse>(mActivity, callback));
+    }
+
+    public void getWeekResume(String date, OnResponseListener<WeekMealResponse> callback) {
+        mNutriproService.getWeekMeal(date)
+                .enqueue(new ResponseHandler<WeekMealResponse>(mActivity, callback));
     }
 
     private Retrofit getRetrofit(List<Interceptor> interceptors) {

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <include layout="@layout/partial_default_toolbar"/>
+
+    <TextView
+        android:id="@+id/week_resume_week_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_between_items"
+        android:layout_marginLeft="@dimen/horizontal_margin"
+        android:layout_marginRight="@dimen/horizontal_margin"
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:background="@drawable/bg_stroke_green"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:lines="1"
+        android:paddingBottom="@dimen/list_internal_vertical_margin"
+        android:paddingLeft="@dimen/list_internal_horizontal_margin"
+        android:paddingRight="@dimen/list_internal_horizontal_margin"
+        android:paddingTop="@dimen/list_internal_vertical_margin"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/text_title"
+        android:textStyle="bold"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/week_resume_nutrient_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_between_items"
+                android:layout_marginLeft="@dimen/horizontal_margin"
+                android:layout_marginRight="@dimen/horizontal_margin"
+                android:background="@drawable/bg_stroke_green"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:lines="1"
+                android:paddingBottom="@dimen/list_internal_vertical_margin"
+                android:paddingLeft="@dimen/list_internal_horizontal_margin"
+                android:paddingRight="@dimen/list_internal_horizontal_margin"
+                android:paddingTop="@dimen/list_internal_vertical_margin"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/text_title"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/week_resume_linechart_yaxis_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/horizontal_margin"
+                android:layout_gravity="start"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/text_headline"
+                android:textStyle="bold"/>
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/week_resume_linechart"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="dia"
+                android:gravity="end"
+                android:paddingRight="@dimen/horizontal_margin"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/text_headline"
+                android:textStyle="bold"/>
+        </LinearLayout>
+    </ScrollView>
+
+
+
+</LinearLayout>

@@ -35,6 +35,7 @@
         <activity android:name=".activities.SearchActivity"/>
         <activity android:name=".activities.ActivityLevelActivity"/>
         <activity android:name=".activities.AddNewFoodActivity"/>
+        <activity android:name=".activities.WeekResumeActivity"/>
 
         <meta-data
             android:name="io.fabric.ApiKey"

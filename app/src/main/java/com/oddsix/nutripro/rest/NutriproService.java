@@ -11,6 +11,7 @@ import com.oddsix.nutripro.rest.models.responses.MealDetailResponse;
 import com.oddsix.nutripro.rest.models.responses.RegisterResponse;
 import com.oddsix.nutripro.rest.models.responses.SearchResponse;
 import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
+import com.oddsix.nutripro.rest.models.responses.WeekMealResponse;
 
 import java.util.Calendar;
 
@@ -70,5 +71,8 @@ public interface NutriproService {
 
     @POST("food")
     Call<CreateFoodResponse> registerFood(@Body RegisterFoodRequest request);
+
+    @GET("week-meal")
+    Call<WeekMealResponse> getWeekMeal(@Query("first_date") String date);
 
 }
