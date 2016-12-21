@@ -26,6 +26,7 @@ import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.DateHelper;
 import com.oddsix.nutripro.utils.helpers.DialogHelper;
 import com.oddsix.nutripro.utils.helpers.FeedbackHelper;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,7 +39,7 @@ import java.util.List;
  * Created by filippecl on 20/12/16.
  */
 
-public class WeekResumeActivity extends BaseActivity {
+public class WeekResumeActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener{
     private LineChart mChart;
     private NutriproProvider mProvider;
     private FeedbackHelper mFeedbackHelper;
@@ -101,6 +102,12 @@ public class WeekResumeActivity extends BaseActivity {
                 });
             }
         });
+        mWeekTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDatePickerDialog();
+            }
+        });
     }
 
     private void setNutrientLabel() {
@@ -115,7 +122,7 @@ public class WeekResumeActivity extends BaseActivity {
         } catch (ParseException e) {
             text = "";
         }
-        mWeekTv.setText(text);
+        mWeekTv.setText(getString(R.string.week_resume_label, text));
     }
 
     private Date getFirstDayOfTheWeek(Calendar calendar) {
@@ -235,5 +242,24 @@ public class WeekResumeActivity extends BaseActivity {
             // set data
             mChart.setData(data);
         }
+    }
+
+    private void showDatePickerDialog() {
+        final Calendar calendar = Calendar.getInstance();
+        DatePickerDialog dpd = DatePickerDialog.newInstance(this,
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH));
+        dpd.setAccentColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        dpd.show(this.getFragmentManager(), "dpd");
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(year, monthOfYear, dayOfMonth);
+        mDate = getFirstDayOfTheWeek(cal);
+        setWeekLabel();
+        sendRequest();
     }
 }

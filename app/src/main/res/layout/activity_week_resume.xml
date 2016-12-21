@@ -45,7 +45,7 @@
                 android:layout_marginLeft="@dimen/horizontal_margin"
                 android:layout_marginRight="@dimen/horizontal_margin"
                 android:background="@drawable/bg_stroke_green"
-                android:ellipsize="end"
+                android:ellipsize="start"
                 android:gravity="center"
                 android:lines="1"
                 android:paddingBottom="@dimen/list_internal_vertical_margin"
