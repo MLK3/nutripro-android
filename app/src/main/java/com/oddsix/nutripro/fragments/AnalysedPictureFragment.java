@@ -23,6 +23,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.oddsix.nutripro.BaseFragment;
 import com.oddsix.nutripro.R;
+import com.oddsix.nutripro.activities.FoodInfoActivity;
 import com.oddsix.nutripro.activities.SearchActivity;
 import com.oddsix.nutripro.adapters.AnalysedImgAdapter;
 import com.oddsix.nutripro.models.AreaModel;
@@ -87,7 +88,7 @@ public class AnalysedPictureFragment extends BaseFragment {
 
             @Override
             public void onEditInfoClicked(int position) {
-                //TODO
+                startFoodInfoActivity(position);
             }
         });
         ListView listView = (ListView) mRootView.findViewById(R.id.listview);
@@ -151,6 +152,14 @@ public class AnalysedPictureFragment extends BaseFragment {
                 //TODO SAVE MEAL
             }
         });
+        ((Button) footerView.findViewById(R.id.footer_analysed_photo_conclude)).setText(getString(R.string.meal_detail_btn_save));
+        //Add a new Item
+        footerView.findViewById(R.id.footer_analysed_photo_add_item).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startSearchActivityAddingFood();
+            }
+        });
         return footerView;
     }
 
@@ -164,6 +173,18 @@ public class AnalysedPictureFragment extends BaseFragment {
             }
         });
     }
+
+    private void startFoodInfoActivity(int position) {
+        Intent infoIntent = new Intent(getActivity(), FoodInfoActivity.class);
+        infoIntent.putExtra(Constants.EXTRA_FOOD_MODEL, (RecognisedFoodResponse) mMeal.getFoods().get(position));
+        startActivity(infoIntent);
+    }
+
+    private void startSearchActivityAddingFood() {
+        Intent intent = new Intent(getActivity(), SearchActivity.class);
+        startActivityForResult(intent, Constants.REQ_ADD_FOOD);
+    }
+
 
     //TODO PUT DRAWING METHODS IN OTHER CLASS
     private void setDrawing(View headerView, Bitmap resource) {

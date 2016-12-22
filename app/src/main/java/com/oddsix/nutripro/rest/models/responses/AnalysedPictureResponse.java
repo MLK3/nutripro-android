@@ -1,12 +1,13 @@
 package com.oddsix.nutripro.rest.models.responses;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by filippecl on 21/12/16.
  */
 
-public class AnalysedPictureResponse {
+public class AnalysedPictureResponse implements Serializable {
     private String status;
     private String picture_id;
     private String picture_url;

@@ -1,12 +1,13 @@
 package com.oddsix.nutripro.rest.models.responses;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by filippecl on 21/12/16.
  */
 
-public class AnalysedRecognisedFoodResponse extends RecognisedFoodResponse {
+public class AnalysedRecognisedFoodResponse extends RecognisedFoodResponse implements Serializable {
 
     private List<Suggestion> suggestions;
 
@@ -21,7 +22,7 @@ public class AnalysedRecognisedFoodResponse extends RecognisedFoodResponse {
     public AnalysedRecognisedFoodResponse() {
     }
 
-    public class Suggestion {
+    public class Suggestion implements Serializable {
         String id;
         String name;
         int quantity;

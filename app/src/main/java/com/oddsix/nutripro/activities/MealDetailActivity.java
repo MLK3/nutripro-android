@@ -175,14 +175,6 @@ public class MealDetailActivity extends BaseActivity {
                 sendSaveChangesRequest();
             }
         });
-        ((Button) footerView.findViewById(R.id.footer_analysed_photo_conclude)).setText(getString(R.string.meal_detail_btn_save));
-        //Add a new Item
-        footerView.findViewById(R.id.footer_analysed_photo_add_item).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startSearchActivityAddingFood();
-            }
-        });
         return footerView;
     }
 
