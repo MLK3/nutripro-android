@@ -11,6 +11,7 @@ import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.models.DBRegisterModel;
 import com.oddsix.nutripro.rest.NutriproProvider;
 import com.oddsix.nutripro.rest.models.responses.GeneralResponse;
+import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.validations.IsEmail;
 
@@ -50,7 +51,7 @@ public class LoginActivity extends BaseActivity {
 
     private void validateAllFields() {
         if (!IsEmail.isValid(mLoginTil.getEditText().getText().toString())) {
-            mLoginTil.setError(getString(R.string.login_error_password_length_error));
+            mLoginTil.setError(getString(R.string.login_error_invalid_mail));
         } else {
             mLoginTil.setErrorEnabled(false);
         }
@@ -77,11 +78,9 @@ public class LoginActivity extends BaseActivity {
                     new NutriproProvider.OnResponseListener<GeneralResponse>() {
                         @Override
                         public void onResponseSuccess(GeneralResponse response) {
-                            dismissProgressDialog();
                             SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE);
                             sharedPreferences.edit().putBoolean(Constants.PREF_IS_LOGGED, true).apply();
-                            Intent intent = new Intent(view.getContext(), MainActivity.class);
-                            startActivity(intent);
+                            getSuggestedDiet(view);
                             finish();
                         }
 
@@ -92,6 +91,25 @@ public class LoginActivity extends BaseActivity {
                         }
                     });
         }
+    }
+
+    public void getSuggestedDiet(final View view) {
+        mNutriproProvider.getDiet(new NutriproProvider.OnResponseListener<SuggestedDietResponse>() {
+            @Override
+            public void onResponseSuccess(SuggestedDietResponse response) {
+                dismissProgressDialog();
+                Intent intent = new Intent(view.getContext(), MainActivity.class);
+                intent.putExtra(Constants.EXTRA_DIET, response);
+                startActivity(intent);
+                finish();
+            }
+
+            @Override
+            public void onResponseFailure(String msg, int code) {
+                showToast(msg);
+                dismissProgressDialog();
+            }
+        });
     }
 
     public void onRegisterClicked(View view) {
