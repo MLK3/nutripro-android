@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.oddsix.nutripro.BuildConfig;
 import com.oddsix.nutripro.rest.models.requests.AnalysedPictureRequest;
+import com.oddsix.nutripro.rest.models.requests.CreateMealRequest;
 import com.oddsix.nutripro.rest.models.requests.DietNutrientRequest;
 import com.oddsix.nutripro.rest.models.requests.EditDietRequest;
 import com.oddsix.nutripro.rest.models.requests.EditMealRequest;
@@ -117,6 +118,12 @@ public class NutriproProvider {
         mNutriproService.analysePicture(new AnalysedPictureRequest(picture))
                 .enqueue(new ResponseHandler<AnalysedPictureResponse>(mActivity, callback));
     }
+
+    public void createMeal(CreateMealRequest request, OnResponseListener<GeneralResponse> callback) {
+        mNutriproService.createMeal(request)
+                .enqueue(new ResponseHandler<GeneralResponse>(mActivity, callback));
+    }
+
     private Retrofit getRetrofit(List<Interceptor> interceptors) {
         Retrofit.Builder retroBuilder = new Retrofit.Builder().baseUrl(Constants.MOCK_URL).addConverterFactory(GsonConverterFactory.create());
         OkHttpClient.Builder httpClient = getClient(interceptors);

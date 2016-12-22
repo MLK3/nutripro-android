@@ -2,6 +2,7 @@ package com.oddsix.nutripro;
 
 
 import android.support.v4.app.Fragment;
+import android.widget.Toast;
 
 import com.oddsix.nutripro.utils.ViewUtil;
 import com.oddsix.nutripro.utils.helpers.DialogHelper;
@@ -27,4 +28,9 @@ public class BaseFragment extends Fragment {
     public void functionNotImplemented(){
         ((BaseActivity) getActivity()).functionNotImplemented();
     }
+
+    public void showToast(String string) {
+        Toast.makeText(getActivity(), string, Toast.LENGTH_SHORT).show();
+    }
+
 }

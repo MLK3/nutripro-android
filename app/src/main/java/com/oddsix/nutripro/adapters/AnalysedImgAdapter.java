@@ -88,6 +88,14 @@ public class AnalysedImgAdapter extends BaseAdapter {
                 }
             });
 
+            viewHolder.name.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    mOnNutrientClickListener.onEditNameLongClicked(i);
+                    return true;
+                }
+            });
+
             // store the holder with the view.
             view.setTag(viewHolder);
 
@@ -118,5 +126,6 @@ public class AnalysedImgAdapter extends BaseAdapter {
         void onEditValueClicked(int position);
         void onEditNameClicked(int position);
         void onEditInfoClicked(int position);
+        void onEditNameLongClicked(int position);
     }
 }

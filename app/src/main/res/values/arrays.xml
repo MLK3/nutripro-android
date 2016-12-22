@@ -30,6 +30,13 @@
         <item>Escolher do álbum</item>
     </string-array>
 
+    <string-array name="meal_name_suggestions">
+        <item>Café da manhã</item>
+        <item>Almoço</item>
+        <item>Jantar</item>
+        <item>Outro nome</item>
+    </string-array>
+
     <integer-array name="app_colors">
         <item>@color/color_blue</item>
         <item>@color/color_blue_light</item>

@@ -17,6 +17,7 @@ import com.oddsix.nutripro.rest.NutriproProvider;
 import com.oddsix.nutripro.rest.models.responses.FoodResponse;
 import com.oddsix.nutripro.rest.models.responses.SearchResponse;
 import com.oddsix.nutripro.utils.Constants;
+import com.oddsix.nutripro.utils.ViewUtil;
 import com.oddsix.nutripro.utils.helpers.FeedbackHelper;
 
 /**
@@ -109,6 +110,7 @@ public class SearchActivity extends BaseActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 sendRequest(query);
+                hideSoftKeyboard();
                 return true;
             }
 

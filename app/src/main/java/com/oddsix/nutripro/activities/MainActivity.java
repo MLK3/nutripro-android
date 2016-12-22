@@ -135,6 +135,10 @@ public class MainActivity extends BaseActivity {
         setupTabIcons(mTabLayout);
     }
 
+    public void resetTabIndex() {
+        mTabLayout.getTabAt(DAY_RESUME_TAB_POSITION).select();
+    }
+
     private void setupTabIcons(TabLayout tabLayout) {
         TypedArray tabIcons = getResources().obtainTypedArray(R.array.tab_icons);
 

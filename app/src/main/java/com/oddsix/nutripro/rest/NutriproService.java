@@ -1,6 +1,7 @@
 package com.oddsix.nutripro.rest;
 
 import com.oddsix.nutripro.rest.models.requests.AnalysedPictureRequest;
+import com.oddsix.nutripro.rest.models.requests.CreateMealRequest;
 import com.oddsix.nutripro.rest.models.requests.EditDietRequest;
 import com.oddsix.nutripro.rest.models.requests.EditMealRequest;
 import com.oddsix.nutripro.rest.models.requests.RegisterFoodRequest;
@@ -83,5 +84,8 @@ public interface NutriproService {
 
     @POST("picture")
     Call<AnalysedPictureResponse> analysePicture(@Body AnalysedPictureRequest request);
+
+    @POST("meal")
+    Call<GeneralResponse> createMeal(@Body CreateMealRequest request);
 
 }

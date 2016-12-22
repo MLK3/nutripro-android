@@ -1,11 +1,13 @@
 package com.oddsix.nutripro.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
 import android.graphics.RectF;
 import android.graphics.Region;
 import android.os.Bundle;
@@ -54,6 +56,10 @@ public class MealDetailActivity extends BaseActivity {
     private MealDetailResponse mMeal;
     private AppColorHelper mColorHelper;
     private DialogHelper mDialogHelper;
+
+    private Canvas mCanvas;
+
+    private View mHeaderView;
 
     private int mEditingFoodIndex = 0;
 
@@ -116,6 +122,22 @@ public class MealDetailActivity extends BaseActivity {
             public void onEditInfoClicked(int position) {
                 startFoodInfoActivity(position);
             }
+
+            @Override
+            public void onEditNameLongClicked(final int position) {
+                mDialogHelper.showAlertDialog("Tem certeza que deseja remover este alimento?",
+                        "Remover",
+                        "Cancelar",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mMeal.getFoods().remove(position);
+                                mAnalysedImgAdapter.setFoods(mMeal.getFoods());
+                                mCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
+                                setImage(mHeaderView);
+                            }
+                        });
+            }
         });
         ListView listView = (ListView) findViewById(R.id.listview);
         listView.setDividerHeight(0);
@@ -161,7 +183,7 @@ public class MealDetailActivity extends BaseActivity {
     private View inflateHeader(LayoutInflater inflater) {
         View headerView = inflater.inflate(R.layout.header_analysed_photo, null);
         ((TextView) headerView.findViewById(R.id.header_analysed_meal_name_tv)).setText(mMeal.getName());
-
+        mHeaderView = headerView;
         setImage(headerView);
         return headerView;
     }
@@ -262,6 +284,8 @@ public class MealDetailActivity extends BaseActivity {
             areas.add(new AreaModel(r, recognisedFood, i));
         }
 
+        mCanvas = canvas;
+
         imageView.setImageBitmap(bitmap);
 
         imageView.setOnTouchListener(new View.OnTouchListener() {
@@ -271,7 +295,7 @@ public class MealDetailActivity extends BaseActivity {
                 point.x = (int) ((motionEvent.getX() * resWidth) / view.getWidth());
                 point.y = (int) ((motionEvent.getY() * resHeight) / view.getHeight());
 
-                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                     for (AreaModel area : areas) {
                         if (area.getRegion().contains(point.x, point.y)) {
                             mEditingFoodIndex = area.getArrayIndex();
