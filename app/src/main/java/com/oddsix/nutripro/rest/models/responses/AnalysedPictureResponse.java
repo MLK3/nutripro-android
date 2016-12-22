@@ -9,8 +9,8 @@ import java.util.List;
 public class AnalysedPictureResponse {
     private String status;
     private String picture_id;
-    private String pictureUrl;
-    private List<Food> foods;
+    private String picture_url;
+    private List<AnalysedRecognisedFoodResponse> foods;
 
     public String getStatus() {
         return status;
@@ -21,83 +21,11 @@ public class AnalysedPictureResponse {
     }
 
     public String getPictureUrl() {
-        return pictureUrl;
+        return picture_url;
     }
 
-    public List<Food> getFoods() {
+    public List<AnalysedRecognisedFoodResponse> getFoods() {
         return foods;
-    }
-
-    public class Food {
-        private String area_id;
-        private List<Suggestion> suggestions;
-        private List<Point> points;
-
-        public List<Point> getPoints() {
-            return points;
-        }
-
-        public String getArea_id() {
-            return area_id;
-        }
-
-        public List<Suggestion> getSuggestions() {
-            return suggestions;
-        }
-
-        public class Suggestion {
-            private String id;
-            private String name;
-            private int quantity;
-            private List<Nutrient> nutrients;
-
-            public String getId() {
-                return id;
-            }
-
-            public String getName() {
-                return name;
-            }
-
-            public int getQuantity() {
-                return quantity;
-            }
-
-            public List<Nutrient> getNutrients() {
-                return nutrients;
-            }
-
-            public class Nutrient {
-                private String name;
-                private int quantity;
-                private String unit;
-
-                public String getName() {
-                    return name;
-                }
-
-                public int getQuantity() {
-                    return quantity;
-                }
-
-                public String getUnit() {
-                    return unit;
-                }
-            }
-        }
-
-        public class Point {
-            private int x;
-            private int y;
-
-            public int getX() {
-                return x;
-            }
-
-            public int getY() {
-                return y;
-            }
-        }
     }
 
 }

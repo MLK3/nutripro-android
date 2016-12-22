@@ -13,13 +13,16 @@ public class RecognisedFoodResponse implements Serializable {
     private int quantity;
     private Area area;
 
-    public Area getArea() {
-        return area;
-    }
-
     public RecognisedFoodResponse(String id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public RecognisedFoodResponse() {
+    }
+
+    public Area getArea() {
+        return area;
     }
 
     public void setName(String name) {

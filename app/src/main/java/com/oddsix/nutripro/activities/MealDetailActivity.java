@@ -55,7 +55,7 @@ public class MealDetailActivity extends BaseActivity {
     private AppColorHelper mColorHelper;
     private DialogHelper mDialogHelper;
 
-    private int mMealIndexEditing = 0;
+    private int mEditingFoodIndex = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,7 +109,7 @@ public class MealDetailActivity extends BaseActivity {
             @Override
             public void onEditNameClicked(int position) {
                 startSearchActivityReplacingFood();
-                mMealIndexEditing = position;
+                mEditingFoodIndex = position;
             }
 
             @Override
@@ -282,7 +282,7 @@ public class MealDetailActivity extends BaseActivity {
                 if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                     for (AreaModel area : areas) {
                         if (area.getRegion().contains(point.x, point.y)) {
-                            mMealIndexEditing = area.getArrayIndex();
+                            mEditingFoodIndex = area.getArrayIndex();
                             startSearchActivityReplacingArea();
                             break;
                         }
@@ -299,8 +299,8 @@ public class MealDetailActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && (requestCode == Constants.REQ_REPLACE_FOOD || requestCode == Constants.REQ_REPLACE_BY_AREA)) {
             FoodResponse foodSelected = (FoodResponse) data.getSerializableExtra(Constants.EXTRA_FOOD);
-            mMeal.getFoods().get(mMealIndexEditing).setId(foodSelected.getId());
-            mMeal.getFoods().get(mMealIndexEditing).setName(foodSelected.getName());
+            mMeal.getFoods().get(mEditingFoodIndex).setId(foodSelected.getId());
+            mMeal.getFoods().get(mEditingFoodIndex).setName(foodSelected.getName());
             mAnalysedImgAdapter.setFoods(mMeal.getFoods());
         } else if (resultCode == RESULT_OK && requestCode == Constants.REQ_ADD_FOOD) {
             FoodResponse foodSelected = (FoodResponse) data.getSerializableExtra(Constants.EXTRA_FOOD);

@@ -1,18 +1,17 @@
 package com.oddsix.nutripro.fragments;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Point;
 import android.graphics.RectF;
 import android.graphics.Region;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -24,29 +23,21 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.oddsix.nutripro.BaseFragment;
 import com.oddsix.nutripro.R;
-import com.oddsix.nutripro.activities.FoodInfoActivity;
 import com.oddsix.nutripro.activities.SearchActivity;
 import com.oddsix.nutripro.adapters.AnalysedImgAdapter;
 import com.oddsix.nutripro.models.AreaModel;
-import com.oddsix.nutripro.models.DBDayMealModel;
-import com.oddsix.nutripro.models.DBMealFoodModel;
-import com.oddsix.nutripro.models.DBMealNutrientModel;
-import com.oddsix.nutripro.models.FoodModel;
-import com.oddsix.nutripro.models.NutrientModel;
 import com.oddsix.nutripro.rest.NutriproProvider;
 import com.oddsix.nutripro.rest.models.responses.AnalysedPictureResponse;
+import com.oddsix.nutripro.rest.models.responses.AnalysedRecognisedFoodResponse;
+import com.oddsix.nutripro.rest.models.responses.FoodResponse;
 import com.oddsix.nutripro.rest.models.responses.RecognisedFoodResponse;
 import com.oddsix.nutripro.utils.Constants;
+import com.oddsix.nutripro.utils.base.BaseDialogHelper;
 import com.oddsix.nutripro.utils.helpers.AppColorHelper;
 import com.oddsix.nutripro.utils.helpers.DialogHelper;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.zip.Inflater;
-
-import io.realm.Realm;
 
 /**
  * Created by Filippe on 21/10/16.
@@ -54,94 +45,96 @@ import io.realm.Realm;
 
 public class AnalysedPictureFragment extends BaseFragment {
     private AnalysedImgAdapter mAnalysedImgAdapter;
-    private View mHeaderView;
     private DialogHelper mDialogHelper;
-    //    private Realm mRealm;
-//    private List<FoodModel> mFoods = new ArrayList<>();
-//    private DBDayMealModel mDay;
     private NutriproProvider mProvider;
     private AppColorHelper mColorHelper;
+    private AnalysedPictureResponse mMeal;
+
     private LayoutInflater mInflater;
-    private View view;
+    private View mRootView;
+    private View mHeaderView;
+
+    private int mEditingFoodIndex = 0;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_listview, container, false);
-//        mRealm = Realm.getDefaultInstance();
-        this.view = view;
+        this.mRootView = view;
         mDialogHelper = new DialogHelper(getActivity());
 
         mProvider = new NutriproProvider(getActivity());
 
         mColorHelper = new AppColorHelper(getActivity());
 
-//        setMockData();
         mInflater = inflater;
+
         setListView();
         return view;
     }
-
-//    private void setMockData() {
-//        Calendar cal = Calendar.getInstance();
-//        cal.set(2016, 10, 2);
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//        mDay = mRealm.where(DBDayMealModel.class)
-//                .equalTo("dateString", dateFormat.format(cal.getTime()))
-//                .findFirst();
-//        for (DBMealFoodModel dbFoods : mDay.getMeals().get(0).getFoods()) {
-//            List<NutrientModel> nutrients = new ArrayList<>();
-//            for (DBMealNutrientModel dbNutrients : dbFoods.getNutrients()) {
-//                nutrients.add(new NutrientModel(dbNutrients.getName(), dbNutrients.getQuantity(), dbNutrients.getUnit()));
-//            }
-//            mFoods.add(new FoodModel(nutrients, dbFoods.getFoodName(), dbFoods.getQuantity()));
-//        }
-//    }
 
     private void setListView() {
         mAnalysedImgAdapter = new AnalysedImgAdapter(getActivity(), new AnalysedImgAdapter.OnNutrientClickListener() {
             @Override
             public void onEditValueClicked(int position) {
-                functionNotImplemented();
+                showInputDialog(position);
             }
 
             @Override
             public void onEditNameClicked(final int position) {
-                List<String> strings = new ArrayList<>();
-
-                for (AnalysedPictureResponse.Food.Suggestion suggestion :
-                        mResponse.getFoods().get(position).getSuggestions()) {
-                    strings.add(suggestion.getName());
-                }
-                strings.add("Outro");
-
-                final String[] options = strings.toArray(new String[strings.size()]);
-                mDialogHelper.showListDialog("Selecione a opção correta", options, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        if (i == options.length - 1) {
-                            Intent searchIntent = new Intent(getActivity(), SearchActivity.class);
-                            startActivityForResult(searchIntent, Constants.REQ_REPLACE_FOOD);
-                        } else {
-                            //TODO replace food
-                        }
-                    }
-                });
+                showListDialog(position);
             }
 
             @Override
             public void onEditInfoClicked(int position) {
-                Intent infoIntent = new Intent(getActivity(), FoodInfoActivity.class);
-//                infoIntent.putExtra(Constants.EXTRA_FOOD_MODEL, mFoods.get(position));
-                startActivity(infoIntent);
+                //TODO
             }
         });
-//        mAnalysedImgAdapter.setFoods(mFoods);
-        ListView listView = (ListView) view.findViewById(R.id.listview);
+        ListView listView = (ListView) mRootView.findViewById(R.id.listview);
+        listView.setDividerHeight(0);
         listView.setAdapter(mAnalysedImgAdapter);
         mHeaderView = inflateHeader(mInflater);
         listView.addHeaderView(mHeaderView);
         listView.addFooterView(inflateFooter(mInflater));
+    }
+
+    @SuppressWarnings("unchecked")
+    private void showInputDialog(final int position) {
+        mDialogHelper.showEditTextDialog(getString(R.string.meal_detail_quantity_dialog_title),
+                getString(R.string.action_confirm),
+                getString(R.string.action_cancel),
+                new BaseDialogHelper.OnEditTextDialogClickListener() {
+                    @Override
+                    public void onInputConfirmed(int value) {
+                        mMeal.getFoods().get(position).setQuantity(value);
+                        mAnalysedImgAdapter.setFoods((List<RecognisedFoodResponse>) (List<?>) mMeal.getFoods());
+                    }
+                });
+    }
+
+    private void showListDialog(final int position) {
+        //TODO PUT STRINGS IN XML
+        List<String> strings = new ArrayList<>();
+
+        for (AnalysedRecognisedFoodResponse.Suggestion suggestion :
+                mMeal.getFoods().get(position).getSuggestions()) {
+            strings.add(suggestion.getName());
+        }
+        strings.add("Outro");
+
+        final String[] options = strings.toArray(new String[strings.size()]);
+        mDialogHelper.showListDialog("Selecione a opção correta", options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (i == options.length - 1) {
+                    mEditingFoodIndex = position;
+                    Intent searchIntent = new Intent(getActivity(), SearchActivity.class);
+                    startActivityForResult(searchIntent, Constants.REQ_REPLACE_FOOD);
+                } else {
+                    //TODO replace food
+                }
+            }
+        });
     }
 
     private View inflateHeader(LayoutInflater inflater) {
@@ -150,16 +143,29 @@ public class AnalysedPictureFragment extends BaseFragment {
         return headerView;
     }
 
+    private View inflateFooter(LayoutInflater inflater) {
+        View footerView = inflater.inflate(R.layout.footer_analysed_photo, null);
+        ((Button) footerView.findViewById(R.id.footer_analysed_photo_conclude)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO SAVE MEAL
+            }
+        });
+        return footerView;
+    }
+
     public void setImage(final View headerView) {
-        Glide.with(this).load(mResponse.getPictureUrl()).asBitmap().into(new SimpleTarget<Bitmap>() {
+        Glide.with(this).load(mMeal.getPictureUrl()).asBitmap().into(new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                ((ImageView) headerView.findViewById(R.id.header_analysed_photo_img)).setImageBitmap(resource);
+                //TODO UNCOMMENT THIS LINE IF THE REQUEST RETURNS THE PICTURE URL
+//                ((ImageView) headerView.findViewById(R.id.header_analysed_photo_img)).setImageBitmap(resource);
                 setDrawing(headerView, resource);
             }
         });
     }
 
+    //TODO PUT DRAWING METHODS IN OTHER CLASS
     private void setDrawing(View headerView, Bitmap resource) {
         ImageView imageView = (ImageView) headerView.findViewById(R.id.header_analysed_drawing);
 
@@ -174,8 +180,8 @@ public class AnalysedPictureFragment extends BaseFragment {
         // Create a list of regions
         final List<AreaModel> areas = new ArrayList<>();
 
-        for (int i = 0; i < mResponse.getFoods().size(); i++) {
-            AnalysedPictureResponse.Food recognisedFood = mResponse.getFoods().get(i);
+        for (int i = 0; i < mMeal.getFoods().size(); i++) {
+            AnalysedRecognisedFoodResponse recognisedFood = mMeal.getFoods().get(i);
 
             //Set color, width and alpha
             Paint wallPaint = new Paint();
@@ -187,10 +193,10 @@ public class AnalysedPictureFragment extends BaseFragment {
             //Draw polygon
             Path wallPath = new Path();
             wallPath.reset();
-            List<AnalysedPictureResponse.Food.Point> points = recognisedFood.getPoints();
+            List<AnalysedRecognisedFoodResponse.Area.Point> points = recognisedFood.getArea().getPoints();
             //Initial point
             wallPath.moveTo(points.get(0).getX(), points.get(0).getY());
-            for (int j = 1; j < recognisedFood.getPoints().size(); j++) {
+            for (int j = 1; j < recognisedFood.getArea().getPoints().size(); j++) {
                 //Rest of the points
                 wallPath.lineTo(points.get(j).getX(), points.get(j).getY());
             }
@@ -214,15 +220,15 @@ public class AnalysedPictureFragment extends BaseFragment {
         //todo
 //        imageView.setOnTouchListener(new View.OnTouchListener() {
 //            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//            public boolean onTouch(View mRootView, MotionEvent motionEvent) {
 //                Point point = new Point();
-//                point.x = (int) ((motionEvent.getX() * resWidth) / view.getWidth());
-//                point.y = (int) ((motionEvent.getY() * resHeight) / view.getHeight());
+//                point.x = (int) ((motionEvent.getX() * resWidth) / mRootView.getWidth());
+//                point.y = (int) ((motionEvent.getY() * resHeight) / mRootView.getHeight());
 //
 //                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
 //                    for (AreaModel area : areas) {
 //                        if (area.getRegion().contains(point.x, point.y)) {
-//                            mMealIndexEditing = area.getArrayIndex();
+//                            mEditingFoodIndex = area.getArrayIndex();
 //                            startSearchActivityReplacingArea();
 //                            break;
 //                        }
@@ -234,53 +240,42 @@ public class AnalysedPictureFragment extends BaseFragment {
 //        });
     }
 
-    private void startSearchActivityReplacingFood() {
-        Intent intent = new Intent(getActivity(), SearchActivity.class);
-        startActivityForResult(intent, Constants.REQ_REPLACE_FOOD);
-    }
-
-    private void startSearchActivityAddingFood() {
-        Intent intent = new Intent(getActivity(), SearchActivity.class);
-        startActivityForResult(intent, Constants.REQ_ADD_FOOD);
-    }
-
-    private void startSearchActivityReplacingArea() {
-        Intent intent = new Intent(getActivity(), SearchActivity.class);
-        startActivityForResult(intent, Constants.REQ_REPLACE_BY_AREA);
-    }
-
-
-    private View inflateFooter(LayoutInflater inflater) {
-        View footerView = inflater.inflate(R.layout.footer_analysed_photo, null);
-        ((Button) footerView.findViewById(R.id.footer_analysed_photo_conclude)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                functionNotImplemented();
-                //todo send meal
-
-            }
-        });
-        return footerView;
-    }
-
-    AnalysedPictureResponse mResponse;
-
-    public void setImage(Bitmap image, String photo64) {
-        ((ImageView) mHeaderView.findViewById(R.id.header_analysed_photo_img)).setImageBitmap(image);
+    @SuppressWarnings("unchecked")
+    public void setImage(final Bitmap image, String photo64) {
+        showProgressdialog();
         mProvider.analysePicture(photo64, new NutriproProvider.OnResponseListener<AnalysedPictureResponse>() {
             @Override
             public void onResponseSuccess(AnalysedPictureResponse response) {
-                mResponse = response;
-//                setImage(mHeaderView);
-//                setListView();
-//                mAnalysedImgAdapter.setFoods();
-                //SET IMAGE
+                dismissProgressDialog();
+                mMeal = response;
+                ((ImageView) mHeaderView.findViewById(R.id.header_analysed_photo_img)).setImageBitmap(image);
+                setImage(mHeaderView);
+                mAnalysedImgAdapter.setFoods((List<RecognisedFoodResponse>) (List<?>) response.getFoods());
             }
 
             @Override
             public void onResponseFailure(String msg, int code) {
+                dismissProgressDialog();
+                //TODO SHOW ERROR TOAST
+                //TODO CHANGE OPENED TAB
             }
         });
 
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK && (requestCode == Constants.REQ_REPLACE_FOOD || requestCode == Constants.REQ_REPLACE_BY_AREA)) {
+            FoodResponse foodSelected = (FoodResponse) data.getSerializableExtra(Constants.EXTRA_FOOD);
+            mMeal.getFoods().get(mEditingFoodIndex).setId(foodSelected.getId());
+            mMeal.getFoods().get(mEditingFoodIndex).setName(foodSelected.getName());
+            mAnalysedImgAdapter.setFoods((List<RecognisedFoodResponse>) (List<?>) mMeal.getFoods());
+        } else if (resultCode == Activity.RESULT_OK && requestCode == Constants.REQ_ADD_FOOD) {
+            FoodResponse foodSelected = (FoodResponse) data.getSerializableExtra(Constants.EXTRA_FOOD);
+            mMeal.getFoods().add(new AnalysedRecognisedFoodResponse(foodSelected.getId(), foodSelected.getName()));
+            mAnalysedImgAdapter.setFoods((List<RecognisedFoodResponse>) (List<?>) mMeal.getFoods());
+        }
     }
 }
