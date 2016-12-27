@@ -103,10 +103,20 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_small_body"
+                android:text="@string/register_hint_gender"
+                android:textColor="@color/colorPrimary"/>
+
             <Spinner
                 android:id="@+id/register_gender_sp"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"/>
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_stroke_green"
+                android:layout_marginBottom="@dimen/small_spacing_between_items"
+                android:layout_height="@dimen/spinner_height"/>
 
 
             <android.support.design.widget.TextInputLayout

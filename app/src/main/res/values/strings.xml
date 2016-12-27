@@ -59,6 +59,7 @@
     <string name="register_hint_password_confirmation">Confirmação de Senha</string>
     <string name="register_hint_name">Nome</string>
     <string name="register_hint_gender">Sexo</string>
+    <string name="register_hint_gender_selection">Selecione um sexo</string>
     <string name="register_hint_age">Idade</string>
     <string name="register_hint_weight_in_kg">Peso em kg</string>
     <string name="register_hint_height_in_cm">Altura em centímetros</string>
