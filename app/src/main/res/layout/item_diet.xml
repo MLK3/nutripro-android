@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/list_internal_horizontal_margin"
@@ -19,92 +19,90 @@
         android:textSize="@dimen/text_title"
         android:textStyle="bold"/>
 
-    <TextView
-        android:id="@+id/item_diet_from"
-        android:layout_width="wrap_content"
-        android:layout_marginTop="@dimen/list_internal_vertical_margin"
 
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignRight="@+id/item_diet_to"
-        android:layout_below="@id/item_diet_name"
-        android:text="de:"
-        android:textColor="@color/colorPrimary"
-        android:textSize="@dimen/text_large_body"
-        android:textStyle="bold"
-        />
-
-    <TextView
-        android:id="@+id/item_diet_max_value"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/list_internal_vertical_margin"
+        android:orientation="horizontal">
 
-        android:layout_below="@id/item_diet_name"
-        android:layout_toLeftOf="@+id/item_diet_max_unit"
-        android:layout_toRightOf="@id/item_diet_from"
-        android:text="asldkmaksdmas"
-        android:paddingLeft="@dimen/list_internal_horizontal_margin"
-        android:paddingRight="@dimen/list_internal_horizontal_margin"
-        android:textColor="@color/color_black"
-        android:textSize="@dimen/text_large_body"
-        />
 
-    <TextView
-        android:id="@+id/item_diet_max_unit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="@dimen/list_internal_vertical_margin"
+        <TextView
+            android:id="@+id/item_diet_from"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="@dimen/list_internal_vertical_margin"
 
-        android:layout_below="@id/item_diet_name"
-        android:text="g"
-        android:textColor="@color/color_black"
-        android:textSize="@dimen/text_large_body"
-        />
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignRight="@+id/item_diet_to"
+            android:layout_below="@id/item_diet_name"
+            android:text="@string/diet_from"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/text_large_body"
+            android:textStyle="bold"
+            />
 
-    <TextView
-        android:id="@+id/item_diet_to"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_marginTop="@dimen/list_internal_vertical_margin"
+        <TextView
+            android:id="@+id/item_diet_max_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/list_internal_vertical_margin"
 
-        android:layout_below="@id/item_diet_from"
-        android:text="até:"
-        android:textColor="@color/colorPrimary"
-        android:textSize="@dimen/text_large_body"
-        android:textStyle="bold"
-        />
+            android:layout_below="@id/item_diet_name"
+            android:layout_toLeftOf="@+id/item_diet_max_unit"
+            android:layout_toRightOf="@id/item_diet_from"
+            android:text="asldkmaksdmas"
+            android:paddingLeft="@dimen/list_internal_horizontal_margin"
+            android:paddingRight="@dimen/list_internal_horizontal_margin"
+            android:textColor="@color/color_black"
+            android:textSize="@dimen/text_large_body"
+            />
 
-    <TextView
-        android:id="@+id/item_diet_min_value"
-        android:layout_width="match_parent"
-        android:layout_marginTop="@dimen/list_internal_vertical_margin"
 
-        android:layout_height="wrap_content"
-        android:layout_below="@id/item_diet_max_value"
-        android:layout_toLeftOf="@+id/item_diet_min_unit"
-        android:layout_toRightOf="@id/item_diet_to"
-        android:layout_weight="1"
-        android:paddingLeft="@dimen/list_internal_horizontal_margin"
-        android:paddingRight="@dimen/list_internal_horizontal_margin"
-        android:text="asldkmaksdmas"
-        android:textColor="@color/color_black"
-        android:textSize="@dimen/text_large_body"
-        />
 
-    <TextView
-        android:id="@+id/item_diet_min_unit"
-        android:layout_width="wrap_content"
-        android:layout_marginTop="@dimen/list_internal_vertical_margin"
+        <TextView
+            android:id="@+id/item_diet_to"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="@dimen/list_internal_vertical_margin"
 
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/item_diet_max_unit"
-        android:text="g"
-        android:textColor="@color/color_black"
-        android:textSize="@dimen/text_large_body"
-        />
+            android:layout_below="@id/item_diet_from"
+            android:text="@string/diet_to"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/text_large_body"
+            android:textStyle="bold"
+            />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/item_diet_min_value"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/list_internal_vertical_margin"
+
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_diet_max_value"
+            android:layout_toLeftOf="@+id/item_diet_min_unit"
+            android:layout_toRightOf="@id/item_diet_to"
+            android:layout_weight="1"
+            android:paddingLeft="@dimen/list_internal_horizontal_margin"
+            android:paddingRight="@dimen/list_internal_horizontal_margin"
+            android:text="asldkmaksdmas"
+            android:textColor="@color/color_black"
+            android:textSize="@dimen/text_large_body"
+            />
+
+        <TextView
+            android:id="@+id/item_diet_min_unit"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="@dimen/list_internal_vertical_margin"
+
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/item_diet_max_unit"
+            android:text="g"
+            android:textColor="@color/color_black"
+            android:textSize="@dimen/text_large_body"
+            />
+    </LinearLayout>
+
+
+</LinearLayout>

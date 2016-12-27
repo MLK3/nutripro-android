@@ -170,6 +170,10 @@
     <string name="week_resume_min_label">Min</string>
     <string name="week_resume_dialog_title">Escolha um nutriente</string>
 
+    <!--DIET-->
+    <string name="diet_from">de</string>
+    <string name="diet_to">até</string>
+
     <!--EDIT DIET-->
     <string name="edit_diet_activity_title">Edição de Dieta</string>
     <string name="edit_diet_activity_toast_success">Dieta editada com sucesso.</string>
