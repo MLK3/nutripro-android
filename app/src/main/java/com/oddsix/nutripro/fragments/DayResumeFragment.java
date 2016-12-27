@@ -128,7 +128,7 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
         mListView = (ListView) view.findViewById(R.id.day_resume_lv);
         mAdapter = new DayResumeAdapter(getActivity());
         mListView.setAdapter(mAdapter);
-        mListView.addHeaderView(getHeader());
+        mListView.addHeaderView(getHeader(), null, false);
         mListView.setHeaderDividersEnabled(false);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
