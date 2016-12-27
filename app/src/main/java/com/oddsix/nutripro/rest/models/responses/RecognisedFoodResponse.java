@@ -18,6 +18,12 @@ public class RecognisedFoodResponse implements Serializable {
         this.name = name;
     }
 
+    public RecognisedFoodResponse(String id, String name, int quantity) {
+        this.id = id;
+        this.name = name;
+        this.quantity = quantity;
+    }
+
     public RecognisedFoodResponse() {
     }
 

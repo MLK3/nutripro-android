@@ -1,5 +1,7 @@
 package com.oddsix.nutripro.rest.models.responses;
 
+import android.content.Intent;
+
 import java.io.Serializable;
 
 /**
@@ -9,10 +11,21 @@ import java.io.Serializable;
 public class FoodResponse implements Serializable {
     String name;
     String id;
+    Integer quantity;
+
+    public FoodResponse(String name, String id, int quantity) {
+        this.name = name;
+        this.id = id;
+        this.quantity = quantity;
+    }
 
     public FoodResponse(String name, String id) {
         this.name = name;
         this.id = id;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
     }
 
     public String getName() {

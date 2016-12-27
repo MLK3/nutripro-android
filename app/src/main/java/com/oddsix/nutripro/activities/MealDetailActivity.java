@@ -125,9 +125,9 @@ public class MealDetailActivity extends BaseActivity {
 
             @Override
             public void onEditNameLongClicked(final int position) {
-                mDialogHelper.showAlertDialog("Tem certeza que deseja remover este alimento?",
-                        "Remover",
-                        "Cancelar",
+                mDialogHelper.showAlertDialog(getString(R.string.remove_food_dialog_title),
+                        getString(R.string.action_remove),
+                        getString(R.string.action_cancel),
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -195,6 +195,12 @@ public class MealDetailActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 sendSaveChangesRequest();
+            }
+        });
+        footerView.findViewById(R.id.footer_analysed_photo_add_item).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startSearchActivityAddingFood();
             }
         });
         return footerView;
@@ -317,10 +323,17 @@ public class MealDetailActivity extends BaseActivity {
             FoodResponse foodSelected = (FoodResponse) data.getSerializableExtra(Constants.EXTRA_FOOD);
             mMeal.getFoods().get(mEditingFoodIndex).setId(foodSelected.getId());
             mMeal.getFoods().get(mEditingFoodIndex).setName(foodSelected.getName());
+            if (foodSelected.getQuantity() != null) {
+                mMeal.getFoods().get(mEditingFoodIndex).setQuantity(foodSelected.getQuantity());
+            }
             mAnalysedImgAdapter.setFoods(mMeal.getFoods());
         } else if (resultCode == RESULT_OK && requestCode == Constants.REQ_ADD_FOOD) {
             FoodResponse foodSelected = (FoodResponse) data.getSerializableExtra(Constants.EXTRA_FOOD);
-            mMeal.getFoods().add(new RecognisedFoodResponse(foodSelected.getId(), foodSelected.getName()));
+            if (foodSelected.getQuantity() != null) {
+                mMeal.getFoods().add(new RecognisedFoodResponse(foodSelected.getId(), foodSelected.getName(), foodSelected.getQuantity()));
+            } else {
+                mMeal.getFoods().add(new RecognisedFoodResponse(foodSelected.getId(), foodSelected.getName()));
+            }
             mAnalysedImgAdapter.setFoods(mMeal.getFoods());
         }
     }

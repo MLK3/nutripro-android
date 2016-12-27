@@ -26,7 +26,9 @@ import java.util.List;
 
 public class AddNewFoodActivity extends BaseActivity {
 
-    private TextInputLayout mNameTil, mCarbTil, mEnergeticValueTil, mProteinTil, mTotalFatTil, mSaturatedFatTil, mFibersTil, mSodiumTil;
+    private TextInputLayout mNameTil, mCarbTil, mEnergeticValueTil,
+            mProteinTil, mTotalFatTil, mSaturatedFatTil,
+            mFibersTil, mSodiumTil, mPortionTil;
     private Button mSendBtn;
     private List<TextInputLayout> mTilList;
     private NutriproProvider mProvider;
@@ -65,22 +67,26 @@ public class AddNewFoodActivity extends BaseActivity {
     private void createRegister() {
         List<NutrientRequest> nutrients = new ArrayList<>();
         for (TextInputLayout til : mTilList) {
-            if (til.getId() != R.id.register_food_name_til) {
+            if (til.getId() != R.id.register_food_name_til && til.getId() != R.id.register_food_quantity_til) {
                 nutrients.add(new NutrientRequest(til.getHint().toString(), Integer.valueOf(til.getEditText().getText().toString())));
             }
         }
+        showProgressdialog();
         mProvider.registerFood(new RegisterFoodRequest(mNameTil.getEditText().getText().toString(), nutrients),
                 new NutriproProvider.OnResponseListener<CreateFoodResponse>() {
                     @Override
                     public void onResponseSuccess(CreateFoodResponse response) {
+                        dismissProgressDialog();
                         Intent intent = new Intent();
-                        intent.putExtra(Constants.EXTRA_FOOD, new FoodResponse(mNameTil.getEditText().getText().toString(), response.getId()));
+                        intent.putExtra(Constants.EXTRA_FOOD, new FoodResponse(mNameTil.getEditText().getText().toString(), response.getId(),
+                                Integer.valueOf(mPortionTil.getEditText().getText().toString())));
                         setResult(RESULT_OK, intent);
                         finish();
                     }
 
                     @Override
                     public void onResponseFailure(String msg, int code) {
+                        dismissProgressDialog();
                         showToast(msg);
                     }
                 });
@@ -96,6 +102,7 @@ public class AddNewFoodActivity extends BaseActivity {
         mTilList.add(mSaturatedFatTil);
         mTilList.add(mFibersTil);
         mTilList.add(mSodiumTil);
+        mTilList.add(mPortionTil);
     }
 
     private boolean isFieldsValid() {
@@ -119,6 +126,7 @@ public class AddNewFoodActivity extends BaseActivity {
         mSaturatedFatTil = (TextInputLayout) findViewById(R.id.register_food_saturated_fat_til);
         mFibersTil = (TextInputLayout) findViewById(R.id.register_food_fibers_til);
         mSodiumTil = (TextInputLayout) findViewById(R.id.register_food_sodium_til);
+        mPortionTil = (TextInputLayout) findViewById(R.id.register_food_quantity_til);
 
         mSendBtn = (Button) findViewById(R.id.register_food_send_btn);
     }

@@ -19,6 +19,10 @@ public class AnalysedRecognisedFoodResponse extends RecognisedFoodResponse imple
         super(id, name);
     }
 
+    public AnalysedRecognisedFoodResponse(String id, String name, int quantity) {
+        super(id, name, quantity);
+    }
+
     public AnalysedRecognisedFoodResponse() {
     }
 
