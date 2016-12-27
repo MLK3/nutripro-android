@@ -104,9 +104,9 @@ public class AnalysedPictureFragment extends BaseFragment {
 
             @Override
             public void onEditNameLongClicked(final int position) {
-                mDialogHelper.showAlertDialog("Tem certeza que deseja remover este alimento?",
-                        "Remover",
-                        "Cancelar",
+                mDialogHelper.showAlertDialog(getString(R.string.remove_food_dialog_title),
+                        getString(R.string.action_remove),
+                        getString(R.string.action_cancel),
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -142,17 +142,16 @@ public class AnalysedPictureFragment extends BaseFragment {
 
     @SuppressWarnings("unchecked")
     private void showListDialog(final int position) {
-        //TODO PUT STRINGS IN XML
         List<String> strings = new ArrayList<>();
 
         for (AnalysedRecognisedFoodResponse.Suggestion suggestion :
                 mMeal.getFoods().get(position).getSuggestions()) {
             strings.add(suggestion.getName());
         }
-        strings.add("Outro");
+        strings.add(getString(R.string.analysed_food_dialog_food_selection_last_item_other));
 
         final String[] options = strings.toArray(new String[strings.size()]);
-        mDialogHelper.showListDialog("Selecione a opção correta", options, new DialogInterface.OnClickListener() {
+        mDialogHelper.showListDialog(getString(R.string.analysed_food_dialog_food_selection_title), options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 mEditingFoodIndex = position;
@@ -192,7 +191,7 @@ public class AnalysedPictureFragment extends BaseFragment {
                         new NutriproProvider.OnResponseListener<GeneralResponse>() {
                             @Override
                             public void onResponseSuccess(GeneralResponse response) {
-                                showToast("Refeição cadastrada com sucesso.");
+                                showToast(getString(R.string.analysed_food_request_success));
                                 ((MainActivity) getActivity()).resetTabIndex();
                             }
 
@@ -305,7 +304,7 @@ public class AnalysedPictureFragment extends BaseFragment {
                     for (AreaModel area : areas) {
                         if (area.getRegion().contains(point.x, point.y)) {
                             mEditingFoodIndex = area.getArrayIndex();
-                            startSearchActivityReplacingArea();
+                            showListDialog(mEditingFoodIndex);
                             break;
                         }
                     }
