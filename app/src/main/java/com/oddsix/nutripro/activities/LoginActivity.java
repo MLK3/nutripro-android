@@ -81,7 +81,6 @@ public class LoginActivity extends BaseActivity {
                             SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE);
                             sharedPreferences.edit().putBoolean(Constants.PREF_IS_LOGGED, true).apply();
                             getSuggestedDiet(view);
-                            finish();
                         }
 
                         @Override
@@ -106,8 +105,8 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onResponseFailure(String msg, int code) {
-                showToast(msg);
                 dismissProgressDialog();
+                showToast(msg);
             }
         });
     }

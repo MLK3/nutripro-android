@@ -29,14 +29,18 @@ public class BaseDialogHelper {
      * Shows progress dialog with standard message.
      */
     public void showProgressDialog() {
-        mProgressDialog = buildProgressDialog();
-        mProgressDialog.setMessage(mContext.getString(R.string.progress_dialog_standard_msg));
+        if(mProgressDialog == null) {
+            mProgressDialog = buildProgressDialog();
+            mProgressDialog.setMessage(mContext.getString(R.string.progress_dialog_standard_msg));
+        }
         mProgressDialog.show();
     }
 
     public void showProgressDialog(String msg) {
-        mProgressDialog = buildProgressDialog();
-        mProgressDialog.setMessage(msg);
+        if(mProgressDialog == null) {
+            mProgressDialog = buildProgressDialog();
+            mProgressDialog.setMessage(msg);
+        }
         mProgressDialog.show();
     }
 

@@ -120,7 +120,11 @@ public class MainActivity extends BaseActivity {
     }
 
     private void enabledChart(boolean enable) {
-        mChartItem.setVisible(enable);
+        try {
+            mChartItem.setVisible(enable);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     private void startCameraActivity() {
