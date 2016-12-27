@@ -11,12 +11,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.AxisValueFormatter;
+import com.github.mikephil.charting.formatter.FormattedStringCache;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.oddsix.nutripro.BaseActivity;
 import com.oddsix.nutripro.R;
@@ -39,13 +42,13 @@ import java.util.List;
  * Created by filippecl on 20/12/16.
  */
 
-public class WeekResumeActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener{
+public class WeekResumeActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener {
+    private final String CHART_DATE_FORMAT = "EEE";
     private LineChart mChart;
     private NutriproProvider mProvider;
     private FeedbackHelper mFeedbackHelper;
     private Date mDate;
     private DialogHelper mDialogHelper;
-
     private TextView mWeekTv;
     private TextView mNutrientTv;
     private TextView mUnitTv;
@@ -135,26 +138,27 @@ public class WeekResumeActivity extends BaseActivity implements DatePickerDialog
     private void sendRequest() {
         mFeedbackHelper.startLoading();
         try {
-            mProvider.getWeekResume(DateHelper.parseDate(Constants.STANDARD_DATE_FORMAT, mDate), new NutriproProvider.OnResponseListener<WeekMealResponse>() {
-                @Override
-                public void onResponseSuccess(WeekMealResponse response) {
-                    mWeekMeal = response;
-                    if (response.getNutrients().isEmpty()) {
-                        mFeedbackHelper.showEmptyPlaceHolder();
-                    } else {
-                        mWeekMeal = response;
-                        mNutrient = response.getNutrients().get(0);
-                        setChart();
-                        setNutrientLabel();
-                        mFeedbackHelper.dismissFeedback();
-                    }
-                }
+            mProvider.getWeekResume(DateHelper.parseDate(Constants.STANDARD_DATE_FORMAT, mDate),
+                    new NutriproProvider.OnResponseListener<WeekMealResponse>() {
+                        @Override
+                        public void onResponseSuccess(WeekMealResponse response) {
+                            mWeekMeal = response;
+                            if (response.getNutrients().isEmpty()) {
+                                mFeedbackHelper.showEmptyPlaceHolder();
+                            } else {
+                                mWeekMeal = response;
+                                mNutrient = response.getNutrients().get(0);
+                                setChart();
+                                setNutrientLabel();
+                                mFeedbackHelper.dismissFeedback();
+                            }
+                        }
 
-                @Override
-                public void onResponseFailure(String msg, int code) {
-                    mFeedbackHelper.showErrorPlaceHolder();
-                }
-            });
+                        @Override
+                        public void onResponseFailure(String msg, int code) {
+                            mFeedbackHelper.showErrorPlaceHolder();
+                        }
+                    });
         } catch (ParseException e) {
             mFeedbackHelper.dismissFeedback();
             e.printStackTrace();
@@ -173,6 +177,20 @@ public class WeekResumeActivity extends BaseActivity implements DatePickerDialog
         xAxis.setDrawGridLines(false);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setAvoidFirstLastClipping(true);
+        xAxis.setValueFormatter(new AxisValueFormatter() {
+            private FormattedStringCache.Generic<Long, Date> mFormattedStringCache = new FormattedStringCache.Generic<>(new SimpleDateFormat(CHART_DATE_FORMAT));
+
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                Long v = (long) value;
+                return mFormattedStringCache.getFormattedValue(new Date(v), v);
+            }
+
+            @Override
+            public int getDecimalDigits() {
+                return 0;
+            }
+        });
 
         LimitLine ll1 = new LimitLine(mNutrient.getMax(), getString(R.string.week_resume_max_label));
         ll1.setLineWidth(2f);
@@ -202,13 +220,13 @@ public class WeekResumeActivity extends BaseActivity implements DatePickerDialog
         mChart.setContentDescription("");
 
     }
-
+    
     private void setData() {
 
         ArrayList<Entry> values = new ArrayList<Entry>();
 
         for (int i = 0; i < mNutrient.getQuantities().size(); i++) {
-            values.add(new Entry(i, mNutrient.getQuantities().get(i).getSum()));
+            values.add(new Entry(DateHelper.addDay(i, mDate).getTime(), mNutrient.getQuantities().get(i).getSum()));
         }
 
         LineDataSet set1;
@@ -229,7 +247,7 @@ public class WeekResumeActivity extends BaseActivity implements DatePickerDialog
             set1.setCircleRadius(5f);
             set1.setDrawCircleHole(false);
             set1.setValueTextSize(9f);
-//            set1.setFormSize(15.f);
+            // set1.setFormSize(15.f);
 
             set1.setFillColor(Color.WHITE);
 
