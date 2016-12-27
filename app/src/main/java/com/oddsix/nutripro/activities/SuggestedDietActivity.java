@@ -27,17 +27,15 @@ import io.realm.Realm;
 
 public class SuggestedDietActivity extends BaseActivity {
     private DietAdapter mAdapter;
-    private Realm mRealm;
     private NutriproProvider mProvider;
-
     private LinearLayout mFeedbackContainer;
+    private SuggestedDietResponse mSuggestedDietResponse;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listview);
 
-        mRealm = Realm.getDefaultInstance();
         mProvider = new NutriproProvider(this);
 
         mFeedbackContainer = (LinearLayout) findViewById(R.id.feedback_container);
@@ -55,6 +53,7 @@ public class SuggestedDietActivity extends BaseActivity {
         mProvider.getDiet(new NutriproProvider.OnResponseListener<SuggestedDietResponse>() {
             @Override
             public void onResponseSuccess(SuggestedDietResponse response) {
+                mSuggestedDietResponse = response;
                 dismissProgressDialog();
                 mFeedbackContainer.setVisibility(View.GONE);
                 setSuggestedDiet(response);
@@ -100,16 +99,10 @@ public class SuggestedDietActivity extends BaseActivity {
         footerView.findViewById(R.id.footer_suggested_diet_conclude).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                DBRegisterModel register = mRealm.where(DBRegisterModel.class)
-//                        .equalTo("mail", getSharedPreferences(Constants.PACKAGE_NAME, Context.MODE_PRIVATE).getString(Constants.PREF_MAIL, ""))
-//                        .findFirst();
-//
-//                mRealm.beginTransaction();
-//                if (register != null) register.setDietModel(mSuggestedDiet);
-//                mRealm.commitTransaction();
                 SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE);
                 sharedPreferences.edit().putBoolean(Constants.PREF_IS_LOGGED, true).apply();
                 Intent intent = new Intent(view.getContext(), MainActivity.class);
+                intent.putExtra(Constants.EXTRA_DIET, mSuggestedDietResponse);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();
@@ -118,9 +111,20 @@ public class SuggestedDietActivity extends BaseActivity {
         footerView.findViewById(R.id.footer_suggested_diet_edit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO
+                Intent editDietIntent = new Intent(view.getContext(), EditDietActivity.class);
+                editDietIntent.putExtra(Constants.EXTRA_DIET, mSuggestedDietResponse);
+                startActivityForResult(editDietIntent, Constants.REQ_EDIT_DIET);
             }
         });
         return footerView;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK && requestCode == Constants.REQ_EDIT_DIET) {
+            mSuggestedDietResponse = (SuggestedDietResponse) data.getSerializableExtra(Constants.EXTRA_DIET);
+            setSuggestedDiet(mSuggestedDietResponse);
+        }
     }
 }
