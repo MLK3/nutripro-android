@@ -1,6 +1,5 @@
 package com.oddsix.nutripro.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,32 +19,17 @@ import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.activities.MainActivity;
 import com.oddsix.nutripro.activities.MealDetailActivity;
 import com.oddsix.nutripro.adapters.DayResumeAdapter;
-import com.oddsix.nutripro.models.DBDayMealModel;
-import com.oddsix.nutripro.models.DBDietModel;
-import com.oddsix.nutripro.models.DBDietNutrientModel;
-import com.oddsix.nutripro.models.DBMealFoodModel;
-import com.oddsix.nutripro.models.DBMealModel;
-import com.oddsix.nutripro.models.DBMealNutrientModel;
-import com.oddsix.nutripro.models.DBRegisterModel;
-import com.oddsix.nutripro.models.FoodModel;
-import com.oddsix.nutripro.models.MealModel;
-import com.oddsix.nutripro.models.NutrientModel;
 import com.oddsix.nutripro.rest.NutriproProvider;
 import com.oddsix.nutripro.rest.models.responses.DayResumeResponse;
 import com.oddsix.nutripro.rest.models.responses.DietNutrientResponse;
 import com.oddsix.nutripro.rest.models.responses.NutrientResponse;
-import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.DateHelper;
 import com.oddsix.nutripro.utils.helpers.FeedbackHelper;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 import io.realm.Realm;
 
@@ -64,7 +48,7 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
     private NutriproProvider mProvider;
 
     private View mView;
-    private DayResumeResponse mDay;
+    private DayResumeResponse mDay = new DayResumeResponse();
     private Calendar mDate;
 
     @Nullable
@@ -86,7 +70,7 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
 
         metrics = new DisplayMetrics();
 
-//        setListView(mView);
+        setListView(mView);
 
         if (mDate == null) {
             mDate = Calendar.getInstance();
@@ -109,7 +93,7 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
                 @Override
                 public void onResponseSuccess(DayResumeResponse response) {
                     mDay = response;
-                    setListView(mView);
+                    setData();
                     mFeedbackHelper.dismissFeedback();
                 }
 
@@ -128,19 +112,17 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
         mListView = (ListView) view.findViewById(R.id.day_resume_lv);
         mAdapter = new DayResumeAdapter(getActivity());
         mListView.setAdapter(mAdapter);
-        mListView.addHeaderView(getHeader(), null, false);
-        mListView.setHeaderDividersEnabled(false);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //header position
                 if (i != 0) {
-                    int arrayPosition = --i;
+                    int arrayPosition = i - 1;
                     startMealDetailActivity(mDay.getMeals().get(arrayPosition));
                 }
             }
         });
-        mHeaderView.setClickable(false);
+        setData();
     }
 
     private void startMealDetailActivity(DayResumeResponse.MealResponse meal) {
@@ -149,17 +131,25 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
         startActivity(mealDetailIntent);
     }
 
+    private void setData() {
+        if(mHeaderView != null) {
+            mListView.removeHeaderView(mHeaderView);
+        }
+        mListView.addHeaderView(getHeader(), null, false);
+        mListView.setHeaderDividersEnabled(false);
+        mHeaderView.setClickable(false);
+        mAdapter.setMeals(mDay.getMeals());
+    }
 
     private View getHeader() {
         mHeaderView = getActivity().getLayoutInflater().inflate(R.layout.header_day_resume, null);
 
-        setHeader();
+        populateHeader();
 
         return mHeaderView;
     }
 
-
-    private void setHeader() {
+    private void populateHeader() {
         LinearLayout container = (LinearLayout) mHeaderView.findViewById(R.id.chart_container);
 
 //        Calendar cal = Calendar.getInstance();
@@ -168,8 +158,6 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
 //        mDay = mRealm.where(DBDayMealModel.class)
 //                .equalTo("dateString", dateFormat.format(cal.getTime()))
 //                .findFirst();
-
-        mAdapter.setMeals(mDay.getMeals());
 
 //        DBDietModel diet = mRealm.where(DBRegisterModel.class)
 //                .equalTo("mail", getActivity().getSharedPreferences(Constants.PACKAGE_NAME, Context.MODE_PRIVATE).getString(Constants.PREF_MAIL, ""))

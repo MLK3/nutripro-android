@@ -1,6 +1,7 @@
 package com.oddsix.nutripro.rest.models.responses;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,8 +11,8 @@ import java.util.List;
 public class DayResumeResponse {
     private String status;
 
-    private List<NutrientResponse> nutrients;
-    private List<MealResponse> meals;
+    private List<NutrientResponse> nutrients = new ArrayList<>();
+    private List<MealResponse> meals = new ArrayList<>();
 
     public class MealResponse implements Serializable {
         private String id;
