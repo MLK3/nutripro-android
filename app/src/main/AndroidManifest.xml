@@ -30,9 +30,10 @@
         </activity>
         <activity android:name=".activities.SettingsActivity"/>
         <activity android:name=".activities.FoodInfoActivity"/>
+        <activity android:name=".activities.CameraActivity"/>
         <activity android:name=".activities.MealDetailActivity"/>
         <activity android:name=".activities.EditDietActivity"/>
-        <activity android:name=".activities.CameraActivity"/>
+        <activity android:name=".activities.CameraViewActivity"/>
         <activity android:name=".activities.SearchActivity"/>
         <activity android:name=".activities.ActivityLevelActivity"/>
         <activity android:name=".activities.AddNewFoodActivity"/>
