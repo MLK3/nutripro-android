@@ -5,15 +5,15 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.oddsix.nutripro.R;
-import com.oddsix.nutripro.models.FoodModel;
+import com.oddsix.nutripro.rest.models.responses.RecognisedFoodResponse;
+import com.oddsix.nutripro.utils.helpers.AppColorHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,14 +23,16 @@ import java.util.List;
 public class AnalysedImgAdapter extends BaseAdapter {
     private Context mContext;
     private OnNutrientClickListener mOnNutrientClickListener;
-    private List<FoodModel> mFoods;
+    private List<RecognisedFoodResponse> mFoods = new ArrayList<>();
+    private AppColorHelper mAppColorHelper;
 
     public AnalysedImgAdapter(Context context, OnNutrientClickListener onNutrientClickListener) {
         mContext = context;
         mOnNutrientClickListener = onNutrientClickListener;
+        mAppColorHelper = new AppColorHelper(context);
     }
 
-    public void setFoods(List<FoodModel> foods) {
+    public void setFoods(List<RecognisedFoodResponse> foods) {
         mFoods = foods;
         notifyDataSetChanged();
     }
@@ -60,20 +62,19 @@ public class AnalysedImgAdapter extends BaseAdapter {
             view = inflater.inflate(R.layout.item_analysed_photo, viewGroup, false);
 
             viewHolder = new NutrientsViewHolder();
-            viewHolder.name = (EditText) view.findViewById(R.id.analysed_photo_name_et);
-            viewHolder.value = (EditText) view.findViewById(R.id.analysed_photo_value_et);
-            viewHolder.editName = (ImageView) view.findViewById(R.id.analysed_photo_edit_name_ic);
-            viewHolder.editValue = (ImageView) view.findViewById(R.id.analysed_photo_edit_value_ic);
+            viewHolder.name = (TextView) view.findViewById(R.id.analysed_photo_name_et);
+            viewHolder.underline = view.findViewById(R.id.analysed_photo_name_underline);
+            viewHolder.value = (TextView) view.findViewById(R.id.analysed_photo_value_et);
             viewHolder.info = (ImageView) view.findViewById(R.id.analysed_photo_info_ic);
 
-            viewHolder.editName.setOnClickListener(new View.OnClickListener() {
+            viewHolder.name.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mOnNutrientClickListener.onEditNameClicked(i);
                 }
             });
 
-            viewHolder.editValue.setOnClickListener(new View.OnClickListener() {
+            viewHolder.value.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mOnNutrientClickListener.onEditValueClicked(i);
@@ -87,6 +88,14 @@ public class AnalysedImgAdapter extends BaseAdapter {
                 }
             });
 
+            viewHolder.name.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    mOnNutrientClickListener.onEditNameLongClicked(i);
+                    return true;
+                }
+            });
+
             // store the holder with the view.
             view.setTag(viewHolder);
 
@@ -97,18 +106,19 @@ public class AnalysedImgAdapter extends BaseAdapter {
         }
 
         // get the TextView from the ViewHolder and then set the text (item name) and tag (item ID) values
-        viewHolder.name.setText(mFoods.get(i).getFoodName());
-        viewHolder.value.setText(String.valueOf(mFoods.get(i).getQuantity()));
-
+        viewHolder.name.setText(mFoods.get(i).getName());
+        viewHolder.value.setText(String.valueOf(mFoods.get(i).getQuantity()) + "g");
+        if(mFoods.get(i).getArea() != null){
+            viewHolder.underline.setBackgroundColor(mAppColorHelper.getColorAtIndex(i));
+        }
         return view;
 
     }
 
     static class NutrientsViewHolder {
-        EditText name;
-        EditText value;
-        ImageView editName;
-        ImageView editValue;
+        TextView name;
+        TextView value;
+        View underline;
         ImageView info;
     }
 
@@ -116,5 +126,6 @@ public class AnalysedImgAdapter extends BaseAdapter {
         void onEditValueClicked(int position);
         void onEditNameClicked(int position);
         void onEditInfoClicked(int position);
+        void onEditNameLongClicked(int position);
     }
 }

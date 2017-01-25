@@ -8,16 +8,23 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.oddsix.nutripro.BaseFragment;
 import com.oddsix.nutripro.R;
+import com.oddsix.nutripro.activities.EditDietActivity;
+import com.oddsix.nutripro.activities.MainActivity;
 import com.oddsix.nutripro.activities.RegisterActivity;
 import com.oddsix.nutripro.adapters.DietAdapter;
 import com.oddsix.nutripro.models.DBDietNutrientModel;
 import com.oddsix.nutripro.models.DBRegisterModel;
+import com.oddsix.nutripro.rest.NutriproProvider;
+import com.oddsix.nutripro.rest.models.responses.RegisterResponse;
+import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
 import com.oddsix.nutripro.utils.Constants;
+import com.oddsix.nutripro.utils.helpers.FeedbackHelper;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -27,70 +34,95 @@ import io.realm.RealmList;
  */
 
 public class ProfileFragment extends BaseFragment {
-    private DBRegisterModel mUserData;
     private DietAdapter mAdapter;
     private View mHeaderView;
+    private NutriproProvider mProvider;
+    private FeedbackHelper mFeedbackHelper;
+    private RegisterResponse mRegister;
+    private View mView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_listview, container, false);
+        mView = inflater.inflate(R.layout.fragment_listview, container, false);
 
-        setUserData();
+        mFeedbackHelper = new FeedbackHelper(getActivity(), (LinearLayout) mView.findViewById(R.id.container), new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getRegister();
+            }
+        });
 
-        setListView(view);
+        mProvider = new NutriproProvider(getActivity());
 
-        setDiet();
+        if(mRegister == null) getRegister();
+        else setListView(mView);
 
-        return view;
+        return mView;
     }
 
-    private void setUserData() {
-        DBRegisterModel register = Realm.getDefaultInstance().where(DBRegisterModel.class)
-                .equalTo("mail", getActivity().getSharedPreferences(Constants.PACKAGE_NAME, Context.MODE_PRIVATE).getString(Constants.PREF_MAIL, ""))
-                .findFirst();
-        if (register != null) mUserData = register;
+    private void getRegister() {
+        mFeedbackHelper.startLoading();
+        mProvider.getRegister(new NutriproProvider.OnResponseListener<RegisterResponse>() {
+            @Override
+            public void onResponseSuccess(RegisterResponse response) {
+                mFeedbackHelper.dismissFeedback();
+                mRegister = response;
+                setListView(mView);
+
+            }
+
+            @Override
+            public void onResponseFailure(String msg, int code) {
+                mFeedbackHelper.showErrorPlaceHolder();
+            }
+        });
     }
 
     private void setListView(View view) {
         ListView list = (ListView) view.findViewById(R.id.listview);
         mAdapter = new DietAdapter(getActivity());
         list.setAdapter(mAdapter);
+        mAdapter.setDiet(((MainActivity) getActivity()).getSuggestedDiet().getNutrients());
         list.addHeaderView(getHeader());
-    }
-
-    private void setDiet() {
-        RealmList<DBDietNutrientModel> diet = mUserData.getDietModel().getDiet();
-        mAdapter.setDiet(diet);
     }
 
     private View getHeader() {
         mHeaderView = getActivity().getLayoutInflater().inflate(R.layout.header_profile, null);
 
+        mHeaderView.findViewById(R.id.register_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), EditDietActivity.class);
+                intent.putExtra(Constants.EXTRA_DIET, ((MainActivity) getActivity()).getSuggestedDiet());
+                startActivityForResult(intent, Constants.REQ_EDIT_DIET);
+            }
+        });
         setHeader(mHeaderView);
 
         return mHeaderView;
     }
 
     private void setHeader(View headerView) {
-        ((TextView)headerView.findViewById(R.id.header_profile_name)).setText(mUserData.getName());
+        ((TextView)headerView.findViewById(R.id.header_profile_name)).setText(mRegister.getName());
 
         View genderContainer = headerView.findViewById(R.id.header_profile_gender);
-        setProfileItem(genderContainer, getString(R.string.profile_item_gender), mUserData.getGender());
+        setProfileItem(genderContainer, getString(R.string.profile_item_gender), mRegister.getGender());
 
         View heightContainer = headerView.findViewById(R.id.header_profile_height);
-        setProfileItem(heightContainer, getString(R.string.profile_item_height), String.valueOf(mUserData.getHeight()));
+        setProfileItem(heightContainer, getString(R.string.profile_item_height), String.valueOf(mRegister.getAltura()));
 
         View weightContainer = headerView.findViewById(R.id.header_profile_weight);
-        setProfileItem(weightContainer, getString(R.string.profile_item_weight), String.valueOf(mUserData.getWeight()));
+        setProfileItem(weightContainer, getString(R.string.profile_item_weight), String.valueOf(mRegister.getPeso()));
 
         View ageContainer = headerView.findViewById(R.id.header_profile_age);
-        setProfileItem(ageContainer, getString(R.string.profile_item_age), String.valueOf(mUserData.getAge()));
+        setProfileItem(ageContainer, getString(R.string.profile_item_age), String.valueOf(mRegister.getAge()));
 
         headerView.findViewById(R.id.register_send_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), RegisterActivity.class);
+                intent.putExtra(Constants.EXTRA_REGISTER_MODEL, mRegister);
                 intent.putExtra(Constants.EXTRA_BOOL_EDIT_REGISTER, true);
                 startActivityForResult(intent, Constants.REQ_EDIT_REGISTER);
             }
@@ -108,8 +140,11 @@ public class ProfileFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == Constants.REQ_EDIT_REGISTER && resultCode == Activity.RESULT_OK) {
-            setUserData();
+            mRegister = (RegisterResponse) data.getSerializableExtra(Constants.EXTRA_REGISTER_MODEL);
             setHeader(mHeaderView);
+        } else if (requestCode == Constants.REQ_EDIT_DIET && resultCode == Activity.RESULT_OK) {
+            ((MainActivity) getActivity()).setSuggestedDiet((SuggestedDietResponse) data.getSerializableExtra(Constants.EXTRA_DIET));
+            mAdapter.setDiet(((MainActivity) getActivity()).getSuggestedDiet().getNutrients());
         }
     }
 }

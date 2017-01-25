@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="password_max_lengt">6</integer>
+    <integer name="password_min_length">6</integer>
 </resources>

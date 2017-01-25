@@ -1,5 +1,16 @@
 <resources>
     <string name="app_name">Nutripro</string>
+
+    <!--ACTIONS-->
+    <string name="action_retry">Tentar Novamente</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="action_confirm">Confirmar</string>
+    <string name="action_register">Cadastrar</string>
+    <string name="action_save">Salvar</string>
+    <string name="action_remove">Remover</string>
+
+    <!--ERROR-->
+    <string name="unknown_error">Não foi possível completar sua requisição, tente novamente.</string>
     <!--DIALOG MESSAGES-->
     <string name="progress_dialog_standard_msg">Aguarde um momento.</string>
     <string name="dialog_title_select_an_option">Selecione uma opção</string>
@@ -27,22 +38,51 @@
         <!--ERRORS-->
     <string name="login_error_user_not_found">Usuário não encontrado, verifique seu e-mail.</string>
     <string name="login_error_user_unauthorized">Senha inválida</string>
+    <string name="login_error_invalid_mail">E-mail inválido</string>
+    <string name="login_error_password_length_error">A senha deve possuir pelo menos %1$d caracteres.</string>
 
     <!--REGISTER-->
     <string name="register_info">Cadastro de Informações</string>
-    <string name="register_btn_send">Enviar</string>
+    <string name="register_btn_continue">Continuar</string>
+
+    <!--ACTIVITY LEVEL-->
+    <string name="activity_level_title">Nível de Atividade</string>
+    <string name="activity_level_btn_send">Enviar</string>
+    <string name="activity_level_description">Escolha o nível de atividade que mais se assemelha ao seu:</string>
+    <string name="activity_level_rb_sedendary">Sedentário: Trabalhos domésticos de esforço leve a moderado, caminhadas para atividades relacionadas com o cotidiano, ficar sentado por várias horas.</string>
+    <string name="activity_level_rb_low_activity">Pouco ativo: Caminhadas leves (até 6,4 Km/hora), além das mesmas atividades relacionadas ao nível “sedentário”.</string>
+    <string name="activity_level_rb_medium_activity">Ativo: Ginástica aeróbica, corrida moderada, natação, jogar tênis, além das mesmas atividades relacionadas ao nível “sedentário”.</string>
+    <string name="activity_level_rb_high_activity">Muito ativo: Ciclismo de intensidade moderada, corrida intensa, pular corda, jogar tênis, além de atividades relacionadas ao nível “sedentário”.</string>
+
     <!--HINT-->
     <string name="register_hint_mail">E-mail</string>
     <string name="register_hint_password">Senha</string>
     <string name="register_hint_password_confirmation">Confirmação de Senha</string>
     <string name="register_hint_name">Nome</string>
     <string name="register_hint_gender">Sexo</string>
+    <string name="register_hint_gender_selection">Selecione um sexo</string>
     <string name="register_hint_age">Idade</string>
     <string name="register_hint_weight_in_kg">Peso em kg</string>
-    <string name="register_hint_height_in_meters">Altura em metros</string>
+    <string name="register_hint_height_in_cm">Altura em centímetros</string>
+    <string name="register_hint_activity_level">Nível de Atividade</string>
         <!--GENDER OPTIONS-->
     <string name="register_gender_option_male">Masculino</string>
     <string name="register_gender_option_female">Feminino</string>
+        <!--ACTIVITY LEVEL OPTIONS-->
+    <string name="register_activity_level_sedentary">Sedentário</string>
+    <string name="register_activity_level_sedentary_description">Sedentário - Trabalhos domésticos de esforço leve a moderado, caminhadas para atividades relacionadas com o cotidiano, ficar sentado por várias horas.</string>
+    <string name="register_activity_level_low">Pouco Ativo</string>
+    <string name="register_activity_level_low_description">Pouco Ativo - Caminhadas leves (até 6,4 Km/hora), além das mesmas atividades relacionadas ao nível “sedentário”.</string>
+    <string name="register_activity_level_medium">Ativo</string>
+    <string name="register_activity_level_medium_description">Ativo - Ginástica aeróbica, corrida moderada, natação, jogar tênis, além das mesmas atividades relacionadas ao nível “sedentário”.</string>
+    <string name="register_activity_level_high">Muito Ativo</string>
+    <string name="register_activity_level_high_description">Muito Ativo - Ciclismo de intensidade moderada, corrida intensa, pular corda, jogar tênis, além de atividades relacionadas ao nível “sedentário”.</string>
+        <!--ACTIVITY LEVEL STRINGS-->
+    <string name="activity_level_sedentary">sedentary</string>
+    <string name="activity_level_low">low_active</string>
+    <string name="activity_level_medium">active</string>
+    <string name="activitY_level_high">very_active</string>
+
         <!--ERRORS-->
     <string name="register_error_invalid_mail">E-mail inválido.</string>
     <string name="register_error_empty_field">O campo não pode estar vazio.</string>
@@ -51,6 +91,7 @@
     <string name="register_error_gender_not_selected">É necessário escolher um sexo.</string>
     <string name="register_error_invalid_weight">Peso inválido.</string>
     <string name="register_error_invalid_height">Altura inválida.</string>
+    <string name="register_level_error_not_selected">É necessário escolher um nivel de atividade para prosseguir.</string>
     
     <!--SUGGESTED DIET-->
     <string name="suggested_diet_header_info">Dieta diária sugerida:</string>
@@ -86,6 +127,13 @@
     <!--MEAL DETAIL-->
     <string name="meal_detail_activity_title">Detalhe da Refeição</string>
     <string name="meal_detail_btn_save">Salvar Edição</string>
+    <string name="meal_detail_add_item">Adicionar um novo alimento nesta refeição</string>
+    <string name="meal_detail_edit_success">Refeição editada com sucesso.</string>
+    <!--EDIT QUANTITY DIALOG-->
+    <string name="meal_detail_quantity_dialog_title">Adicione a nova quantidade em gramas</string>
+
+    <!--REMOVE FOOD DIALOG-->
+    <string name="remove_food_dialog_title">Tem certeza que deseja remover este alimento?</string>
 
     <!--CAMERA-->
     <string name="camera_permission_confirmation">This app demonstrates the usage of CameraView. In order to do that, it needs permission to access camera.</string>
@@ -96,5 +144,43 @@
     <string name="flash_auto">Flash auto</string>
     <string name="flash_off">Flash off</string>
     <string name="flash_on">Flash on</string>
+
+    <!--ANALYSED FOOD-->
+    <string name="analysed_food_dialog_food_selection_title">Selecione a opção correta</string>
+    <string name="analysed_food_dialog_food_selection_last_item_other">Outro</string>
+    <string name="analysed_food_request_success">Refeição cadastrada com sucesso.</string>
+
+    <!--REGISTER FOOD-->
+    <string name="register_food_activity_title">Cadastro de Alimento</string>
+    <string name="register_food_name">Nome do Alimento</string>
+    <string name="register_food_quantity">Porção (g)</string>
+    <string name="register_food_energetic_value">Valor Energético (kcal)</string>
+    <string name="register_food_carbs">Carboidratos (g)</string>
+    <string name="register_food_proteins">Proteínas (g)</string>
+    <string name="register_food_total_fat">Gorduras Totais (g)</string>
+    <string name="register_food_saturated_fat">Gorduras Saturadas (g)</string>
+    <string name="register_food_fibers">Fibras Alimentares (g)</string>
+    <string name="register_food_error">O campo não pode estar vazio.</string>
+    <string name="register_food_sodium">Sódio (mg)</string>
+    
+    <!--WEEK RESUME-->
+    <string name="week_resume_activity_label">Resumo por Semana</string>
+    <string name="week_resume_label">Semana do dia %1$s</string>
+    <string name="week_resume_max_label">Max</string>
+    <string name="week_resume_min_label">Min</string>
+    <string name="week_resume_dialog_title">Escolha um nutriente</string>
+
+    <!--DIET-->
+    <string name="diet_from">de</string>
+    <string name="diet_to">até</string>
+
+    <!--EDIT DIET-->
+    <string name="edit_diet_activity_title">Edição de Dieta</string>
+    <string name="edit_diet_activity_toast_success">Dieta editada com sucesso.</string>
+
+    <!--SEARCH-->
+    <string name="search_activity_title">Lista de Alimentos</string>
+    <string name="search_header_list">Selecione o alimento:</string>
+    <string name="search_button_register_food">Cadastrar Alimento</string>
 
 </resources>

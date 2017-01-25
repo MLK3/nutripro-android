@@ -18,4 +18,11 @@ public class DateHelper {
         return formattedDate;
     }
 
+    public static Date addDay(int days, Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date); // Now use today date.
+        c.add(Calendar.DATE, days);
+        return c.getTime();
+    }
+
 }

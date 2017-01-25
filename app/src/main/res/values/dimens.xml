@@ -30,4 +30,6 @@
     <!--APP DIMENS-->
     <dimen name="analyzed_image_size">300dp</dimen>
 
+    <dimen name="spinner_height">40dp</dimen>
+
 </resources>

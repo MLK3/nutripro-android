@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical">
 
-    <include layout="@layout/partial_default_toolbar" />
+    <include layout="@layout/partial_default_toolbar"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -26,9 +26,9 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/large_spacing_between_items"
                 android:layout_marginBottom="@dimen/spacing_between_items"
-                android:src="@drawable/ic_logo_nutripro" />
+                android:layout_marginTop="@dimen/large_spacing_between_items"
+                android:src="@drawable/ic_logo_nutripro"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -36,33 +36,33 @@
                 android:layout_marginBottom="@dimen/small_spacing_between_items"
                 android:text="@string/register_info"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/text_title" />
+                android:textSize="@dimen/text_title"/>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/register_mail_til"
                 android:layout_width="match_parent"
-                android:theme="@style/InputTextLayout"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:theme="@style/InputTextLayout">
 
                 <android.support.design.widget.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/login_hint_mail"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textEmailAddress"/>
 
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/register_password_til"
                 android:layout_width="match_parent"
-                android:theme="@style/InputTextLayout"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:theme="@style/InputTextLayout">
 
                 <android.support.design.widget.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/login_hint_password"
-                    android:inputType="textPassword" />
+                    android:inputType="textPassword"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -78,64 +78,73 @@
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/register_password_confirmation_til"
                 android:layout_width="match_parent"
-                android:theme="@style/InputTextLayout"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:theme="@style/InputTextLayout">
 
                 <android.support.design.widget.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/register_hint_password_confirmation"
-                    android:inputType="textPassword" />
+                    android:inputType="textPassword"/>
 
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/register_name_til"
                 android:layout_width="match_parent"
-                android:theme="@style/InputTextLayout"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:theme="@style/InputTextLayout">
 
                 <android.support.design.widget.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/register_hint_name"
-                    android:inputType="textPersonName|textCapWords" />
+                    android:inputType="textPersonName|textCapWords"/>
 
             </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_small_body"
+                android:text="@string/register_hint_gender"
+                android:textColor="@color/colorPrimary"/>
 
             <Spinner
                 android:id="@+id/register_gender_sp"
                 android:layout_width="match_parent"
-                android:layout_height="30dp" />
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_stroke_green"
+                android:layout_marginBottom="@dimen/small_spacing_between_items"
+                android:layout_height="@dimen/spinner_height"/>
 
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/register_age_til"
                 android:layout_width="match_parent"
-                android:theme="@style/InputTextLayout"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:theme="@style/InputTextLayout">
 
                 <android.support.design.widget.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/register_hint_age"
-                    android:inputType="number" />
+                    android:inputType="number"/>
 
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/register_weight_til"
                 android:layout_width="match_parent"
-                android:theme="@style/InputTextLayout"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:theme="@style/InputTextLayout">
 
                 <android.support.design.widget.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/register_hint_weight_in_kg"
-                    android:inputType="number"
-                    android:digits="1234567890,."
                     android:imeOptions="actionNext"
+                    android:inputType="number"
                     />
 
             </android.support.design.widget.TextInputLayout>
@@ -143,28 +152,94 @@
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/register_height_til"
                 android:layout_width="match_parent"
-                android:theme="@style/InputTextLayout"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:theme="@style/InputTextLayout">
 
                 <android.support.design.widget.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/register_hint_height_in_meters"
+                    android:hint="@string/register_hint_height_in_cm"
                     android:inputType="number"
-                    android:digits="1234567890,."
                     />
 
             </android.support.design.widget.TextInputLayout>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/large_spacing_between_items"
+                android:text="@string/register_hint_activity_level"
+                android:textSize="@dimen/text_large_body"/>
+
+            <RadioGroup
+                android:id="@+id/rg_activity_level"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <RadioButton
+                    android:id="@+id/register_rb_sedentary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/register_activity_level_sedentary_description"/>
+
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
+                    <!--android:clickable="false"-->
+                    <!--android:text="@string/register_activity_level_sedentary_description"/>-->
+
+                <RadioButton
+                    android:id="@+id/register_rb_low"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/register_activity_level_low_description"/>
+
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
+                    <!--android:clickable="false"-->
+                    <!--android:text="@string/register_activity_level_low_description"/>-->
+
+                <RadioButton
+                    android:id="@+id/register_rb_medium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/register_activity_level_medium_description"/>
+
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
+                    <!--android:clickable="false"-->
+                    <!--android:text="@string/register_activity_level_medium_description"/>-->
+
+                <RadioButton
+                    android:id="@+id/register_rb_high"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/register_activity_level_high_description"/>
+
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:clickable="false"-->
+                    <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="@string/register_activity_level_high_description"/>-->
+
+
+            </RadioGroup>
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/register_send_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/large_spacing_between_items"
-                app:backgroundTint="@color/colorPrimary"
-                android:text="@string/register_btn_send"
-                android:textColor="@color/color_white" />
+                android:text="@string/register_btn_continue"
+                android:textColor="@color/color_white"
+                app:backgroundTint="@color/colorPrimary"/>
 
 
         </LinearLayout>

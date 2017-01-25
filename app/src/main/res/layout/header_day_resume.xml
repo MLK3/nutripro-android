@@ -8,14 +8,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
-        <View
-            android:id="@+id/chart_max_bar"
-            android:layout_width="2dp"
-            android:layout_height="match_parent"
-            android:layout_alignTop="@+id/chart_container"
-            android:layout_alignBottom="@+id/chart_container"
-            android:layout_alignParentLeft="true"
-            android:background="@color/color_red"/>
 
         <LinearLayout
             android:id="@+id/chart_container"

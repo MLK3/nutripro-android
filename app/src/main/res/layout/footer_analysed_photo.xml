@@ -3,11 +3,22 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:orientation="horizontal"
+              android:orientation="vertical"
               android:paddingBottom="@dimen/vertical_margin"
               android:paddingLeft="@dimen/horizontal_margin"
               android:paddingRight="@dimen/horizontal_margin"
               android:paddingTop="@dimen/small_spacing_between_items">
+
+    <TextView
+        android:id="@+id/footer_analysed_photo_add_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/color_light_black"
+        android:drawableLeft="@drawable/ic_add_circle"
+        android:text="@string/meal_detail_add_item"
+        android:padding="@dimen/spacing_between_items"
+        />
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/footer_analysed_photo_conclude"

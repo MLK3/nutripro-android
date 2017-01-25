@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <include layout="@layout/partial_default_toolbar"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="@dimen/vertical_margin"
+        android:paddingBottom="@dimen/vertical_margin"
+        android:scrollbarStyle="insideOverlay"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/horizontal_margin"
+            android:layout_marginRight="@dimen/horizontal_margin"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/register_food_name_til"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/InputTextLayout">
+
+                <android.support.design.widget.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/register_food_name"
+                    android:inputType="textPersonName"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/register_food_quantity_til"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/InputTextLayout">
+
+                <android.support.design.widget.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/register_food_quantity"
+                    android:inputType="number"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/register_food_energetic_value_til"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/InputTextLayout">
+
+                <android.support.design.widget.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/register_food_energetic_value"
+                    android:inputType="number"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/register_food_carbs_til"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/InputTextLayout">
+
+                <android.support.design.widget.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/register_food_carbs"
+                    android:inputType="number"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/register_food_protein_til"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/InputTextLayout">
+
+                <android.support.design.widget.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/register_food_proteins"
+                    android:inputType="number"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/register_food_total_fat_til"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/InputTextLayout">
+
+                <android.support.design.widget.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/register_food_total_fat"
+                    android:inputType="number"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/register_food_saturated_fat_til"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/InputTextLayout">
+
+                <android.support.design.widget.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/register_food_saturated_fat"
+                    android:inputType="number"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/register_food_fibers_til"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/InputTextLayout">
+
+                <android.support.design.widget.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/register_food_fibers"
+                    android:inputType="number"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/register_food_sodium_til"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/InputTextLayout">
+
+                <android.support.design.widget.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/register_food_sodium"
+                    android:inputType="number"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/register_food_send_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/large_spacing_between_items"
+                android:text="@string/action_register"
+                android:textColor="@color/color_white"
+                app:backgroundTint="@color/colorPrimary"
+                />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

@@ -4,6 +4,12 @@
     tools:context=".activities.MainActivity">
 
     <item
+        android:id="@+id/action_week_chart"
+        android:title="@string/settings_title"
+        android:icon="@drawable/ic_chart"
+        app:showAsAction="always|collapseActionView" />
+
+    <item
         android:id="@+id/action_settings"
         android:title="@string/settings_title"
         android:icon="@drawable/ic_settings"

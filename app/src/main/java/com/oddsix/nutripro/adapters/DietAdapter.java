@@ -9,23 +9,24 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.oddsix.nutripro.R;
-import com.oddsix.nutripro.models.DBDietNutrientModel;
+import com.oddsix.nutripro.rest.models.responses.DietNutrientResponse;
 
-import io.realm.RealmList;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Filippe on 22/10/16.
  */
 
 public class DietAdapter extends BaseAdapter {
-    private RealmList<DBDietNutrientModel> diet = new RealmList<>();
+    private List<DietNutrientResponse> diet = new ArrayList<>();
     private Context mContext;
 
     public DietAdapter(Context mContext) {
         this.mContext = mContext;
     }
 
-    public void setDiet(RealmList<DBDietNutrientModel> diet) {
+    public void setDiet(List<DietNutrientResponse> diet) {
         this.diet = diet;
         notifyDataSetChanged();
     }
@@ -56,7 +57,10 @@ public class DietAdapter extends BaseAdapter {
 
             viewHolder = new DietViewHolder();
             viewHolder.name = (TextView) view.findViewById(R.id.item_diet_name);
-            viewHolder.value = (TextView) view.findViewById(R.id.item_diet_value);
+//            viewHolder.maxUnit = (TextView) view.findViewById(R.id.item_diet_max_unit);
+            viewHolder.minUnit = (TextView) view.findViewById(R.id.item_diet_min_unit);
+            viewHolder.minValue = (TextView) view.findViewById(R.id.item_diet_min_value);
+            viewHolder.maxValue = (TextView) view.findViewById(R.id.item_diet_max_value);
 
             // store the holder with the view.
             view.setTag(viewHolder);
@@ -70,8 +74,10 @@ public class DietAdapter extends BaseAdapter {
 
         // get the TextView from the ViewHolder and then set the text (item name) and tag (item ID) values
         viewHolder.name.setText(diet.get(i).getName());
-        viewHolder.value.setText(mContext.getString(R.string.diet_item_range_label,
-                diet.get(i).getMin(), diet.get(i).getMax(), diet.get(i).getUnit()));
+//        viewHolder.maxUnit.setText(diet.get(i).getUnit());
+        viewHolder.minUnit.setText(diet.get(i).getUnit());
+        viewHolder.maxValue.setText(String.valueOf(diet.get(i).getMax()));
+        viewHolder.minValue.setText(String.valueOf(diet.get(i).getMin()));
 
         return view;
 
@@ -79,6 +85,9 @@ public class DietAdapter extends BaseAdapter {
 
     static class DietViewHolder {
         TextView name;
-        TextView value;
+        TextView maxValue;
+        TextView minValue;
+//        TextView maxUnit;
+        TextView minUnit;
     }
 }

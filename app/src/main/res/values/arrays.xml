@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="info_gender_options">
-        <item>@string/register_hint_gender</item>
+        <item>@string/register_hint_gender_selection</item>
         <item>@string/register_gender_option_female</item>
         <item>@string/register_gender_option_male</item>
     </string-array>
@@ -29,4 +29,21 @@
         <item>Tirar nova foto</item>
         <item>Escolher do álbum</item>
     </string-array>
+
+    <string-array name="meal_name_suggestions">
+        <item>Café da manhã</item>
+        <item>Almoço</item>
+        <item>Jantar</item>
+        <item>Outro nome</item>
+    </string-array>
+
+    <integer-array name="app_colors">
+        <item>@color/color_blue</item>
+        <item>@color/color_blue_light</item>
+        <item>@color/color_green_dark</item>
+        <item>@color/color_green_light</item>
+        <item>@color/color_orange</item>
+        <item>@color/color_red_dark</item>
+        <item>@color/color_pink</item>
+    </integer-array>
 </resources>

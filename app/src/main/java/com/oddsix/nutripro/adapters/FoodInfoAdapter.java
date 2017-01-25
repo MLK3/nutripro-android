@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.models.NutrientModel;
+import com.oddsix.nutripro.rest.models.responses.NutrientResponse;
 
 import java.util.List;
 
@@ -18,10 +19,10 @@ import java.util.List;
  */
 
 public class FoodInfoAdapter extends BaseAdapter {
-    private List<NutrientModel> mNutrients;
+    private List<NutrientResponse> mNutrients;
     private Context mContext;
 
-    public FoodInfoAdapter(List<NutrientModel> nutrients, Context context) {
+    public FoodInfoAdapter(List<NutrientResponse> nutrients, Context context) {
         mNutrients = nutrients;
         mContext = context;
     }

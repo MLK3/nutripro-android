@@ -1,12 +1,12 @@
 package com.oddsix.nutripro.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -23,7 +24,7 @@ import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.fragments.AnalysedPictureFragment;
 import com.oddsix.nutripro.fragments.DayResumeFragment;
 import com.oddsix.nutripro.fragments.ProfileFragment;
-import com.oddsix.nutripro.models.DBRegisterModel;
+import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.helpers.UpdatePhotoHelper;
 
@@ -34,27 +35,27 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Realm;
-
 /**
  * Created by Filippe on 21/10/16.
  */
 
 public class MainActivity extends BaseActivity {
+    private static final int DAY_RESUME_TAB_POSITION = 0;
+
     private ViewPager mViewPager;
     private String[] mTabTitles;
     private TabLayout mTabLayout;
     private UpdatePhotoHelper mUpdatePhotoHelper;
     private AnalysedPictureFragment mPictureFragment;
-    private Realm mRealm;
+    private SuggestedDietResponse mSuggestedDiet;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mRealm = Realm.getDefaultInstance();
+//        verifyUserLogin();
 
-        verifyUserLogin();
+        mSuggestedDiet = (SuggestedDietResponse) getIntent().getSerializableExtra(Constants.EXTRA_DIET);
 
         setContentView(R.layout.activity_main);
 
@@ -66,19 +67,19 @@ public class MainActivity extends BaseActivity {
     }
 
     private void verifyUserLogin() {
-        DBRegisterModel register = mRealm.where(DBRegisterModel.class)
-                .equalTo("mail", getSharedPreferences(Constants.PACKAGE_NAME, Context.MODE_PRIVATE).getString(Constants.PREF_MAIL, ""))
-                .findFirst();
-
-        if (!getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE).getBoolean(Constants.PREF_IS_LOGGED, false) || register == null) {
+        if (!getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE).getBoolean(Constants.PREF_IS_LOGGED, false)) {
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
             finish();
-        } else if (register.getDietModel() == null) {
-            Intent suggestedDietActivity = new Intent(this, SuggestedDietActivity.class);
-            startActivity(suggestedDietActivity);
-            finish();
         }
+    }
+
+    public void setSuggestedDiet(SuggestedDietResponse suggestedDiet) {
+        mSuggestedDiet = suggestedDiet;
+    }
+
+    public SuggestedDietResponse getSuggestedDiet() {
+        return mSuggestedDiet;
     }
 
     private void setViewPager() {
@@ -103,6 +104,8 @@ public class MainActivity extends BaseActivity {
 //                        mUpdatePhotoHelper.initiate(false, Constants.PIC_UPLOAD_MAX_SIZE);
                         break;
                 }
+                //Enable chart icon only at first tab
+                enabledChart(position == DAY_RESUME_TAB_POSITION);
                 setTitle(mTabTitles[position]);
             }
 
@@ -112,9 +115,17 @@ public class MainActivity extends BaseActivity {
         });
     }
 
+    private void enabledChart(boolean enable) {
+        try {
+            mChartItem.setVisible(enable);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void startCameraActivity() {
         Intent intent = new Intent(this, CameraActivity.class);
-        startActivityForResult(intent, 10);
+        startActivityForResult(intent, Constants.REQ_PICTURE);
     }
 
     private void setTabLayout() {
@@ -122,6 +133,10 @@ public class MainActivity extends BaseActivity {
         mTabLayout.setupWithViewPager(mViewPager);
         setTitle(mTabTitles[mTabLayout.getSelectedTabPosition()]);
         setupTabIcons(mTabLayout);
+    }
+
+    public void resetTabIndex() {
+        mTabLayout.getTabAt(DAY_RESUME_TAB_POSITION).select();
     }
 
     private void setupTabIcons(TabLayout tabLayout) {
@@ -133,10 +148,14 @@ public class MainActivity extends BaseActivity {
     }
 
 
+    private MenuItem mChartItem;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        mChartItem = menu.findItem(R.id.action_week_chart);
+        //Need this when the menu just created
+        enabledChart(mTabLayout.getSelectedTabPosition() == DAY_RESUME_TAB_POSITION);
         return true;
     }
 
@@ -152,6 +171,10 @@ public class MainActivity extends BaseActivity {
                 Intent settingsIntent = new Intent(this, SettingsActivity.class);
                 startActivity(settingsIntent);
                 return true;
+            case R.id.action_week_chart:
+                Intent chartIntent = new Intent(this, WeekResumeActivity.class);
+                startActivity(chartIntent);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -161,25 +184,6 @@ public class MainActivity extends BaseActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         mUpdatePhotoHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 10 && resultCode == RESULT_OK) {
-            Bitmap bm;
-            try {
-                bm = rotateImage(data.getStringExtra("PATH"));
-            } catch (Exception e) {
-                e.printStackTrace();
-                bm = BitmapFactory.decodeFile(data.getStringExtra("PATH"));
-            }
-
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-            byte[] b = baos.toByteArray();
-            mPictureFragment.setImage(bm);
-        }
     }
 
     private Bitmap loadPrescaledBitmap(String filename) throws IOException {
@@ -248,6 +252,61 @@ public class MainActivity extends BaseActivity {
         Bitmap bpm = loadPrescaledBitmap(photoPath);
         bm = Bitmap.createBitmap(bpm, 0, 0, bpm.getWidth(), bpm.getHeight(), matrix, true);
         return bm;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.REQ_PICTURE) {
+            if(resultCode == RESULT_OK) {
+                Bitmap bm;
+                try {
+                    bm = rotateImage(data.getStringExtra(Constants.EXTRA_FILE_PATH));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    bm = BitmapFactory.decodeFile(data.getStringExtra(Constants.EXTRA_FILE_PATH));
+                }
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] b = baos.toByteArray();
+
+                showProgressdialog();
+                Async async = new Async(b, bm);
+                async.execute();
+            } else {
+                mTabLayout.getTabAt(0).select();
+            }
+        }
+    }
+
+    /**
+     * Async task to send updateImageRequest
+     */
+    private class Async extends AsyncTask {
+        byte[] b;
+        Bitmap bm;
+
+        String mPhoto64;
+
+        public Async(byte[] b, Bitmap bm) {
+            this.b = b;
+            this.bm = bm;
+        }
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            mPhoto64 = Base64.encodeToString(b, Base64.DEFAULT);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
+//            mOnRequestReady.updateImage();
+            dismissProgressDialog();
+            mPictureFragment.setImage(bm,  Base64.encodeToString(b, Base64.DEFAULT));
+        }
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
