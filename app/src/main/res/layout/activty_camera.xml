@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/take_photos_relativelayout"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+
+        <FrameLayout
+            android:id="@+id/camera_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+                                           xmlns:app="http://schemas.android.com/apk/res-auto"
+                                           android:id="@+id/toolbar"
+                                           android:layout_width="match_parent"
+                                           android:layout_height="?attr/actionBarSize"
+                                           android:background="@android:color/transparent"
+                                           app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+
+            >
+
+        </android.support.v7.widget.Toolbar>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="?attr/colorPrimary">
+
+        <ImageView
+            android:id="@+id/camera_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:visibility="gone"
+            android:padding="@dimen/horizontal_margin"
+            android:clickable="true"
+            android:onClick="onCloseClicked"
+            android:paddingRight="@dimen/horizontal_margin"
+            android:src="@drawable/ic_close"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/camera_take_pic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/small_spacing_between_items"
+            android:clickable="true"
+            android:onClick="onTakePicClicked"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_camera"
+            app:fabSize="normal"/>
+
+        <ImageView
+            android:id="@+id/camera_album"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:onClick="onAlbumClicked"
+            android:padding="@dimen/horizontal_margin"
+            android:paddingRight="@dimen/horizontal_margin"
+            android:src="@drawable/ic_photo_library"/>
+
+        <ImageView
+            android:id="@+id/camera_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/horizontal_margin"
+            android:clickable="true"
+            android:onClick="onCheckClicked"
+            android:paddingRight="@dimen/horizontal_margin"
+            android:visibility="gone"
+            android:src="@drawable/ic_check"/>
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>

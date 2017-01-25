@@ -39,6 +39,7 @@ public class Constants {
     public final static String EXTRA_DIET = "EXTRA_DIET";
     public final static String EXTRA_FOOD_ID = "EXTRA_FOOD_ID";
     public final static String EXTRA_FOOD_NAME = "EXTRA_FOOD_NAME";
+    public final static String EXTRA_FILE_PATH = "EXTRA_FILE_PATH";
 
     //PREF
     public final static String PREF_MAIL = PACKAGE_NAME + ".PREF_MAIL";

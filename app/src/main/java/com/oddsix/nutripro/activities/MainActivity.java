@@ -1,6 +1,5 @@
 package com.oddsix.nutripro.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -25,7 +24,6 @@ import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.fragments.AnalysedPictureFragment;
 import com.oddsix.nutripro.fragments.DayResumeFragment;
 import com.oddsix.nutripro.fragments.ProfileFragment;
-import com.oddsix.nutripro.models.DBRegisterModel;
 import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.helpers.UpdatePhotoHelper;
@@ -36,8 +34,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.Realm;
 
 /**
  * Created by Filippe on 21/10/16.
@@ -265,10 +261,10 @@ public class MainActivity extends BaseActivity {
             if(resultCode == RESULT_OK) {
                 Bitmap bm;
                 try {
-                    bm = rotateImage(data.getStringExtra("PATH"));
+                    bm = rotateImage(data.getStringExtra(Constants.EXTRA_FILE_PATH));
                 } catch (Exception e) {
                     e.printStackTrace();
-                    bm = BitmapFactory.decodeFile(data.getStringExtra("PATH"));
+                    bm = BitmapFactory.decodeFile(data.getStringExtra(Constants.EXTRA_FILE_PATH));
                 }
 
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
