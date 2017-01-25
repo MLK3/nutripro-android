@@ -3,6 +3,8 @@ package com.oddsix.nutripro.rest;
 import android.app.Activity;
 
 import com.oddsix.nutripro.BuildConfig;
+import com.oddsix.nutripro.activities.LoginActivity;
+import com.oddsix.nutripro.activities.RegisterActivity;
 import com.oddsix.nutripro.rest.models.requests.AnalysedPictureRequest;
 import com.oddsix.nutripro.rest.models.requests.CreateMealRequest;
 import com.oddsix.nutripro.rest.models.requests.DietNutrientRequest;
@@ -41,12 +43,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class NutriproProvider {
 
     private Activity mActivity;
-    private ResponseHandler mResponseHandler;
     private NutriproService mNutriproService;
 
     public NutriproProvider(Activity activity) {
         mActivity = activity;
-        mNutriproService = getRetrofit(new ArrayList<Interceptor>()).create(NutriproService.class);
+        List<Interceptor> interceptors = new ArrayList<Interceptor>();
+        if (activity instanceof LoginActivity || activity instanceof RegisterActivity) {
+            interceptors.add(new ReceivedCookieInterceptor());
+        }
+        interceptors.add(new AddCookieInterceptor());
+        mNutriproService = getRetrofit(interceptors).create(NutriproService.class);
     }
 
     public void signIn(String mail, String password, final OnResponseListener<GeneralResponse> callback) {
@@ -59,7 +65,7 @@ public class NutriproProvider {
                 .enqueue(new ResponseHandler<GeneralResponse>(mActivity, callback));
     }
 
-    public void getDiet(OnResponseListener<SuggestedDietResponse> callback){
+    public void getDiet(OnResponseListener<SuggestedDietResponse> callback) {
         mNutriproService.getSuggestedDiet()
                 .enqueue(new ResponseHandler<SuggestedDietResponse>(mActivity, callback));
     }
@@ -89,7 +95,7 @@ public class NutriproProvider {
                 .enqueue(new ResponseHandler<FoodFromMealResponse>(mActivity, callback));
     }
 
-    public void searchFood(String query, OnResponseListener<SearchResponse> callback){
+    public void searchFood(String query, OnResponseListener<SearchResponse> callback) {
         mNutriproService.searchFoods(query)
                 .enqueue(new ResponseHandler<SearchResponse>(mActivity, callback));
     }
@@ -142,8 +148,9 @@ public class NutriproProvider {
         return httpClientBuilder;
     }
 
-    public interface OnResponseListener <T> {
+    public interface OnResponseListener<T> {
         void onResponseSuccess(T response);
+
         void onResponseFailure(String msg, int code);
     }
 }

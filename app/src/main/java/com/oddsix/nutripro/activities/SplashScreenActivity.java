@@ -14,6 +14,7 @@ import com.oddsix.nutripro.rest.NutriproProvider;
 import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.helpers.FeedbackHelper;
+import com.oddsix.nutripro.utils.helpers.SharedPreferencesHelper;
 
 /**
  * Created by filippecl on 17/12/16.
@@ -30,10 +31,9 @@ public class SplashScreenActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE);
         mProvider = new NutriproProvider(this);
 
-        if (!sharedPreferences.getBoolean(Constants.PREF_IS_LOGGED, false)) {
+        if (!SharedPreferencesHelper.getInstance().isLogged()) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();

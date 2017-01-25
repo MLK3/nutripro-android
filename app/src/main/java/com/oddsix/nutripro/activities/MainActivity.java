@@ -26,6 +26,7 @@ import com.oddsix.nutripro.fragments.DayResumeFragment;
 import com.oddsix.nutripro.fragments.ProfileFragment;
 import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
 import com.oddsix.nutripro.utils.Constants;
+import com.oddsix.nutripro.utils.helpers.SharedPreferencesHelper;
 import com.oddsix.nutripro.utils.helpers.UpdatePhotoHelper;
 
 import java.io.ByteArrayOutputStream;
@@ -53,8 +54,6 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        verifyUserLogin();
-
         mSuggestedDiet = (SuggestedDietResponse) getIntent().getSerializableExtra(Constants.EXTRA_DIET);
 
         setContentView(R.layout.activity_main);
@@ -64,14 +63,6 @@ public class MainActivity extends BaseActivity {
         setViewPager();
 
         setTabLayout();
-    }
-
-    private void verifyUserLogin() {
-        if (!getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE).getBoolean(Constants.PREF_IS_LOGGED, false)) {
-            Intent loginIntent = new Intent(this, LoginActivity.class);
-            startActivity(loginIntent);
-            finish();
-        }
     }
 
     public void setSuggestedDiet(SuggestedDietResponse suggestedDiet) {

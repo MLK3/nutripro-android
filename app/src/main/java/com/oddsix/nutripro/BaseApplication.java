@@ -11,6 +11,7 @@ import com.oddsix.nutripro.models.DBMealModel;
 import com.oddsix.nutripro.models.DBMealNutrientModel;
 import com.oddsix.nutripro.models.DBRegisterModel;
 import com.oddsix.nutripro.utils.Constants;
+import com.oddsix.nutripro.utils.helpers.SharedPreferencesHelper;
 
 import java.util.Calendar;
 
@@ -29,6 +30,7 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Fabric.with(this, new Crashlytics());
+        SharedPreferencesHelper.initializeInstance(this);
         RealmConfiguration config = new RealmConfiguration.Builder(this)
                 .name(Constants.BASE_DB_PATH)
                 .initialData(new Realm.Transaction() {

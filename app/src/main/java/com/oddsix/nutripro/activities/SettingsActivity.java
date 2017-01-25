@@ -14,6 +14,7 @@ import com.oddsix.nutripro.BuildConfig;
 import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.helpers.DialogHelper;
+import com.oddsix.nutripro.utils.helpers.SharedPreferencesHelper;
 
 /**
  * Created by filippecl on 30/10/16.
@@ -47,8 +48,8 @@ public class SettingsActivity extends BaseActivity {
                         getString(R.string.settings_logout_dialog_negative), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                SharedPreferencesHelper.getInstance().clearSharedPref();
                                 startLoginActivity();
-                                getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE).edit().clear().apply();
                             }
                         });
             }

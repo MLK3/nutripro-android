@@ -8,15 +8,11 @@ import android.view.View;
 
 import com.oddsix.nutripro.BaseActivity;
 import com.oddsix.nutripro.R;
-import com.oddsix.nutripro.models.DBRegisterModel;
 import com.oddsix.nutripro.rest.NutriproProvider;
 import com.oddsix.nutripro.rest.models.responses.GeneralResponse;
 import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.validations.IsEmail;
-
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 /**
  * Created by Filippe on 16/10/16.
@@ -78,8 +74,6 @@ public class LoginActivity extends BaseActivity {
                     new NutriproProvider.OnResponseListener<GeneralResponse>() {
                         @Override
                         public void onResponseSuccess(GeneralResponse response) {
-                            SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE);
-                            sharedPreferences.edit().putBoolean(Constants.PREF_IS_LOGGED, true).apply();
                             getSuggestedDiet(view);
                         }
 

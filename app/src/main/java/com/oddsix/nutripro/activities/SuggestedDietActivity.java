@@ -99,8 +99,6 @@ public class SuggestedDietActivity extends BaseActivity {
         footerView.findViewById(R.id.footer_suggested_diet_conclude).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREF_NAME, MODE_PRIVATE);
-                sharedPreferences.edit().putBoolean(Constants.PREF_IS_LOGGED, true).apply();
                 Intent intent = new Intent(view.getContext(), MainActivity.class);
                 intent.putExtra(Constants.EXTRA_DIET, mSuggestedDietResponse);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
