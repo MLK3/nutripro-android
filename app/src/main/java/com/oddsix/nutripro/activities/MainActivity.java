@@ -24,6 +24,7 @@ import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.fragments.AnalysedPictureFragment;
 import com.oddsix.nutripro.fragments.DayResumeFragment;
 import com.oddsix.nutripro.fragments.ProfileFragment;
+import com.oddsix.nutripro.models.DBDietModel;
 import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.helpers.SharedPreferencesHelper;
@@ -36,6 +37,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
+
 /**
  * Created by Filippe on 21/10/16.
  */
@@ -46,17 +49,18 @@ public class MainActivity extends BaseActivity {
     private ViewPager mViewPager;
     private String[] mTabTitles;
     private TabLayout mTabLayout;
-    private UpdatePhotoHelper mUpdatePhotoHelper;
+    private Realm mRealm;
     private AnalysedPictureFragment mPictureFragment;
     private SuggestedDietResponse mSuggestedDiet;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
+        mRealm = Realm.getDefaultInstance();
         mSuggestedDiet = (SuggestedDietResponse) getIntent().getSerializableExtra(Constants.EXTRA_DIET);
 
-        setContentView(R.layout.activity_main);
 
         setToolbar(false);
 
@@ -169,12 +173,6 @@ public class MainActivity extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        mUpdatePhotoHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     private Bitmap loadPrescaledBitmap(String filename) throws IOException {

@@ -1,5 +1,7 @@
 package com.oddsix.nutripro.models;
 
+import com.oddsix.nutripro.rest.models.responses.DietNutrientResponse;
+
 import java.io.Serializable;
 
 import io.realm.RealmObject;
@@ -22,6 +24,13 @@ public class DBDietNutrientModel extends RealmObject implements Serializable {
         this.min = min;
         this.name = name;
         this.unit = unit;
+    }
+
+    public DBDietNutrientModel(DietNutrientResponse response) {
+        max = response.getMax();
+        min = response.getMin();
+        name = response.getName();
+        unit = response.getUnit();
     }
 
     public String getUnit() {

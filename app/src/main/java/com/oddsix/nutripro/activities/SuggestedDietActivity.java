@@ -1,8 +1,6 @@
 package com.oddsix.nutripro.activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.IntentCompat;
@@ -14,12 +12,14 @@ import com.oddsix.nutripro.BaseActivity;
 import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.adapters.DietAdapter;
 import com.oddsix.nutripro.models.DBDietModel;
-import com.oddsix.nutripro.models.DBRegisterModel;
+import com.oddsix.nutripro.models.DBDietNutrientModel;
 import com.oddsix.nutripro.rest.NutriproProvider;
+import com.oddsix.nutripro.rest.models.responses.DietNutrientResponse;
 import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
 import com.oddsix.nutripro.utils.Constants;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 
 /**
  * Created by Filippe on 22/10/16.
@@ -30,6 +30,7 @@ public class SuggestedDietActivity extends BaseActivity {
     private NutriproProvider mProvider;
     private LinearLayout mFeedbackContainer;
     private SuggestedDietResponse mSuggestedDietResponse;
+    private Realm mRealm;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,6 +38,8 @@ public class SuggestedDietActivity extends BaseActivity {
         setContentView(R.layout.activity_listview);
 
         mProvider = new NutriproProvider(this);
+
+        mRealm = Realm.getDefaultInstance();
 
         mFeedbackContainer = (LinearLayout) findViewById(R.id.feedback_container);
 
@@ -54,6 +57,10 @@ public class SuggestedDietActivity extends BaseActivity {
             @Override
             public void onResponseSuccess(SuggestedDietResponse response) {
                 mSuggestedDietResponse = response;
+                DBDietModel dbDietModel = new DBDietModel(mSuggestedDietResponse);
+                mRealm.beginTransaction();
+                mRealm.copyToRealmOrUpdate(dbDietModel);
+                mRealm.commitTransaction();
                 dismissProgressDialog();
                 mFeedbackContainer.setVisibility(View.GONE);
                 setSuggestedDiet(response);
@@ -120,7 +127,7 @@ public class SuggestedDietActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK && requestCode == Constants.REQ_EDIT_DIET) {
+        if (resultCode == RESULT_OK && requestCode == Constants.REQ_EDIT_DIET) {
             mSuggestedDietResponse = (SuggestedDietResponse) data.getSerializableExtra(Constants.EXTRA_DIET);
             setSuggestedDiet(mSuggestedDietResponse);
         }

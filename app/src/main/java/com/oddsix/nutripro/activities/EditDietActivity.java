@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.oddsix.nutripro.BaseActivity;
 import com.oddsix.nutripro.R;
+import com.oddsix.nutripro.models.DBDietModel;
 import com.oddsix.nutripro.rest.NutriproProvider;
 import com.oddsix.nutripro.rest.models.requests.DietNutrientRequest;
 import com.oddsix.nutripro.rest.models.requests.NutrientRequest;
@@ -20,6 +21,8 @@ import com.oddsix.nutripro.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
 
 /**
  * Created by filippecl on 21/12/16.
@@ -35,6 +38,7 @@ public class EditDietActivity extends BaseActivity {
     private List<EditText> mMinValue = new ArrayList<>();
 
     private NutriproProvider mProvider;
+    private Realm mRealm;
 
     private SuggestedDietResponse mSuggestedDiet;
 
@@ -43,6 +47,7 @@ public class EditDietActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_diet);
         setToolbar(true, getString(R.string.edit_diet_activity_title));
+        mRealm = Realm.getDefaultInstance();
 
         mLayout = (LinearLayout) findViewById(R.id.container);
 
@@ -94,6 +99,7 @@ public class EditDietActivity extends BaseActivity {
                     @Override
                     public void onResponseSuccess(GeneralResponse response) {
                         dismissProgressDialog();
+                        saveInLocalDb();
                         showToast(getString(R.string.edit_diet_activity_toast_success));
                         Intent intent = new Intent();
                         for (int i = 0; i < mNutrients.size(); i++) {
@@ -115,5 +121,12 @@ public class EditDietActivity extends BaseActivity {
                 });
             }
         });
+    }
+
+    private void saveInLocalDb() {
+        DBDietModel dbDietModel = new DBDietModel(mSuggestedDiet);
+        mRealm.beginTransaction();
+        mRealm.copyToRealmOrUpdate(dbDietModel);
+        mRealm.commitTransaction();
     }
 }

@@ -1,5 +1,7 @@
 package com.oddsix.nutripro.rest.models.responses;
 
+import com.oddsix.nutripro.models.DBDietNutrientModel;
+
 import java.io.Serializable;
 
 /**
@@ -17,6 +19,13 @@ public class DietNutrientResponse implements Serializable {
         this.max = max;
         this.min = min;
         this.unit = unit;
+    }
+
+    public DietNutrientResponse(DBDietNutrientModel dbDietNutrientModel) {
+        max = dbDietNutrientModel.getMax();
+        min = dbDietNutrientModel.getMin();
+        name = dbDietNutrientModel.getName();
+        unit = dbDietNutrientModel.getUnit();
     }
 
     public void setName(String name) {
