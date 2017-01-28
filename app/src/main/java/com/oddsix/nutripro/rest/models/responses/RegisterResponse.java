@@ -1,5 +1,7 @@
 package com.oddsix.nutripro.rest.models.responses;
 
+import com.oddsix.nutripro.models.DBRegisterModel;
+
 import java.io.Serializable;
 
 /**
@@ -14,6 +16,16 @@ public class RegisterResponse implements Serializable {
     private String activity;
     private int peso;
     private int altura;
+
+    public RegisterResponse(DBRegisterModel dbRegisterModel) {
+        name = dbRegisterModel.getName();
+        gender = dbRegisterModel.getGender();
+        age = dbRegisterModel.getAge();
+        email = dbRegisterModel.getEmail();
+        activity = dbRegisterModel.getActivity();
+        peso = dbRegisterModel.getPeso();
+        altura = dbRegisterModel.getAltura();
+    }
 
     public RegisterResponse(String name, String gender, int age, String email, String activity, int peso, int altura) {
         this.name = name;

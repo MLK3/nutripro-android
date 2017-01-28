@@ -11,83 +11,53 @@ import io.realm.annotations.PrimaryKey;
 
 public class DBRegisterModel extends RealmObject implements Serializable{
     @PrimaryKey
-    private String mail;
-
-    private String password;
+    private String email;
 
     private String name;
-    private int age;
     private String gender;
-    private float height;
-    private float weight;
-    private DBDietModel dietModel;
-
-    public DBRegisterModel(String mail, String password, String name, int age, String gender, float height, float weight) {
-        this.mail = mail;
-        this.password = password;
-        this.name = name;
-        this.age = age;
-        this.gender = gender;
-        this.height = height;
-        this.weight = weight;
-    }
+    private int age;
+    private String activity;
+    private int peso;
+    private int altura;
 
     public DBRegisterModel() {
     }
 
-    public void setName(String name) {
+    public DBRegisterModel(String email, String name, String gender, int age, String activity, int peso, int altura) {
+        this.email = email;
         this.name = name;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public void setGender(String gender) {
         this.gender = gender;
+        this.age = age;
+        this.activity = activity;
+        this.peso = peso;
+        this.altura = altura;
     }
 
-    public void setHeight(float height) {
-        this.height = height;
-    }
-
-    public void setWeight(float weight) {
-        this.weight = weight;
-    }
-
-    public void setDietModel(DBDietModel dietModel) {
-        this.dietModel = dietModel;
-    }
-
-    public DBDietModel getDietModel() {
-        return dietModel;
-    }
-
-    public String getMail() {
-        return mail;
-    }
-
-    public String getPassword() {
-        return password;
+    public String getEmail() {
+        return email;
     }
 
     public String getName() {
         return name;
     }
 
-    public int getAge() {
-        return age;
-    }
-
     public String getGender() {
         return gender;
     }
 
-    public float getHeight() {
-        return height;
+    public int getAge() {
+        return age;
     }
 
-    public float getWeight() {
-        return weight;
+    public String getActivity() {
+        return activity;
+    }
+
+    public int getPeso() {
+        return peso;
+    }
+
+    public int getAltura() {
+        return altura;
     }
 }

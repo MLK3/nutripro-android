@@ -14,16 +14,21 @@ import android.widget.TextView;
 
 import com.oddsix.nutripro.BaseActivity;
 import com.oddsix.nutripro.R;
+import com.oddsix.nutripro.models.DBRegisterModel;
 import com.oddsix.nutripro.rest.NutriproProvider;
 import com.oddsix.nutripro.rest.models.responses.GeneralResponse;
 import com.oddsix.nutripro.rest.models.responses.RegisterResponse;
 import com.oddsix.nutripro.utils.Constants;
+import com.oddsix.nutripro.utils.helpers.SharedPreferencesHelper;
 import com.oddsix.nutripro.utils.validations.HasMinLength;
 import com.oddsix.nutripro.utils.validations.IsEmail;
 import com.oddsix.nutripro.utils.validations.IsNotEmpty;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.exceptions.RealmPrimaryKeyConstraintException;
 
 
 /**
@@ -39,6 +44,7 @@ public class RegisterActivity extends BaseActivity {
     private RadioGroup mRadioGroup;
     private Button mButton;
     private String[] mGenderArray;
+    private Realm mRealm;
 
     private NutriproProvider mProvider;
 
@@ -49,6 +55,7 @@ public class RegisterActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        mRealm = Realm.getDefaultInstance();
 
         mProvider = new NutriproProvider(this);
 
@@ -85,8 +92,13 @@ public class RegisterActivity extends BaseActivity {
         setGenderSpinner();
         setTextInputLayouts();
         if (mIsEditingRegister) {
-            mRegisterModel = (RegisterResponse) getIntent().getSerializableExtra(Constants.EXTRA_REGISTER_MODEL);
-            populateViews();
+            DBRegisterModel registerDbModel = mRealm.where(DBRegisterModel.class)
+                    .equalTo("email", SharedPreferencesHelper.getInstance().getUserEmail()).findFirst();
+            if(registerDbModel != null) {
+                mRegisterModel = new RegisterResponse(registerDbModel);
+                populateViews();
+            }
+
         }
     }
 
@@ -107,13 +119,13 @@ public class RegisterActivity extends BaseActivity {
         String activity = mRegisterModel.getActivity();
 
         int id = -1;
-        if(activity.equalsIgnoreCase(getString(R.string.activity_level_sedentary))) {
-           id = R.id.register_rb_sedentary;
+        if (activity.equalsIgnoreCase(getString(R.string.activity_level_sedentary))) {
+            id = R.id.register_rb_sedentary;
         } else if (activity.equalsIgnoreCase(getString(R.string.activity_level_low))) {
             id = R.id.register_rb_low;
-        } else if(activity.equalsIgnoreCase(getString(R.string.activity_level_medium))) {
+        } else if (activity.equalsIgnoreCase(getString(R.string.activity_level_medium))) {
             id = R.id.register_rb_medium;
-        } else if(activity.equalsIgnoreCase(getString(R.string.activitY_level_high))) {
+        } else if (activity.equalsIgnoreCase(getString(R.string.activitY_level_high))) {
             id = R.id.register_rb_high;
         }
         mRadioGroup.check(id);
@@ -200,6 +212,17 @@ public class RegisterActivity extends BaseActivity {
                             @Override
                             public void onResponseSuccess(GeneralResponse response) {
                                 updateRegisterModel(activityLevel);
+                                mRealm.beginTransaction();
+                                mRealm.copyToRealmOrUpdate(new DBRegisterModel(mMailTil.getEditText().getText().toString(),
+                                        mNameTil.getEditText().getText().toString(),
+                                        mGenderArray[mGenderSp.getSelectedItemPosition()],
+                                        Integer.valueOf(mAgeTil.getEditText().getText().toString()),
+                                        activityLevel,
+                                        Integer.valueOf(mWeightTil.getEditText().getText().toString()),
+                                        Integer.valueOf(mHeightTil.getEditText().getText().toString())
+
+                                ));
+                                mRealm.commitTransaction();
                                 finishWithResult();
                                 dismissProgressDialog();
                             }
@@ -223,8 +246,24 @@ public class RegisterActivity extends BaseActivity {
                         new NutriproProvider.OnResponseListener<GeneralResponse>() {
                             @Override
                             public void onResponseSuccess(GeneralResponse response) {
-                                dismissProgressDialog();
-                                startSuggestedDietActivity();
+                                try {
+                                    mRealm.beginTransaction();
+                                    mRealm.copyToRealm(new DBRegisterModel(mMailTil.getEditText().getText().toString(),
+                                            mNameTil.getEditText().getText().toString(),
+                                            mGenderArray[mGenderSp.getSelectedItemPosition()],
+                                            Integer.valueOf(mAgeTil.getEditText().getText().toString()),
+                                            activityLevel,
+                                            Integer.valueOf(mWeightTil.getEditText().getText().toString()),
+                                            Integer.valueOf(mHeightTil.getEditText().getText().toString())
+
+                                    ));
+                                    mRealm.commitTransaction();
+                                    dismissProgressDialog();
+                                    startSuggestedDietActivity();
+                                } catch (RealmPrimaryKeyConstraintException e) {
+                                    dismissProgressDialog();
+                                    showToast(getString(R.string.register_error_already_registred));
+                                }
                             }
 
                             @Override

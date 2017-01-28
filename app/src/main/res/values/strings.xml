@@ -44,6 +44,7 @@
     <!--REGISTER-->
     <string name="register_info">Cadastro de Informações</string>
     <string name="register_btn_continue">Continuar</string>
+    <string name="register_error_already_registred">Usuário já cadastrado.</string>
 
     <!--ACTIVITY LEVEL-->
     <string name="activity_level_title">Nível de Atividade</string>

@@ -13,6 +13,8 @@ public class SharedPreferencesHelper {
     public static final String SHARED_PREFERENCES_NAME = Constants.PACKAGE_NAME + ".SHARED_PREFERENCES";
 
     private static final String PREF_SESSION_COOKIE = SHARED_PREFERENCES_NAME + ".PREF_SESSION_COOKIE";
+    private static final String PREF_USER_EMAIL = SHARED_PREFERENCES_NAME + ".PREF_USER_EMAIL";
+
 
     private SharedPreferences mSharedPreferences;
 
@@ -43,6 +45,15 @@ public class SharedPreferencesHelper {
     public String getSessionCookie(){
         return mSharedPreferences.getString(PREF_SESSION_COOKIE, "");
     }
+
+    public void putUserEmail(String sessionCookie){
+        mSharedPreferences.edit().putString(PREF_USER_EMAIL, sessionCookie).apply();
+    }
+
+    public String getUserEmail(){
+        return mSharedPreferences.getString(PREF_USER_EMAIL, "");
+    }
+
 
     public boolean isLogged(){
         return !getSessionCookie().isEmpty();
