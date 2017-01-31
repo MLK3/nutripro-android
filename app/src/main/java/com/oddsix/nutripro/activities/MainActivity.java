@@ -25,6 +25,8 @@ import com.oddsix.nutripro.fragments.AnalysedPictureFragment;
 import com.oddsix.nutripro.fragments.DayResumeFragment;
 import com.oddsix.nutripro.fragments.ProfileFragment;
 import com.oddsix.nutripro.models.DBDietModel;
+import com.oddsix.nutripro.models.DBRegisterModel;
+import com.oddsix.nutripro.rest.models.responses.RegisterResponse;
 import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.helpers.SharedPreferencesHelper;
@@ -59,8 +61,13 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         mRealm = Realm.getDefaultInstance();
-        mSuggestedDiet = (SuggestedDietResponse) getIntent().getSerializableExtra(Constants.EXTRA_DIET);
 
+        DBDietModel dietModel = mRealm.where(DBDietModel.class)
+                .equalTo("email", SharedPreferencesHelper.getInstance().getUserEmail()).findFirst();
+        if (dietModel != null) {
+            mSuggestedDiet = new SuggestedDietResponse(dietModel);
+        }
+//        mSuggestedDiet = (SuggestedDietResponse) getIntent().getSerializableExtra(Constants.EXTRA_DIET);
 
         setToolbar(false);
 
@@ -144,6 +151,7 @@ public class MainActivity extends BaseActivity {
 
 
     private MenuItem mChartItem;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -199,7 +207,7 @@ public class MainActivity extends BaseActivity {
         resizeScale = 1;
 
         if (opts.outHeight > mPhotoMaxSize || opts.outWidth > mPhotoMaxSize) {
-            resizeScale = (int)Math.pow(2, (int) Math.round(Math.log(mPhotoMaxSize / (double) Math.max(opts.outHeight, opts.outWidth)) / Math.log(0.5)));
+            resizeScale = (int) Math.pow(2, (int) Math.round(Math.log(mPhotoMaxSize / (double) Math.max(opts.outHeight, opts.outWidth)) / Math.log(0.5)));
         }
 
         // Load pre-scaled bitmap
@@ -247,7 +255,7 @@ public class MainActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Constants.REQ_PICTURE) {
-            if(resultCode == RESULT_OK) {
+            if (resultCode == RESULT_OK) {
                 Bitmap bm;
                 try {
                     bm = rotateImage(data.getStringExtra(Constants.EXTRA_FILE_PATH));
@@ -294,7 +302,7 @@ public class MainActivity extends BaseActivity {
             super.onPostExecute(o);
 //            mOnRequestReady.updateImage();
             dismissProgressDialog();
-            mPictureFragment.setImage(bm,  Base64.encodeToString(b, Base64.DEFAULT));
+            mPictureFragment.setImage(bm, Base64.encodeToString(b, Base64.DEFAULT));
         }
     }
 

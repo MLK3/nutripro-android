@@ -5,6 +5,7 @@ import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
 import com.oddsix.nutripro.utils.helpers.SharedPreferencesHelper;
 
 import java.io.Serializable;
+import java.util.List;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
@@ -20,9 +21,9 @@ public class DBDietModel extends RealmObject implements Serializable {
 
     private RealmList<DBDietNutrientModel> diet;
 
-    public DBDietModel(SuggestedDietResponse dietResponse) {
+    public DBDietModel(List<DietNutrientResponse> nutrients) {
         RealmList<DBDietNutrientModel> dbDietNutrientsModel = new RealmList<DBDietNutrientModel>();
-        for (DietNutrientResponse nutrientResponse : dietResponse.getNutrients()) {
+        for (DietNutrientResponse nutrientResponse : nutrients) {
             dbDietNutrientsModel.add(new DBDietNutrientModel(nutrientResponse));
         }
         diet = dbDietNutrientsModel;

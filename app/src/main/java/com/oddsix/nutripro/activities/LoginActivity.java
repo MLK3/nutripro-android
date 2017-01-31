@@ -8,11 +8,14 @@ import android.view.View;
 
 import com.oddsix.nutripro.BaseActivity;
 import com.oddsix.nutripro.R;
+import com.oddsix.nutripro.models.DBDietModel;
 import com.oddsix.nutripro.rest.NutriproProvider;
-import com.oddsix.nutripro.rest.models.responses.GeneralResponse;
-import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
+import com.oddsix.nutripro.rest.models.responses.LoginResponse;
 import com.oddsix.nutripro.utils.Constants;
+import com.oddsix.nutripro.utils.helpers.SharedPreferencesHelper;
 import com.oddsix.nutripro.utils.validations.IsEmail;
+
+import io.realm.Realm;
 
 /**
  * Created by Filippe on 16/10/16.
@@ -21,12 +24,14 @@ import com.oddsix.nutripro.utils.validations.IsEmail;
 public class LoginActivity extends BaseActivity {
     private TextInputLayout mLoginTil, mPassTil;
     private NutriproProvider mNutriproProvider;
+    private Realm mRealm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         findViews();
+        mRealm = Realm.getDefaultInstance();
         mNutriproProvider = new NutriproProvider(this);
         setBtn();
     }
@@ -61,20 +66,27 @@ public class LoginActivity extends BaseActivity {
 
     }
 
-    private boolean isFieldsAllFieldsValid() {
+    private boolean areFieldsAllFieldsValid() {
         validateAllFields();
         return !mLoginTil.isErrorEnabled() && !mPassTil.isErrorEnabled();
     }
 
     public void onEnterClicked(final View view) {
-        if (isFieldsAllFieldsValid()) {
+        if (areFieldsAllFieldsValid()) {
             showProgressdialog();
             mNutriproProvider.signIn(mLoginTil.getEditText().getText().toString(),
                     mPassTil.getEditText().getText().toString(),
-                    new NutriproProvider.OnResponseListener<GeneralResponse>() {
+                    new NutriproProvider.OnResponseListener<LoginResponse>() {
                         @Override
-                        public void onResponseSuccess(GeneralResponse response) {
-                            getSuggestedDiet(view);
+                        public void onResponseSuccess(LoginResponse response) {
+                            SharedPreferencesHelper.getInstance().putUserEmail(response.getProfile().getEmail());
+                            mRealm.beginTransaction();
+                            DBDietModel dietModel = new DBDietModel(response.getNutrients());
+                            mRealm.copyToRealmOrUpdate(dietModel);
+                            mRealm.commitTransaction();
+                            dismissProgressDialog();
+                            startMainActivity();
+//                            getSuggestedDiet(view);
                         }
 
                         @Override
@@ -86,24 +98,29 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-    public void getSuggestedDiet(final View view) {
-        mNutriproProvider.getDiet(new NutriproProvider.OnResponseListener<SuggestedDietResponse>() {
-            @Override
-            public void onResponseSuccess(SuggestedDietResponse response) {
-                dismissProgressDialog();
-                Intent intent = new Intent(view.getContext(), MainActivity.class);
-                intent.putExtra(Constants.EXTRA_DIET, response);
-                startActivity(intent);
-                finish();
-            }
-
-            @Override
-            public void onResponseFailure(String msg, int code) {
-                dismissProgressDialog();
-                showToast(msg);
-            }
-        });
+    private void startMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
+//    public void getSuggestedDiet(final View view) {
+//        mNutriproProvider.getDiet(new NutriproProvider.OnResponseListener<SuggestedDietResponse>() {
+//            @Override
+//            public void onResponseSuccess(SuggestedDietResponse response) {
+//                dismissProgressDialog();
+//                Intent intent = new Intent(view.getContext(), MainActivity.class);
+//                intent.putExtra(Constants.EXTRA_DIET, response);
+//                startActivity(intent);
+//                finish();
+//            }
+//
+//            @Override
+//            public void onResponseFailure(String msg, int code) {
+//                dismissProgressDialog();
+//                showToast(msg);
+//            }
+//        });
+//    }
 
     public void onRegisterClicked(View view) {
         Intent registerIntent = new Intent(view.getContext(), RegisterActivity.class);

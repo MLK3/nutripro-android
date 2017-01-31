@@ -4,6 +4,7 @@ import com.oddsix.nutripro.models.DBDietModel;
 import com.oddsix.nutripro.models.DBDietNutrientModel;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,7 +13,7 @@ import java.util.List;
 
 public class SuggestedDietResponse implements Serializable {
     private String status;
-    private List<DietNutrientResponse> nutrients;
+    private List<DietNutrientResponse> nutrients = new ArrayList<>();
 
     public String getStatus() {
         return status;

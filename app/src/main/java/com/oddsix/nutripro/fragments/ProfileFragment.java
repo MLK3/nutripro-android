@@ -18,6 +18,7 @@ import com.oddsix.nutripro.activities.EditDietActivity;
 import com.oddsix.nutripro.activities.MainActivity;
 import com.oddsix.nutripro.activities.RegisterActivity;
 import com.oddsix.nutripro.adapters.DietAdapter;
+import com.oddsix.nutripro.models.DBDietModel;
 import com.oddsix.nutripro.models.DBDietNutrientModel;
 import com.oddsix.nutripro.models.DBRegisterModel;
 import com.oddsix.nutripro.rest.NutriproProvider;
@@ -25,6 +26,7 @@ import com.oddsix.nutripro.rest.models.responses.RegisterResponse;
 import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.helpers.FeedbackHelper;
+import com.oddsix.nutripro.utils.helpers.SharedPreferencesHelper;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -36,9 +38,10 @@ import io.realm.RealmList;
 public class ProfileFragment extends BaseFragment {
     private DietAdapter mAdapter;
     private View mHeaderView;
-    private NutriproProvider mProvider;
-    private FeedbackHelper mFeedbackHelper;
+//    private NutriproProvider mProvider;
+//    private FeedbackHelper mFeedbackHelper;
     private RegisterResponse mRegister;
+    private Realm mRealm;
     private View mView;
 
     @Nullable
@@ -46,45 +49,55 @@ public class ProfileFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_listview, container, false);
 
-        mFeedbackHelper = new FeedbackHelper(getActivity(), (LinearLayout) mView.findViewById(R.id.container), new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getRegister();
-            }
-        });
+//        mFeedbackHelper = new FeedbackHelper(getActivity(), (LinearLayout) mView.findViewById(R.id.container), new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                getRegister();
+//            }
+//        });
+//
+//        mProvider = new NutriproProvider(getActivity());
 
-        mProvider = new NutriproProvider(getActivity());
-
-        if(mRegister == null) getRegister();
+        if (mRegister == null) getRegister();
         else setListView(mView);
 
         return mView;
     }
 
     private void getRegister() {
-        mFeedbackHelper.startLoading();
-        mProvider.getRegister(new NutriproProvider.OnResponseListener<RegisterResponse>() {
-            @Override
-            public void onResponseSuccess(RegisterResponse response) {
-                mFeedbackHelper.dismissFeedback();
-                mRegister = response;
-                setListView(mView);
 
-            }
-
-            @Override
-            public void onResponseFailure(String msg, int code) {
-                mFeedbackHelper.showErrorPlaceHolder();
-            }
-        });
+        DBRegisterModel registerModel = mRealm.where(DBRegisterModel.class)
+                .equalTo("email", SharedPreferencesHelper.getInstance().getUserEmail()).findFirst();
+        if (registerModel != null) {
+            mRegister = new RegisterResponse(registerModel);
+            setListView(mView);
+        }
+//        mFeedbackHelper.startLoading();
+//        mProvider.getRegister(new NutriproProvider.OnResponseListener<RegisterResponse>() {
+//            @Override
+//            public void onResponseSuccess(RegisterResponse response) {
+//                mFeedbackHelper.dismissFeedback();
+//                mRegister = response;
+//
+//            }
+//
+//            @Override
+//            public void onResponseFailure(String msg, int code) {
+//                mFeedbackHelper.showErrorPlaceHolder();
+//            }
+//        });
     }
 
     private void setListView(View view) {
         ListView list = (ListView) view.findViewById(R.id.listview);
         mAdapter = new DietAdapter(getActivity());
         list.setAdapter(mAdapter);
-        mAdapter.setDiet(((MainActivity) getActivity()).getSuggestedDiet().getNutrients());
-        list.addHeaderView(getHeader());
+        DBDietModel dietModel = mRealm.where(DBDietModel.class)
+                .equalTo("email", SharedPreferencesHelper.getInstance().getUserEmail()).findFirst();
+        if (dietModel != null) {
+            mAdapter.setDiet(((MainActivity) getActivity()).getSuggestedDiet().getNutrients());
+            list.addHeaderView(getHeader());
+        }
     }
 
     private View getHeader() {
@@ -104,7 +117,7 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void setHeader(View headerView) {
-        ((TextView)headerView.findViewById(R.id.header_profile_name)).setText(mRegister.getName());
+        ((TextView) headerView.findViewById(R.id.header_profile_name)).setText(mRegister.getName());
 
         View genderContainer = headerView.findViewById(R.id.header_profile_gender);
         setProfileItem(genderContainer, getString(R.string.profile_item_gender), mRegister.getGender());
@@ -139,7 +152,7 @@ public class ProfileFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == Constants.REQ_EDIT_REGISTER && resultCode == Activity.RESULT_OK) {
+        if (requestCode == Constants.REQ_EDIT_REGISTER && resultCode == Activity.RESULT_OK) {
             mRegister = (RegisterResponse) data.getSerializableExtra(Constants.EXTRA_REGISTER_MODEL);
             setHeader(mHeaderView);
         } else if (requestCode == Constants.REQ_EDIT_DIET && resultCode == Activity.RESULT_OK) {

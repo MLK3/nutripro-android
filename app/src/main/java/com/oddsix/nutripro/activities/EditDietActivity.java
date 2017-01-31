@@ -124,7 +124,7 @@ public class EditDietActivity extends BaseActivity {
     }
 
     private void saveInLocalDb() {
-        DBDietModel dbDietModel = new DBDietModel(mSuggestedDiet);
+        DBDietModel dbDietModel = new DBDietModel(mSuggestedDiet.getNutrients());
         mRealm.beginTransaction();
         mRealm.copyToRealmOrUpdate(dbDietModel);
         mRealm.commitTransaction();

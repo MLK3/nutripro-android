@@ -57,7 +57,7 @@ public class SuggestedDietActivity extends BaseActivity {
             @Override
             public void onResponseSuccess(SuggestedDietResponse response) {
                 mSuggestedDietResponse = response;
-                DBDietModel dbDietModel = new DBDietModel(mSuggestedDietResponse);
+                DBDietModel dbDietModel = new DBDietModel(mSuggestedDietResponse.getNutrients());
                 mRealm.beginTransaction();
                 mRealm.copyToRealmOrUpdate(dbDietModel);
                 mRealm.commitTransaction();

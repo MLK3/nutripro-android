@@ -11,6 +11,7 @@ import com.oddsix.nutripro.rest.models.responses.CreateFoodResponse;
 import com.oddsix.nutripro.rest.models.responses.DayResumeResponse;
 import com.oddsix.nutripro.rest.models.responses.FoodFromMealResponse;
 import com.oddsix.nutripro.rest.models.responses.GeneralResponse;
+import com.oddsix.nutripro.rest.models.responses.LoginResponse;
 import com.oddsix.nutripro.rest.models.responses.MealDetailResponse;
 import com.oddsix.nutripro.rest.models.responses.RegisterResponse;
 import com.oddsix.nutripro.rest.models.responses.SearchResponse;
@@ -39,8 +40,8 @@ public interface NutriproService {
 
     @FormUrlEncoded
     @POST("signin")
-    Call<GeneralResponse> postSignin(@Field("email") String email,
-                                     @Field("password") String password);
+    Call<LoginResponse> postSignin(@Field("email") String email,
+                                   @Field("password") String password);
 
     @GET("diet")
     Call<SuggestedDietResponse> getSuggestedDiet();

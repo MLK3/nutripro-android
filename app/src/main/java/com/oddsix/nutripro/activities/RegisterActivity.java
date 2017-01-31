@@ -223,6 +223,7 @@ public class RegisterActivity extends BaseActivity {
 
                                 ));
                                 mRealm.commitTransaction();
+                                SharedPreferencesHelper.getInstance().putUserEmail(mMailTil.getEditText().getText().toString());
                                 finishWithResult();
                                 dismissProgressDialog();
                             }

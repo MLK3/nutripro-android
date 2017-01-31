@@ -46,8 +46,8 @@ public class SharedPreferencesHelper {
         return mSharedPreferences.getString(PREF_SESSION_COOKIE, "");
     }
 
-    public void putUserEmail(String sessionCookie){
-        mSharedPreferences.edit().putString(PREF_USER_EMAIL, sessionCookie).apply();
+    public void putUserEmail(String userMail){
+        mSharedPreferences.edit().putString(PREF_USER_EMAIL, userMail).apply();
     }
 
     public String getUserEmail(){

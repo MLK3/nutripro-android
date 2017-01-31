@@ -17,6 +17,7 @@ import com.oddsix.nutripro.rest.models.responses.CreateFoodResponse;
 import com.oddsix.nutripro.rest.models.responses.DayResumeResponse;
 import com.oddsix.nutripro.rest.models.responses.FoodFromMealResponse;
 import com.oddsix.nutripro.rest.models.responses.GeneralResponse;
+import com.oddsix.nutripro.rest.models.responses.LoginResponse;
 import com.oddsix.nutripro.rest.models.responses.MealDetailResponse;
 import com.oddsix.nutripro.rest.models.responses.RegisterResponse;
 import com.oddsix.nutripro.rest.models.responses.SearchResponse;
@@ -55,9 +56,9 @@ public class NutriproProvider {
         mNutriproService = getRetrofit(interceptors).create(NutriproService.class);
     }
 
-    public void signIn(String mail, String password, final OnResponseListener<GeneralResponse> callback) {
+    public void signIn(String mail, String password, final OnResponseListener<LoginResponse> callback) {
         mNutriproService.postSignin(mail, password)
-                .enqueue(new ResponseHandler<GeneralResponse>(mActivity, callback));
+                .enqueue(new ResponseHandler<LoginResponse>(mActivity, callback));
     }
 
     public void createRegister(String name, String gender, int age, String email, String activity, int peso, int altura, OnResponseListener<GeneralResponse> callback) {
