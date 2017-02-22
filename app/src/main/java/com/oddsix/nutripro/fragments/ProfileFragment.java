@@ -57,6 +57,8 @@ public class ProfileFragment extends BaseFragment {
 //        });
 //
 //        mProvider = new NutriproProvider(getActivity());
+        mRealm = Realm.getDefaultInstance();
+
 
         if (mRegister == null) getRegister();
         else setListView(mView);

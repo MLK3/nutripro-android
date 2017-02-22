@@ -17,17 +17,13 @@
         <activity android:name=".activities.LoginActivity"/>
         <activity android:name=".activities.RegisterActivity"/>
         <activity android:name=".activities.MainActivity">
-
-        </activity>
-        <activity android:name=".activities.SuggestedDietActivity"/>
-        <activity android:name=".activities.EditSuggestedDietActivity"/>
-        <activity android:name=".activities.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".activities.SuggestedDietActivity"/>
         <activity android:name=".activities.SettingsActivity"/>
         <activity android:name=".activities.FoodInfoActivity"/>
         <activity android:name=".activities.CameraActivity"/>
@@ -35,7 +31,6 @@
         <activity android:name=".activities.EditDietActivity"/>
         <activity android:name=".activities.CameraViewActivity"/>
         <activity android:name=".activities.SearchActivity"/>
-        <activity android:name=".activities.ActivityLevelActivity"/>
         <activity android:name=".activities.AddNewFoodActivity"/>
         <activity android:name=".activities.WeekResumeActivity"/>
 

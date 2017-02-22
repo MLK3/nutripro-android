@@ -1,5 +1,7 @@
 package com.oddsix.nutripro.models;
 
+import com.oddsix.nutripro.rest.models.responses.RegisterResponse;
+
 import java.io.Serializable;
 
 import io.realm.RealmObject;
@@ -21,6 +23,16 @@ public class DBRegisterModel extends RealmObject implements Serializable{
     private int altura;
 
     public DBRegisterModel() {
+    }
+
+    public DBRegisterModel(RegisterResponse response) {
+        this.email = response.getEmail();
+        this.name = response.getName();
+        this.gender = response.getGender();
+        this.age = response.getAge();
+        this.activity = response.getActivity();
+        this.peso = response.getPeso();
+        this.altura = response.getAltura();
     }
 
     public DBRegisterModel(String email, String name, String gender, int age, String activity, int peso, int altura) {

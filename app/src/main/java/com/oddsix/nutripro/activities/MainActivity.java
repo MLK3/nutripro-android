@@ -58,22 +58,28 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        mRealm = Realm.getDefaultInstance();
+        if(!SharedPreferencesHelper.getInstance().isLogged()) {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        } else {
+            setContentView(R.layout.activity_main);
 
-        DBDietModel dietModel = mRealm.where(DBDietModel.class)
-                .equalTo("email", SharedPreferencesHelper.getInstance().getUserEmail()).findFirst();
-        if (dietModel != null) {
-            mSuggestedDiet = new SuggestedDietResponse(dietModel);
-        }
+            mRealm = Realm.getDefaultInstance();
+
+            DBDietModel dietModel = mRealm.where(DBDietModel.class)
+                    .equalTo("email", SharedPreferencesHelper.getInstance().getUserEmail()).findFirst();
+            if (dietModel != null) {
+                mSuggestedDiet = new SuggestedDietResponse(dietModel);
+            }
 //        mSuggestedDiet = (SuggestedDietResponse) getIntent().getSerializableExtra(Constants.EXTRA_DIET);
 
-        setToolbar(false);
+            setToolbar(false);
 
-        setViewPager();
+            setViewPager();
 
-        setTabLayout();
+            setTabLayout();
+        }
     }
 
     public void setSuggestedDiet(SuggestedDietResponse suggestedDiet) {

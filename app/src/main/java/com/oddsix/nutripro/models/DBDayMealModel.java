@@ -14,8 +14,8 @@ import io.realm.annotations.PrimaryKey;
 public class DBDayMealModel extends RealmObject {
     private Date date;
 
-    @PrimaryKey
     private String dateString;
+
     private RealmList<DBMealModel> meals;
 
     public DBDayMealModel(Date date, RealmList<DBMealModel> meals) {

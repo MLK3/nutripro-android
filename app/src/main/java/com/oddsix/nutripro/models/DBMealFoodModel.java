@@ -10,15 +10,21 @@ import io.realm.RealmObject;
 public class DBMealFoodModel extends RealmObject {
     private RealmList<DBMealNutrientModel> nutrients;
     private String foodName;
+    private DBAreaModel area;
     private int quantity; //grams
 
     public DBMealFoodModel() {
     }
 
-    public DBMealFoodModel(RealmList<DBMealNutrientModel> nutrients, String foodName, int quantity) {
+    public DBMealFoodModel(RealmList<DBMealNutrientModel> nutrients, String foodName, int quantity, DBAreaModel area) {
         this.nutrients = nutrients;
         this.foodName = foodName;
         this.quantity = quantity;
+        this.area = area;
+    }
+
+    public DBAreaModel getArea() {
+        return area;
     }
 
     public int getQuantity() {

@@ -32,21 +32,33 @@ import com.oddsix.nutripro.activities.MainActivity;
 import com.oddsix.nutripro.activities.SearchActivity;
 import com.oddsix.nutripro.adapters.AnalysedImgAdapter;
 import com.oddsix.nutripro.models.AreaModel;
+import com.oddsix.nutripro.models.DBAllMealsByDayModel;
+import com.oddsix.nutripro.models.DBAreaModel;
+import com.oddsix.nutripro.models.DBDayMealModel;
+import com.oddsix.nutripro.models.DBMealFoodModel;
+import com.oddsix.nutripro.models.DBMealModel;
+import com.oddsix.nutripro.models.DBMealNutrientModel;
 import com.oddsix.nutripro.rest.NutriproProvider;
-import com.oddsix.nutripro.rest.models.requests.CreateMealRequest;
 import com.oddsix.nutripro.rest.models.requests.FoodRequest;
 import com.oddsix.nutripro.rest.models.responses.AnalysedPictureResponse;
 import com.oddsix.nutripro.rest.models.responses.AnalysedRecognisedFoodResponse;
 import com.oddsix.nutripro.rest.models.responses.FoodResponse;
-import com.oddsix.nutripro.rest.models.responses.GeneralResponse;
+import com.oddsix.nutripro.rest.models.responses.NutrientResponse;
 import com.oddsix.nutripro.rest.models.responses.RecognisedFoodResponse;
 import com.oddsix.nutripro.utils.Constants;
+import com.oddsix.nutripro.utils.DateHelper;
 import com.oddsix.nutripro.utils.base.BaseDialogHelper;
 import com.oddsix.nutripro.utils.helpers.AppColorHelper;
 import com.oddsix.nutripro.utils.helpers.DialogHelper;
+import com.oddsix.nutripro.utils.helpers.SharedPreferencesHelper;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmList;
 
 /**
  * Created by Filippe on 21/10/16.
@@ -58,6 +70,7 @@ public class AnalysedPictureFragment extends BaseFragment {
     private NutriproProvider mProvider;
     private AppColorHelper mColorHelper;
     private AnalysedPictureResponse mMeal;
+    private Realm mRealm;
 
     private LayoutInflater mInflater;
     private View mRootView;
@@ -79,6 +92,8 @@ public class AnalysedPictureFragment extends BaseFragment {
         mColorHelper = new AppColorHelper(getActivity());
 
         mInflater = inflater;
+
+        mRealm = Realm.getDefaultInstance();
 
         setListView();
         return view;
@@ -113,7 +128,7 @@ public class AnalysedPictureFragment extends BaseFragment {
                                 mMeal.getFoods().remove(position);
                                 mAnalysedImgAdapter.setFoods((List<RecognisedFoodResponse>) (List<?>) mMeal.getFoods());
                                 mCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
-                                setImage(mHeaderView);
+                                showImage(mHeaderView);
                             }
                         });
             }
@@ -175,6 +190,54 @@ public class AnalysedPictureFragment extends BaseFragment {
         return headerView;
     }
 
+    private void saveMeal() {
+        //get all meals
+        DBAllMealsByDayModel allMealsByDayModel = mRealm.where(DBAllMealsByDayModel.class)
+                .equalTo("email", SharedPreferencesHelper.getInstance().getUserEmail()).findFirst();
+
+        //initialize all meals if there is no meal
+        if (allMealsByDayModel == null) {
+            allMealsByDayModel = new DBAllMealsByDayModel(new RealmList<DBDayMealModel>());
+        }
+
+        //get today meals
+        DBDayMealModel dbDayMealModel = null;
+        for (DBDayMealModel dayMealModel : allMealsByDayModel.getAllDays()) {
+            try {
+                if (DateHelper.parseDate(Constants.STANDARD_DATE_FORMAT, dayMealModel.getDate()).equals(DateHelper.parseDate(Constants.STANDARD_DATE_FORMAT, Calendar.getInstance().getTime()))) {
+                    dbDayMealModel = dayMealModel;
+                    break;
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        //initialize if there is no today meal
+        if (dbDayMealModel == null) {
+            dbDayMealModel = new DBDayMealModel(Calendar.getInstance().getTime(), new RealmList<DBMealModel>());
+        }
+
+        DBMealModel dbMealModel = new DBMealModel(mMeal.getName(), mMeal.getPicture_url());
+        for (RecognisedFoodResponse food : mMeal.getFoods()) {
+            DBAreaModel areaModel = new DBAreaModel(food.getArea().getArea_id(), food.getArea().getPoints());
+            RealmList<DBMealNutrientModel> nutrients = new RealmList<>();
+            for (NutrientResponse nutrient : food.getNutrients()) {
+                nutrients.add(new DBMealNutrientModel(nutrient.getName(), nutrient.getQuantity(), nutrient.getUnit()));
+            }
+            dbMealModel.getFoods().add(new DBMealFoodModel(nutrients, food.getName(), food.getQuantity(), areaModel));
+        }
+
+
+        mRealm.beginTransaction();
+        dbDayMealModel.getMeals().add(dbMealModel);
+        allMealsByDayModel.getAllDays().add(dbDayMealModel);
+        mRealm.copyToRealmOrUpdate(allMealsByDayModel);
+        mRealm.commitTransaction();
+        showToast(getString(R.string.analysed_food_request_success));
+        ((MainActivity) getActivity()).resetTabIndex();
+    }
+
     private View inflateFooter(LayoutInflater inflater) {
         View footerView = inflater.inflate(R.layout.footer_analysed_photo, null);
         ((Button) footerView.findViewById(R.id.footer_analysed_photo_conclude)).setOnClickListener(new View.OnClickListener() {
@@ -184,22 +247,24 @@ public class AnalysedPictureFragment extends BaseFragment {
                 for (AnalysedRecognisedFoodResponse food : mMeal.getFoods()) {
                     foods.add(new FoodRequest(food.getArea().getArea_id(), food.getId(), food.getQuantity()));
                 }
-                mProvider.createMeal(new CreateMealRequest(
-                                mMeal.getPicture_id(),
-                                ((TextView) mHeaderView.findViewById(R.id.header_analysed_meal_name_tv)).getText().toString(),
-                                foods),
-                        new NutriproProvider.OnResponseListener<GeneralResponse>() {
-                            @Override
-                            public void onResponseSuccess(GeneralResponse response) {
-                                showToast(getString(R.string.analysed_food_request_success));
-                                ((MainActivity) getActivity()).resetTabIndex();
-                            }
+                saveMeal();
 
-                            @Override
-                            public void onResponseFailure(String msg, int code) {
-                                showToast(msg);
-                            }
-                        });
+//                mProvider.createMeal(new CreateMealRequest(
+//                                mMeal.getPicture_id(),
+//                                ((TextView) mHeaderView.findViewById(R.id.header_analysed_meal_name_tv)).getText().toString(),
+//                                foods),
+//                        new NutriproProvider.OnResponseListener<GeneralResponse>() {
+//                            @Override
+//                            public void onResponseSuccess(GeneralResponse response) {
+//                                showToast(getString(R.string.analysed_food_request_success));
+//                                ((MainActivity) getActivity()).resetTabIndex();
+//                            }
+//
+//                            @Override
+//                            public void onResponseFailure(String msg, int code) {
+//                                showToast(msg);
+//                            }
+//                        });
             }
         });
         ((Button) footerView.findViewById(R.id.footer_analysed_photo_conclude)).setText(getString(R.string.meal_detail_btn_save));
@@ -213,12 +278,11 @@ public class AnalysedPictureFragment extends BaseFragment {
         return footerView;
     }
 
-    public void setImage(final View headerView) {
+    public void showImage(final View headerView) {
         Glide.with(this).load(mMeal.getPictureUrl()).asBitmap().into(new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                //TODO UNCOMMENT THIS LINE IF THE REQUEST RETURNS THE PICTURE URL
-//                ((ImageView) headerView.findViewById(R.id.header_analysed_photo_img)).setImageBitmap(resource);
+                ((ImageView) headerView.findViewById(R.id.header_analysed_photo_img)).setImageBitmap(resource);
                 setDrawing(headerView, resource);
             }
         });
@@ -324,7 +388,14 @@ public class AnalysedPictureFragment extends BaseFragment {
                 dismissProgressDialog();
                 mMeal = response;
                 ((ImageView) mHeaderView.findViewById(R.id.header_analysed_photo_img)).setImageBitmap(image);
-                setImage(mHeaderView);
+                showImage(mHeaderView);
+                mDialogHelper.showEditTextTextDialog("Digite um nome para sua refeição:", "Incluir", new BaseDialogHelper.OnEditTextTextDialogClickListener() {
+                    @Override
+                    public void onInputConfirmed(String text) {
+                        ((TextView) mHeaderView.findViewById(R.id.header_analysed_meal_name_tv)).setText(text);
+                        mMeal.setName(text);
+                    }
+                });
                 mAnalysedImgAdapter.setFoods((List<RecognisedFoodResponse>) (List<?>) response.getFoods());
             }
 
@@ -346,15 +417,15 @@ public class AnalysedPictureFragment extends BaseFragment {
             FoodResponse foodSelected = (FoodResponse) data.getSerializableExtra(Constants.EXTRA_FOOD);
             mMeal.getFoods().get(mEditingFoodIndex).setId(foodSelected.getId());
             mMeal.getFoods().get(mEditingFoodIndex).setName(foodSelected.getName());
-            if(foodSelected.getQuantity() != null) {
+            if (foodSelected.getQuantity() != null) {
                 mMeal.getFoods().get(mEditingFoodIndex).setQuantity(foodSelected.getQuantity());
             }
             mAnalysedImgAdapter.setFoods((List<RecognisedFoodResponse>) (List<?>) mMeal.getFoods());
         } else if (resultCode == Activity.RESULT_OK && requestCode == Constants.REQ_ADD_FOOD) {
             FoodResponse foodSelected = (FoodResponse) data.getSerializableExtra(Constants.EXTRA_FOOD);
-            if(foodSelected.getQuantity() != null) {
+            if (foodSelected.getQuantity() != null) {
                 mMeal.getFoods().add(new AnalysedRecognisedFoodResponse(foodSelected.getId(), foodSelected.getName(), foodSelected.getQuantity()));
-            }else {
+            } else {
                 mMeal.getFoods().add(new AnalysedRecognisedFoodResponse(foodSelected.getId(), foodSelected.getName()));
             }
             mAnalysedImgAdapter.setFoods((List<RecognisedFoodResponse>) (List<?>) mMeal.getFoods());

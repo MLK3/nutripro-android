@@ -23,13 +23,13 @@ import io.realm.RealmList;
 
 public class DayResumeAdapter extends BaseAdapter {
     private Context mContext;
-    private List<DayResumeResponse.MealResponse> mMeals = new ArrayList<>();
+    private RealmList<DBMealModel> mMeals = new RealmList<>();
 
     public DayResumeAdapter(Context context) {
         mContext = context;
     }
 
-    public void setMeals(List<DayResumeResponse.MealResponse> meals) {
+    public void setMeals(RealmList<DBMealModel> meals) {
         mMeals = meals;
         notifyDataSetChanged();
     }

@@ -102,8 +102,35 @@ public class BaseDialogHelper {
         builder.show();
     }
 
+    public void showEditTextTextDialog(String title, String positiveText, final OnEditTextTextDialogClickListener listener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+
+        builder.setTitle(title).setCancelable(false);
+
+        final EditText input = new EditText(mContext);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        input.setLayoutParams(lp);
+        builder.setView(input);
+
+        builder.setPositiveButton(positiveText, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (!input.getText().toString().isEmpty()) {
+                    listener.onInputConfirmed(input.getText().toString());
+                }
+            }
+        });
+        builder.show();
+    }
+
     public interface OnEditTextDialogClickListener {
         void onInputConfirmed(int value);
+    }
+
+    public interface OnEditTextTextDialogClickListener {
+        void onInputConfirmed(String text);
     }
 
     public void showAlertDialog(String msg, String positiveText, String negativeText, DialogInterface.OnClickListener postiveButtonListener) {

@@ -8,15 +8,14 @@ import io.realm.RealmObject;
  */
 
 public class DBMealModel extends RealmObject{
-    private RealmList<DBMealFoodModel> foods;
+    private RealmList<DBMealFoodModel> foods = new RealmList<>();
     private String name;
     private String imagePath;
 
     public DBMealModel() {
     }
 
-    public DBMealModel(RealmList<DBMealFoodModel> foods, String name, String imagePath) {
-        this.foods = foods;
+    public DBMealModel(String name, String imagePath) {
         this.name = name;
         this.imagePath = imagePath;
     }

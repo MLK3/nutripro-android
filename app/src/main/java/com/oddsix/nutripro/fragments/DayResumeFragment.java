@@ -19,6 +19,11 @@ import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.activities.MainActivity;
 import com.oddsix.nutripro.activities.MealDetailActivity;
 import com.oddsix.nutripro.adapters.DayResumeAdapter;
+import com.oddsix.nutripro.models.DBAllMealsByDayModel;
+import com.oddsix.nutripro.models.DBDayMealModel;
+import com.oddsix.nutripro.models.DBMealFoodModel;
+import com.oddsix.nutripro.models.DBMealModel;
+import com.oddsix.nutripro.models.DBMealNutrientModel;
 import com.oddsix.nutripro.rest.NutriproProvider;
 import com.oddsix.nutripro.rest.models.responses.DayResumeResponse;
 import com.oddsix.nutripro.rest.models.responses.DietNutrientResponse;
@@ -26,12 +31,16 @@ import com.oddsix.nutripro.rest.models.responses.NutrientResponse;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.DateHelper;
 import com.oddsix.nutripro.utils.helpers.FeedbackHelper;
+import com.oddsix.nutripro.utils.helpers.SharedPreferencesHelper;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 
 /**
  * Created by Filippe on 21/10/16.
@@ -48,7 +57,7 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
     private NutriproProvider mProvider;
 
     private View mView;
-    private DayResumeResponse mDay = new DayResumeResponse();
+    private DBDayMealModel mDay;
     private Calendar mDate;
 
     @Nullable
@@ -66,7 +75,7 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
         });
         setDayLabel(mView);
 
-//        mRealm = Realm.getDefaultInstance();
+        mRealm = Realm.getDefaultInstance();
 
         metrics = new DisplayMetrics();
 
@@ -75,10 +84,8 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
         if (mDate == null) {
             mDate = Calendar.getInstance();
             getMealByDay(mDate);
-        } else if (mDay == null) {
-            getMealByDay(mDate);
         } else {
-            setListView(mView);
+            getMealByDay(mDate);
             setDateLabel(mDate);
         }
 
@@ -88,24 +95,52 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
     private void getMealByDay(Calendar date) {
         setDateLabel(date);
         mFeedbackHelper.startLoading();
-        try {
-            mProvider.getMealsByDay(date.getTime(), new NutriproProvider.OnResponseListener<DayResumeResponse>() {
-                @Override
-                public void onResponseSuccess(DayResumeResponse response) {
-                    mDay = response;
-                    setData();
-                    mFeedbackHelper.dismissFeedback();
-                }
+        //get all meals
+        DBAllMealsByDayModel allMealsByDayModel = mRealm.where(DBAllMealsByDayModel.class)
+                .equalTo("email", SharedPreferencesHelper.getInstance().getUserEmail()).findFirst();
 
-                @Override
-                public void onResponseFailure(String msg, int code) {
-                    mFeedbackHelper.showErrorPlaceHolder();
+        //initialize all meals if there is no meal
+        if (allMealsByDayModel == null) {
+            mFeedbackHelper.showEmptyPlaceHolder();
+        } else {
+            //get date meals
+            mDay = null;
+            for (DBDayMealModel dayMealModel : allMealsByDayModel.getAllDays()) {
+                try {
+                    if (DateHelper.parseDate(Constants.STANDARD_DATE_FORMAT, dayMealModel.getDate()).equals(DateHelper.parseDate(Constants.STANDARD_DATE_FORMAT, date.getTime()))) {
+                        mDay = dayMealModel;
+                        break;
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
-            });
-        } catch (ParseException e) {
-            e.printStackTrace();
-            mFeedbackHelper.showErrorPlaceHolder();
+            }
+            if (mDay == null) {
+                mFeedbackHelper.showEmptyPlaceHolder();
+            } else {
+                setData();
+                mFeedbackHelper.dismissFeedback();
+            }
         }
+//            DateHelper.parseDate(Constants.REQUEST_DATE_FORMAT, date)
+//        try {
+//            mProvider.getMealsByDay(date.getTime(), new NutriproProvider.OnResponseListener<DayResumeResponse>() {
+//                @Override
+//                public void onResponseSuccess(DayResumeResponse response) {
+//                    mDay = response;
+//                    setData();
+//                    mFeedbackHelper.dismissFeedback();
+//                }
+//
+//                @Override
+//                public void onResponseFailure(String msg, int code) {
+//                    mFeedbackHelper.showErrorPlaceHolder();
+//                }
+//            });
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//            mFeedbackHelper.showErrorPlaceHolder();
+//        }
     }
 
     private void setListView(View view) {
@@ -118,11 +153,11 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
                 //header position
                 if (i != 0) {
                     int arrayPosition = i - 1;
-                    startMealDetailActivity(mDay.getMeals().get(arrayPosition));
+                    //todo
+//                    startMealDetailActivity(mDay.getMeals().get(arrayPosition));
                 }
             }
         });
-        setData();
     }
 
     private void startMealDetailActivity(DayResumeResponse.MealResponse meal) {
@@ -132,7 +167,7 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
     }
 
     private void setData() {
-        if(mHeaderView != null) {
+        if (mHeaderView != null) {
             mListView.removeHeaderView(mHeaderView);
         }
         mListView.addHeaderView(getHeader(), null, false);
@@ -163,7 +198,25 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
 //                .equalTo("mail", getActivity().getSharedPreferences(Constants.PACKAGE_NAME, Context.MODE_PRIVATE).getString(Constants.PREF_MAIL, ""))
 //                .findFirst().getDietModel();
 
-        for (NutrientResponse nutrient : mDay.getNutrients()) {
+        List<NutrientResponse> nutrients = new ArrayList<>();
+        for (DietNutrientResponse dietNutrient : ((MainActivity) getActivity()).getSuggestedDiet().getNutrients()) {
+            nutrients.add(new NutrientResponse(dietNutrient.getName(), 0, dietNutrient.getUnit()));
+        }
+
+        for (DBMealModel meal : mDay.getMeals()) {
+            for (DBMealFoodModel food : meal.getFoods()) {
+                for (DBMealNutrientModel nutrientDb : food.getNutrients()) {
+                    for (NutrientResponse nutrient: nutrients) {
+                        if (nutrient.getName().equalsIgnoreCase(nutrientDb.getName())) {
+                            nutrient.setQuantity(nutrient.getQuantity() + nutrientDb.getQuantity());
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        for (NutrientResponse nutrient : nutrients) {
             for (DietNutrientResponse dietNutrient : ((MainActivity) getActivity()).getSuggestedDiet().getNutrients()) {
                 if (nutrient.getName().equalsIgnoreCase(dietNutrient.getName())) {
                     View bar = getActivity().getLayoutInflater().inflate(R.layout.partial_horizontal_bar_chart, container, false);

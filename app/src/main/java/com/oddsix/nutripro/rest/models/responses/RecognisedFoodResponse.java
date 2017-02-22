@@ -12,6 +12,7 @@ public class RecognisedFoodResponse implements Serializable {
     private String name;
     private int quantity;
     private Area area;
+    private List<NutrientResponse> nutrients;
 
     public RecognisedFoodResponse(String id, String name) {
         this.id = id;
@@ -25,6 +26,10 @@ public class RecognisedFoodResponse implements Serializable {
     }
 
     public RecognisedFoodResponse() {
+    }
+
+    public List<NutrientResponse> getNutrients() {
+        return nutrients;
     }
 
     public Area getArea() {

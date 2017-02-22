@@ -11,7 +11,20 @@ public class AnalysedPictureResponse implements Serializable {
     private String status;
     private String picture_id;
     private String picture_url;
+    private String name;
     private List<AnalysedRecognisedFoodResponse> foods;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPicture_url() {
+        return picture_url;
+    }
+
+    public String getName() {
+        return name;
+    }
 
     public String getStatus() {
         return status;
