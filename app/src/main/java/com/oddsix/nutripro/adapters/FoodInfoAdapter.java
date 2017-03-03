@@ -19,10 +19,10 @@ import java.util.List;
  */
 
 public class FoodInfoAdapter extends BaseAdapter {
-    private List<NutrientResponse> mNutrients;
+    private List<NutrientModel> mNutrients;
     private Context mContext;
 
-    public FoodInfoAdapter(List<NutrientResponse> nutrients, Context context) {
+    public FoodInfoAdapter(List<NutrientModel> nutrients, Context context) {
         mNutrients = nutrients;
         mContext = context;
     }

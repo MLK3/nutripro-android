@@ -2,7 +2,6 @@ package com.oddsix.nutripro.activities;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.graphics.DashPathEffect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -23,12 +22,22 @@ import com.github.mikephil.charting.formatter.FormattedStringCache;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.oddsix.nutripro.BaseActivity;
 import com.oddsix.nutripro.R;
+import com.oddsix.nutripro.models.DBAllMealsByDayModel;
+import com.oddsix.nutripro.models.DBDayMealModel;
+import com.oddsix.nutripro.models.DBDietModel;
+import com.oddsix.nutripro.models.DBMealFoodModel;
+import com.oddsix.nutripro.models.DBMealModel;
+import com.oddsix.nutripro.models.DBMealNutrientModel;
 import com.oddsix.nutripro.rest.NutriproProvider;
+import com.oddsix.nutripro.rest.models.responses.DietNutrientResponse;
+import com.oddsix.nutripro.rest.models.responses.NutrientWeekResponse;
+import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
 import com.oddsix.nutripro.rest.models.responses.WeekMealResponse;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.DateHelper;
 import com.oddsix.nutripro.utils.helpers.DialogHelper;
 import com.oddsix.nutripro.utils.helpers.FeedbackHelper;
+import com.oddsix.nutripro.utils.helpers.SharedPreferencesHelper;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.text.ParseException;
@@ -37,6 +46,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import io.realm.Realm;
 
 /**
  * Created by filippecl on 20/12/16.
@@ -47,14 +58,19 @@ public class WeekResumeActivity extends BaseActivity implements DatePickerDialog
     private LineChart mChart;
     private NutriproProvider mProvider;
     private FeedbackHelper mFeedbackHelper;
-    private Date mDate;
+    private Calendar mDate;
     private DialogHelper mDialogHelper;
     private TextView mWeekTv;
+    private Realm mRealm;
     private TextView mNutrientTv;
     private TextView mUnitTv;
 
+    private List<DBDayMealModel> mDays;
+
     private WeekMealResponse mWeekMeal;
-    private WeekMealResponse.Nutrient mNutrient;
+
+    private NutrientWeekResponse mNutrientResponse;
+    private SuggestedDietResponse mSuggestedDiet;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,16 +84,95 @@ public class WeekResumeActivity extends BaseActivity implements DatePickerDialog
         mChart = (LineChart) findViewById(R.id.week_resume_linechart);
         mProvider = new NutriproProvider(this);
 
+        mRealm = Realm.getDefaultInstance();
+
         mFeedbackHelper = new FeedbackHelper(this, (ViewGroup) findViewById(R.id.container), mOnTryAgainClickListener);
 
         mDialogHelper = new DialogHelper(this);
 
         mDate = getFirstDayOfTheWeek(Calendar.getInstance());
+
+        DBDietModel dietModel = mRealm.where(DBDietModel.class)
+                .equalTo("email", SharedPreferencesHelper.getInstance().getUserEmail()).findFirst();
+
         setWeekLabel();
 
-        sendRequest();
+        if (dietModel != null) {
+            mSuggestedDiet = new SuggestedDietResponse(dietModel);
+            getAllMealsInvolved();
+        }
     }
 
+    private void getAllMealsInvolved() {
+        mDays = new ArrayList<>();
+        mFeedbackHelper.startLoading();
+        DBAllMealsByDayModel allMealsByDayModel = mRealm.where(DBAllMealsByDayModel.class)
+                .equalTo("email", SharedPreferencesHelper.getInstance().getUserEmail()).findFirst();
+
+        //initialize all meals if there is no meal
+        if (allMealsByDayModel == null) {
+            mFeedbackHelper.showEmptyPlaceHolder();
+        } else {
+            Date date = mDate.getTime();
+            //get date meals
+            for (int i = 0; i < 7; i++) {
+                for (DBDayMealModel dayMealModel : allMealsByDayModel.getAllDays()) {
+                    try {
+                        if (DateHelper.parseDate(Constants.STANDARD_DATE_FORMAT,
+                                dayMealModel.getDate()).equals(DateHelper.parseDate(Constants.STANDARD_DATE_FORMAT, date))) {
+                            mDays.add(dayMealModel);
+                            break;
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+                date = DateHelper.addDay(1, date);
+            }
+            if (mDays.isEmpty()) {
+                mFeedbackHelper.showEmptyPlaceHolder();
+            } else {
+                buildWeekMeal();
+                mFeedbackHelper.dismissFeedback();
+            }
+        }
+    }
+
+    private void buildWeekMeal() {
+        mWeekMeal = new WeekMealResponse();
+
+        DBDietModel dietModel = mRealm.where(DBDietModel.class)
+                .equalTo("email", SharedPreferencesHelper.getInstance().getUserEmail()).findFirst();
+        if (dietModel != null) {
+            mSuggestedDiet = new SuggestedDietResponse(dietModel);
+        }
+
+        for (DietNutrientResponse dietNutrients : mSuggestedDiet.getNutrients()) {
+            NutrientWeekResponse nutrientResponse = new NutrientWeekResponse(dietNutrients.getName(), dietNutrients.getUnit(),
+                    dietNutrients.getMin(), dietNutrients.getMax());
+            mWeekMeal.getNutrientResponses().add(nutrientResponse);
+        }
+        for (NutrientWeekResponse dietNutrient : mWeekMeal.getNutrientResponses()) {
+            for (DBDayMealModel day : mDays) {
+                int sum = 0;
+                for (DBMealModel meal : day.getMeals()) {
+                    for (DBMealFoodModel food : meal.getFoods()) {
+                        for (DBMealNutrientModel nutrient : food.getNutrients()) {
+                            if (dietNutrient.getName().equalsIgnoreCase(nutrient.getName())) {
+                                sum += nutrient.getQuantity();
+                                break;
+                            }
+                        }
+                    }
+                }
+                dietNutrient.addQuantity(day.getDate(), sum);
+            }
+        }
+
+        mNutrientResponse = mWeekMeal.getNutrientResponses().get(0);
+        setChart();
+        setNutrientLabel();
+    }
 
     private void findViews() {
         mWeekTv = (TextView) findViewById(R.id.week_resume_week_tv);
@@ -90,14 +185,14 @@ public class WeekResumeActivity extends BaseActivity implements DatePickerDialog
             @Override
             public void onClick(View view) {
                 List<String> nutrients = new ArrayList<String>();
-                for (WeekMealResponse.Nutrient nutrient : mWeekMeal.getNutrients()) {
-                    nutrients.add(nutrient.getName());
+                for (NutrientWeekResponse nutrientResponse : mWeekMeal.getNutrientResponses()) {
+                    nutrients.add(nutrientResponse.getName());
                 }
                 String[] strings = nutrients.toArray(new String[nutrients.size()]);
                 mDialogHelper.showListDialog(getString(R.string.week_resume_dialog_title), strings, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        mNutrient = mWeekMeal.getNutrients().get(i);
+                        mNutrientResponse = mWeekMeal.getNutrientResponses().get(i);
                         setChart();
                         setNutrientLabel();
                         mChart.invalidate();
@@ -114,40 +209,40 @@ public class WeekResumeActivity extends BaseActivity implements DatePickerDialog
     }
 
     private void setNutrientLabel() {
-        mNutrientTv.setText(mNutrient.getName());
-        mUnitTv.setText(mNutrient.getUnit());
+        mNutrientTv.setText(mNutrientResponse.getName());
+        mUnitTv.setText(mNutrientResponse.getUnit());
     }
 
     private void setWeekLabel() {
         String text;
         try {
-            text = DateHelper.parseDate(Constants.STANDARD_DATE_FORMAT, mDate);
+            text = DateHelper.parseDate(Constants.STANDARD_DATE_FORMAT, mDate.getTime());
         } catch (ParseException e) {
             text = "";
         }
         mWeekTv.setText(getString(R.string.week_resume_label, text));
     }
 
-    private Date getFirstDayOfTheWeek(Calendar calendar) {
+    private Calendar getFirstDayOfTheWeek(Calendar calendar) {
         while (calendar.get(Calendar.DAY_OF_WEEK) > calendar.getFirstDayOfWeek()) {
             calendar.add(Calendar.DATE, -1); // Substract 1 day until first day of week.
         }
-        return calendar.getTime();
+        return calendar;
     }
 
     private void sendRequest() {
         mFeedbackHelper.startLoading();
         try {
-            mProvider.getWeekResume(DateHelper.parseDate(Constants.STANDARD_DATE_FORMAT, mDate),
+            mProvider.getWeekResume(DateHelper.parseDate(Constants.STANDARD_DATE_FORMAT, mDate.getTime()),
                     new NutriproProvider.OnResponseListener<WeekMealResponse>() {
                         @Override
                         public void onResponseSuccess(WeekMealResponse response) {
                             mWeekMeal = response;
-                            if (response.getNutrients().isEmpty()) {
+                            if (response.getNutrientResponses().isEmpty()) {
                                 mFeedbackHelper.showEmptyPlaceHolder();
                             } else {
                                 mWeekMeal = response;
-                                mNutrient = response.getNutrients().get(0);
+                                mNutrientResponse = response.getNutrientResponses().get(0);
                                 setChart();
                                 setNutrientLabel();
                                 mFeedbackHelper.dismissFeedback();
@@ -168,7 +263,7 @@ public class WeekResumeActivity extends BaseActivity implements DatePickerDialog
     private View.OnClickListener mOnTryAgainClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            sendRequest();
+//            sendRequest();
         }
     };
 
@@ -192,13 +287,13 @@ public class WeekResumeActivity extends BaseActivity implements DatePickerDialog
             }
         });
 
-        LimitLine ll1 = new LimitLine(mNutrient.getMax(), getString(R.string.week_resume_max_label));
+        LimitLine ll1 = new LimitLine(mNutrientResponse.getMax(), getString(R.string.week_resume_max_label));
         ll1.setLineWidth(2f);
         ll1.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
         ll1.setTextSize(14f);
         ll1.setLineColor(ContextCompat.getColor(this, R.color.colorAccent));
 
-        LimitLine ll2 = new LimitLine(mNutrient.getMin(), getString(R.string.week_resume_min_label));
+        LimitLine ll2 = new LimitLine(mNutrientResponse.getMin(), getString(R.string.week_resume_min_label));
         ll2.setLineWidth(2f);
         ll2.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
         ll2.setTextSize(14f);
@@ -213,20 +308,36 @@ public class WeekResumeActivity extends BaseActivity implements DatePickerDialog
         leftAxis.setDrawGridLines(false);
         leftAxis.setDrawLimitLinesBehindData(true);
 
-        setData();
+        try {
+            setData();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
 //        mChart.setDragEnabled(false);
         mChart.setTouchEnabled(false);
         mChart.setContentDescription("");
 
     }
-    
-    private void setData() {
 
+    private void setData() throws ParseException {
         ArrayList<Entry> values = new ArrayList<Entry>();
-
-        for (int i = 0; i < mNutrient.getQuantities().size(); i++) {
-            values.add(new Entry(DateHelper.addDay(i, mDate).getTime(), mNutrient.getQuantities().get(i).getSum()));
+        Calendar cal= Calendar.getInstance();
+        cal.setTime(mNutrientResponse.getQuantities().get(0).getDate());
+        cal = getFirstDayOfTheWeek(cal);
+        for (int i = 0; i < 7; i++) {
+            Date date = DateHelper.addDay(i, cal.getTime());
+            boolean dayExists = false;
+            for (int j = 0; j < mNutrientResponse.getQuantities().size(); j++) {
+                if(DateHelper.parseDate(Constants.STANDARD_DATE_FORMAT, date).equalsIgnoreCase(DateHelper.parseDate(Constants.STANDARD_DATE_FORMAT, mNutrientResponse.getQuantities().get(j).getDate()))) {
+                    values.add(new Entry(mNutrientResponse.getQuantities().get(j).getDate().getTime(), mNutrientResponse.getQuantities().get(j).getSum()));
+                    dayExists = true;
+                    break;
+                }
+            }
+            if(!dayExists) {
+                values.add(new Entry(date.getTime(), 0));
+            }
         }
 
         LineDataSet set1;
@@ -278,6 +389,7 @@ public class WeekResumeActivity extends BaseActivity implements DatePickerDialog
         cal.set(year, monthOfYear, dayOfMonth);
         mDate = getFirstDayOfTheWeek(cal);
         setWeekLabel();
-        sendRequest();
+        getAllMealsInvolved();
+//        sendRequest();
     }
 }

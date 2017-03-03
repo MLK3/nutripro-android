@@ -28,12 +28,15 @@ import com.oddsix.nutripro.BaseActivity;
 import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.adapters.AnalysedImgAdapter;
 import com.oddsix.nutripro.models.AreaModel;
+import com.oddsix.nutripro.models.FoodModel;
+import com.oddsix.nutripro.models.NutrientModel;
 import com.oddsix.nutripro.rest.NutriproProvider;
 import com.oddsix.nutripro.rest.models.requests.EditMealRequest;
 import com.oddsix.nutripro.rest.models.responses.DayResumeResponse;
 import com.oddsix.nutripro.rest.models.responses.EditMealFoodResponse;
 import com.oddsix.nutripro.rest.models.responses.FoodResponse;
 import com.oddsix.nutripro.rest.models.responses.GeneralResponse;
+import com.oddsix.nutripro.rest.models.responses.NutrientResponse;
 import com.oddsix.nutripro.rest.models.responses.RecognisedFoodResponse;
 import com.oddsix.nutripro.rest.models.responses.MealDetailResponse;
 import com.oddsix.nutripro.utils.Constants;
@@ -52,7 +55,7 @@ import java.util.List;
 public class MealDetailActivity extends BaseActivity {
     private AnalysedImgAdapter mAnalysedImgAdapter;
     private NutriproProvider mProvider;
-    private FeedbackHelper mFeedbackHelper;
+//    private FeedbackHelper mFeedbackHelper;
     private MealDetailResponse mMeal;
     private AppColorHelper mColorHelper;
     private DialogHelper mDialogHelper;
@@ -68,42 +71,44 @@ public class MealDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listview_with_toolbar);
 
-        final DayResumeResponse.MealResponse meal = (DayResumeResponse.MealResponse) getIntent().getSerializableExtra(Constants.EXTRA_MEAL_MODEL);
+        mMeal = (MealDetailResponse) getIntent().getSerializableExtra(Constants.EXTRA_MEAL_MODEL);
 
         mColorHelper = new AppColorHelper(this);
         mDialogHelper = new DialogHelper(this);
 
-        mFeedbackHelper = new FeedbackHelper(this, (LinearLayout) findViewById(R.id.container), new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendRequest(meal.getId());
-            }
-        });
+//        mFeedbackHelper = new FeedbackHelper(this, (LinearLayout) findViewById(R.id.container), new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                sendRequest(meal.getId());
+//            }
+//        });
 
         mProvider = new NutriproProvider(this);
 
         setToolbar(true, getString(R.string.meal_detail_activity_title));
+        setListView();
+        mAnalysedImgAdapter.setFoods(mMeal.getFoods());
 
-        sendRequest(meal.getId());
+//        sendRequest(meal.getId());
     }
 
-    private void sendRequest(String id) {
-        mFeedbackHelper.startLoading();
-        mProvider.getMealDetail(id, new NutriproProvider.OnResponseListener<MealDetailResponse>() {
-            @Override
-            public void onResponseSuccess(MealDetailResponse response) {
-                mMeal = response;
-                mFeedbackHelper.dismissFeedback();
-                setListView();
-                mAnalysedImgAdapter.setFoods(response.getFoods());
-            }
-
-            @Override
-            public void onResponseFailure(String msg, int code) {
-                mFeedbackHelper.showErrorPlaceHolder();
-            }
-        });
-    }
+//    private void sendRequest(String id) {
+//        mFeedbackHelper.startLoading();
+//        mProvider.getMealDetail(id, new NutriproProvider.OnResponseListener<MealDetailResponse>() {
+//            @Override
+//            public void onResponseSuccess(MealDetailResponse response) {
+//                mMeal = response;
+//                mFeedbackHelper.dismissFeedback();
+//                setListView();
+//                mAnalysedImgAdapter.setFoods(response.getFoods());
+//            }
+//
+//            @Override
+//            public void onResponseFailure(String msg, int code) {
+//                mFeedbackHelper.showErrorPlaceHolder();
+//            }
+//        });
+//    }
 
     private void setListView() {
         mAnalysedImgAdapter = new AnalysedImgAdapter(this, new AnalysedImgAdapter.OnNutrientClickListener() {
@@ -176,7 +181,12 @@ public class MealDetailActivity extends BaseActivity {
 
     private void startFoodInfoActivity(int position) {
         Intent infoIntent = new Intent(this, FoodInfoActivity.class);
-        infoIntent.putExtra(Constants.EXTRA_FOOD_MODEL, mMeal.getFoods().get(position));
+        List<NutrientModel> nutrients = new ArrayList<>();
+        for (NutrientResponse nutrient : mMeal.getFoods().get(position).getNutrients()) {
+            nutrients.add(new NutrientModel(nutrient.getName(), nutrient.getQuantity(), nutrient.getUnit()));
+        }
+        FoodModel selectedFood = new FoodModel(nutrients, mMeal.getFoods().get(position).getName(), mMeal.getFoods().get(position).getQuantity());
+        infoIntent.putExtra(Constants.EXTRA_FOOD_MODEL, selectedFood);
         startActivity(infoIntent);
     }
 
@@ -189,7 +199,7 @@ public class MealDetailActivity extends BaseActivity {
     }
 
     private View inflateFooter(LayoutInflater inflater) {
-        //Sava changes
+        //Save changes
         View footerView = inflater.inflate(R.layout.footer_analysed_photo, null);
         footerView.findViewById(R.id.footer_analysed_photo_conclude).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -207,6 +217,7 @@ public class MealDetailActivity extends BaseActivity {
     }
 
     public void sendSaveChangesRequest() {
+        //todo
         EditMealRequest editMealRequest = new EditMealRequest(mMeal.getMeal_id(), mMeal.getName());
         for (RecognisedFoodResponse food : mMeal.getFoods()) {
             editMealRequest.getFoods().add(

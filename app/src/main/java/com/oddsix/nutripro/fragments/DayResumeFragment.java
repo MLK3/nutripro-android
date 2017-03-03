@@ -27,6 +27,7 @@ import com.oddsix.nutripro.models.DBMealNutrientModel;
 import com.oddsix.nutripro.rest.NutriproProvider;
 import com.oddsix.nutripro.rest.models.responses.DayResumeResponse;
 import com.oddsix.nutripro.rest.models.responses.DietNutrientResponse;
+import com.oddsix.nutripro.rest.models.responses.MealDetailResponse;
 import com.oddsix.nutripro.rest.models.responses.NutrientResponse;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.DateHelper;
@@ -153,16 +154,17 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
                 //header position
                 if (i != 0) {
                     int arrayPosition = i - 1;
-                    //todo
-//                    startMealDetailActivity(mDay.getMeals().get(arrayPosition));
+//                    DayResumeResponse.MealResponse meal = new DayResumeResponse.MealResponse();
+                    startMealDetailActivity(arrayPosition);
                 }
             }
         });
     }
 
-    private void startMealDetailActivity(DayResumeResponse.MealResponse meal) {
+    private void startMealDetailActivity(int position) {
         Intent mealDetailIntent = new Intent(getActivity(), MealDetailActivity.class);
-        mealDetailIntent.putExtra(Constants.EXTRA_MEAL_MODEL, meal);
+        MealDetailResponse mealDetail = new MealDetailResponse(mDay.getMeals().get(position));
+        mealDetailIntent.putExtra(Constants.EXTRA_MEAL_MODEL, mealDetail);
         startActivity(mealDetailIntent);
     }
 

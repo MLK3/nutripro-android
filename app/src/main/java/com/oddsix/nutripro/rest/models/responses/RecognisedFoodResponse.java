@@ -1,6 +1,13 @@
 package com.oddsix.nutripro.rest.models.responses;
 
+import com.oddsix.nutripro.models.DBAreaModel;
+import com.oddsix.nutripro.models.DBDayMealModel;
+import com.oddsix.nutripro.models.DBMealFoodModel;
+import com.oddsix.nutripro.models.DBMealNutrientModel;
+import com.oddsix.nutripro.models.DBPoint;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +33,16 @@ public class RecognisedFoodResponse implements Serializable {
     }
 
     public RecognisedFoodResponse() {
+    }
+
+    public RecognisedFoodResponse(DBMealFoodModel food) {
+        name = food.getFoodName();
+        quantity = food.getQuantity();
+        area = new Area(food.getArea());
+        nutrients = new ArrayList<>();
+        for (DBMealNutrientModel nutrientModel : food.getNutrients()) {
+            nutrients.add(new NutrientResponse(nutrientModel));
+        }
     }
 
     public List<NutrientResponse> getNutrients() {
@@ -64,6 +81,14 @@ public class RecognisedFoodResponse implements Serializable {
         private String area_id;
         private List<Point> points;
 
+        public Area(DBAreaModel areaModel) {
+            area_id = areaModel.getAreaId();
+            points = new ArrayList<>();
+            for (DBPoint point : areaModel.getPoints()) {
+                points.add(new Point(point));
+            }
+        }
+
         public List<Point> getPoints() {
             return points;
         }
@@ -75,6 +100,11 @@ public class RecognisedFoodResponse implements Serializable {
         public class Point implements Serializable {
             float x;
             float y;
+
+            public Point(DBPoint point) {
+                x = point.getX();
+                y = point.getY();
+            }
 
             public float getX() {
                 return x;
