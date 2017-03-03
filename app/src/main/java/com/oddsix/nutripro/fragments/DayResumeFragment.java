@@ -21,6 +21,7 @@ import com.oddsix.nutripro.activities.MealDetailActivity;
 import com.oddsix.nutripro.adapters.DayResumeAdapter;
 import com.oddsix.nutripro.models.DBAllMealsByDayModel;
 import com.oddsix.nutripro.models.DBDayMealModel;
+import com.oddsix.nutripro.models.DBDietModel;
 import com.oddsix.nutripro.models.DBMealFoodModel;
 import com.oddsix.nutripro.models.DBMealModel;
 import com.oddsix.nutripro.models.DBMealNutrientModel;
@@ -29,6 +30,7 @@ import com.oddsix.nutripro.rest.models.responses.DayResumeResponse;
 import com.oddsix.nutripro.rest.models.responses.DietNutrientResponse;
 import com.oddsix.nutripro.rest.models.responses.MealDetailResponse;
 import com.oddsix.nutripro.rest.models.responses.NutrientResponse;
+import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.DateHelper;
 import com.oddsix.nutripro.utils.helpers.FeedbackHelper;
@@ -201,7 +203,11 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
 //                .findFirst().getDietModel();
 
         List<NutrientResponse> nutrients = new ArrayList<>();
-        for (DietNutrientResponse dietNutrient : ((MainActivity) getActivity()).getSuggestedDiet().getNutrients()) {
+        DBDietModel dietModel = mRealm.where(DBDietModel.class)
+                .equalTo("email", SharedPreferencesHelper.getInstance().getUserEmail()).findFirst();
+
+        SuggestedDietResponse dietResponse = new SuggestedDietResponse(dietModel);
+        for (DietNutrientResponse dietNutrient : dietResponse.getNutrients()) {
             nutrients.add(new NutrientResponse(dietNutrient.getName(), 0, dietNutrient.getUnit()));
         }
 
@@ -218,8 +224,9 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
             }
         }
 
+
         for (NutrientResponse nutrient : nutrients) {
-            for (DietNutrientResponse dietNutrient : ((MainActivity) getActivity()).getSuggestedDiet().getNutrients()) {
+            for (DietNutrientResponse dietNutrient : dietResponse.getNutrients()) {
                 if (nutrient.getName().equalsIgnoreCase(dietNutrient.getName())) {
                     View bar = getActivity().getLayoutInflater().inflate(R.layout.partial_horizontal_bar_chart, container, false);
 

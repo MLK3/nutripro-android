@@ -11,18 +11,18 @@ import java.io.Serializable;
 public class NutrientResponse implements Serializable{
     private String name;
     private int quantity;
-    private String unit;
+    private String unity;
 
     public NutrientResponse(String name, int quantity, String unit) {
         this.name = name;
         this.quantity = quantity;
-        this.unit = unit;
+        this.unity = unit;
     }
 
     public NutrientResponse(DBMealNutrientModel nutrientModel){
         name = nutrientModel.getName();
         quantity = nutrientModel.getQuantity();
-        unit = nutrientModel.getUnit();
+        unity = nutrientModel.getUnit();
     }
 
     public String getName() {
@@ -34,7 +34,7 @@ public class NutrientResponse implements Serializable{
     }
 
     public String getUnit() {
-        return unit;
+        return unity;
     }
 
     public void setQuantity(int quantity) {

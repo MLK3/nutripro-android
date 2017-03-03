@@ -38,6 +38,8 @@ import com.oddsix.nutripro.models.DBDayMealModel;
 import com.oddsix.nutripro.models.DBMealFoodModel;
 import com.oddsix.nutripro.models.DBMealModel;
 import com.oddsix.nutripro.models.DBMealNutrientModel;
+import com.oddsix.nutripro.models.FoodModel;
+import com.oddsix.nutripro.models.NutrientModel;
 import com.oddsix.nutripro.rest.NutriproProvider;
 import com.oddsix.nutripro.rest.models.requests.FoodRequest;
 import com.oddsix.nutripro.rest.models.responses.AnalysedPictureResponse;
@@ -194,7 +196,6 @@ public class AnalysedPictureFragment extends BaseFragment {
         //get all meals
         DBAllMealsByDayModel allMealsByDayModel = mRealm.where(DBAllMealsByDayModel.class)
                 .equalTo("email", SharedPreferencesHelper.getInstance().getUserEmail()).findFirst();
-
         //initialize all meals if there is no meal
         if (allMealsByDayModel == null) {
             allMealsByDayModel = new DBAllMealsByDayModel(new RealmList<DBDayMealModel>());
@@ -290,7 +291,12 @@ public class AnalysedPictureFragment extends BaseFragment {
 
     private void startFoodInfoActivity(int position) {
         Intent infoIntent = new Intent(getActivity(), FoodInfoActivity.class);
-        infoIntent.putExtra(Constants.EXTRA_FOOD_MODEL, (RecognisedFoodResponse) mMeal.getFoods().get(position));
+        List<NutrientModel> nutrients = new ArrayList<>();
+        for (NutrientResponse nutrient : mMeal.getFoods().get(position).getNutrients()) {
+            nutrients.add(new NutrientModel(nutrient.getName(), nutrient.getQuantity(), nutrient.getUnit()));
+        }
+        FoodModel selectedFood = new FoodModel(nutrients, mMeal.getFoods().get(position).getName(), mMeal.getFoods().get(position).getQuantity());
+        infoIntent.putExtra(Constants.EXTRA_FOOD_MODEL, selectedFood);
         startActivity(infoIntent);
     }
 
@@ -306,6 +312,7 @@ public class AnalysedPictureFragment extends BaseFragment {
 
     //TODO PUT DRAWING METHODS IN OTHER CLASS
     private void setDrawing(View headerView, Bitmap resource) {
+        mColorHelper = new AppColorHelper(getActivity());
         ImageView imageView = (ImageView) headerView.findViewById(R.id.header_analysed_drawing);
 
         // Get picture dimensions
@@ -389,13 +396,7 @@ public class AnalysedPictureFragment extends BaseFragment {
                 mMeal = response;
                 ((ImageView) mHeaderView.findViewById(R.id.header_analysed_photo_img)).setImageBitmap(image);
                 showImage(mHeaderView);
-                mDialogHelper.showEditTextTextDialog("Digite um nome para sua refeição:", "Incluir", new BaseDialogHelper.OnEditTextTextDialogClickListener() {
-                    @Override
-                    public void onInputConfirmed(String text) {
-                        ((TextView) mHeaderView.findViewById(R.id.header_analysed_meal_name_tv)).setText(text);
-                        mMeal.setName(text);
-                    }
-                });
+                showNameDialog();
                 mAnalysedImgAdapter.setFoods((List<RecognisedFoodResponse>) (List<?>) response.getFoods());
             }
 
@@ -406,7 +407,20 @@ public class AnalysedPictureFragment extends BaseFragment {
                 ((MainActivity) getActivity()).resetTabIndex();
             }
         });
+    }
 
+    private void showNameDialog() {
+        mDialogHelper.showEditTextTextDialog("Digite um nome para sua refeição:", "Incluir", new BaseDialogHelper.OnEditTextTextDialogClickListener() {
+            @Override
+            public void onInputConfirmed(String text) {
+                if(!text.isEmpty()) {
+                    ((TextView) mHeaderView.findViewById(R.id.header_analysed_meal_name_tv)).setText(text);
+                    mMeal.setName(text);
+                } else {
+                    showNameDialog();
+                }
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")

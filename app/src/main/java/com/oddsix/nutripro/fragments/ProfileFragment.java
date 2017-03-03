@@ -43,6 +43,7 @@ public class ProfileFragment extends BaseFragment {
     private RegisterResponse mRegister;
     private Realm mRealm;
     private View mView;
+    private SuggestedDietResponse mSuggestedDietResponse;
 
     @Nullable
     @Override
@@ -59,6 +60,10 @@ public class ProfileFragment extends BaseFragment {
 //        mProvider = new NutriproProvider(getActivity());
         mRealm = Realm.getDefaultInstance();
 
+        DBDietModel dietModel = mRealm.where(DBDietModel.class)
+                .equalTo("email", SharedPreferencesHelper.getInstance().getUserEmail()).findFirst();
+
+        mSuggestedDietResponse = new SuggestedDietResponse(dietModel);
 
         if (mRegister == null) getRegister();
         else setListView(mView);
@@ -97,7 +102,7 @@ public class ProfileFragment extends BaseFragment {
         DBDietModel dietModel = mRealm.where(DBDietModel.class)
                 .equalTo("email", SharedPreferencesHelper.getInstance().getUserEmail()).findFirst();
         if (dietModel != null) {
-            mAdapter.setDiet(((MainActivity) getActivity()).getSuggestedDiet().getNutrients());
+            mAdapter.setDiet(mSuggestedDietResponse.getNutrients());
             list.addHeaderView(getHeader());
         }
     }
@@ -109,7 +114,7 @@ public class ProfileFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), EditDietActivity.class);
-                intent.putExtra(Constants.EXTRA_DIET, ((MainActivity) getActivity()).getSuggestedDiet());
+                intent.putExtra(Constants.EXTRA_DIET, mSuggestedDietResponse);
                 startActivityForResult(intent, Constants.REQ_EDIT_DIET);
             }
         });
@@ -159,7 +164,7 @@ public class ProfileFragment extends BaseFragment {
             setHeader(mHeaderView);
         } else if (requestCode == Constants.REQ_EDIT_DIET && resultCode == Activity.RESULT_OK) {
             ((MainActivity) getActivity()).setSuggestedDiet((SuggestedDietResponse) data.getSerializableExtra(Constants.EXTRA_DIET));
-            mAdapter.setDiet(((MainActivity) getActivity()).getSuggestedDiet().getNutrients());
+            mAdapter.setDiet(mSuggestedDietResponse.getNutrients());
         }
     }
 }

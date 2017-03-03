@@ -29,7 +29,7 @@ public class BaseDialogHelper {
      * Shows progress dialog with standard message.
      */
     public void showProgressDialog() {
-        if(mProgressDialog == null) {
+        if (mProgressDialog == null) {
             mProgressDialog = buildProgressDialog();
             mProgressDialog.setMessage(mContext.getString(R.string.progress_dialog_standard_msg));
         }
@@ -37,7 +37,7 @@ public class BaseDialogHelper {
     }
 
     public void showProgressDialog(String msg) {
-        if(mProgressDialog == null) {
+        if (mProgressDialog == null) {
             mProgressDialog = buildProgressDialog();
             mProgressDialog.setMessage(msg);
         }
@@ -117,9 +117,7 @@ public class BaseDialogHelper {
         builder.setPositiveButton(positiveText, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if (!input.getText().toString().isEmpty()) {
-                    listener.onInputConfirmed(input.getText().toString());
-                }
+                listener.onInputConfirmed(input.getText().toString());
             }
         });
         builder.show();
