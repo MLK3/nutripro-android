@@ -168,7 +168,6 @@ public class ProfileFragment extends BaseFragment {
             setHeader(mHeaderView);
         } else if (requestCode == Constants.REQ_EDIT_DIET && resultCode == Activity.RESULT_OK) {
             getDiet();
-            ((MainActivity) getActivity()).setSuggestedDiet(mSuggestedDietResponse);
             mAdapter.setDiet(mSuggestedDietResponse.getNutrients());
         }
     }

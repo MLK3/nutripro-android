@@ -72,7 +72,6 @@ public class MainActivity extends BaseActivity {
             if (dietModel != null) {
                 mSuggestedDiet = new SuggestedDietResponse(dietModel);
             }
-//        mSuggestedDiet = (SuggestedDietResponse) getIntent().getSerializableExtra(Constants.EXTRA_DIET);
 
             setToolbar(false);
 
@@ -80,14 +79,6 @@ public class MainActivity extends BaseActivity {
 
             setTabLayout();
         }
-    }
-
-    public void setSuggestedDiet(SuggestedDietResponse suggestedDiet) {
-        mSuggestedDiet = suggestedDiet;
-    }
-
-    public SuggestedDietResponse getSuggestedDiet() {
-        return mSuggestedDiet;
     }
 
     private void setViewPager() {
