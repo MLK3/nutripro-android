@@ -237,6 +237,7 @@ public class AnalysedPictureFragment extends BaseFragment {
         mRealm.commitTransaction();
         showToast(getString(R.string.analysed_food_request_success));
         ((MainActivity) getActivity()).resetTabIndex();
+        ((MainActivity) getActivity()).refreshDayResume();
     }
 
     private View inflateFooter(LayoutInflater inflater) {

@@ -26,6 +26,7 @@ import com.oddsix.nutripro.fragments.DayResumeFragment;
 import com.oddsix.nutripro.fragments.ProfileFragment;
 import com.oddsix.nutripro.models.DBDietModel;
 import com.oddsix.nutripro.models.DBRegisterModel;
+import com.oddsix.nutripro.rest.models.responses.DayResumeResponse;
 import com.oddsix.nutripro.rest.models.responses.RegisterResponse;
 import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
 import com.oddsix.nutripro.utils.Constants;
@@ -53,7 +54,7 @@ public class MainActivity extends BaseActivity {
     private TabLayout mTabLayout;
     private Realm mRealm;
     private AnalysedPictureFragment mPictureFragment;
-    private SuggestedDietResponse mSuggestedDiet;
+    private DayResumeFragment mDayResumeFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,12 +68,6 @@ public class MainActivity extends BaseActivity {
 
             mRealm = Realm.getDefaultInstance();
 
-            DBDietModel dietModel = mRealm.where(DBDietModel.class)
-                    .equalTo("email", SharedPreferencesHelper.getInstance().getUserEmail()).findFirst();
-            if (dietModel != null) {
-                mSuggestedDiet = new SuggestedDietResponse(dietModel);
-            }
-
             setToolbar(false);
 
             setViewPager();
@@ -85,8 +80,9 @@ public class MainActivity extends BaseActivity {
         mTabTitles = getResources().getStringArray(R.array.tab_titles);
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
-        sectionsPagerAdapter.addFragment(new DayResumeFragment());
+        mDayResumeFragment = new DayResumeFragment();
         mPictureFragment = new AnalysedPictureFragment();
+        sectionsPagerAdapter.addFragment(mDayResumeFragment);
         sectionsPagerAdapter.addFragment(mPictureFragment);
         sectionsPagerAdapter.addFragment(new ProfileFragment());
         mViewPager.setAdapter(sectionsPagerAdapter);
@@ -246,6 +242,12 @@ public class MainActivity extends BaseActivity {
         Bitmap bpm = loadPrescaledBitmap(photoPath);
         bm = Bitmap.createBitmap(bpm, 0, 0, bpm.getWidth(), bpm.getHeight(), matrix, true);
         return bm;
+    }
+
+    public void refreshDayResume() {
+        if(mDayResumeFragment != null) {
+            mDayResumeFragment.refreshDayMeal();
+        }
     }
 
     @Override

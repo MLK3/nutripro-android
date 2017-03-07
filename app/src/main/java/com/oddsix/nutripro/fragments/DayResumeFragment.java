@@ -57,7 +57,6 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
     private ListView mListView;
     private DisplayMetrics metrics;
     private FeedbackHelper mFeedbackHelper;
-    private NutriproProvider mProvider;
 
     private View mView;
     private DBDayMealModel mDay;
@@ -67,8 +66,6 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_day_resume, container, false);
-
-        mProvider = new NutriproProvider(getActivity());
 
         mFeedbackHelper = new FeedbackHelper(getActivity(), (LinearLayout) mView.findViewById(R.id.container), new View.OnClickListener() {
             @Override
@@ -84,6 +81,12 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
 
         setListView(mView);
 
+        refreshDayMeal();
+
+        return mView;
+    }
+
+    public void refreshDayMeal() {
         if (mDate == null) {
             mDate = Calendar.getInstance();
             getMealByDay(mDate);
@@ -91,8 +94,6 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
             getMealByDay(mDate);
             setDateLabel(mDate);
         }
-
-        return mView;
     }
 
     private void getMealByDay(Calendar date) {
