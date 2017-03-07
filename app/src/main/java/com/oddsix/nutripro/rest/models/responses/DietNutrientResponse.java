@@ -21,6 +21,8 @@ public class DietNutrientResponse implements Serializable {
         this.unit = unit;
     }
 
+
+
     public DietNutrientResponse(DBDietNutrientModel dbDietNutrientModel) {
         max = dbDietNutrientModel.getMax();
         min = dbDietNutrientModel.getMin();

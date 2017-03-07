@@ -59,8 +59,8 @@ public class DietAdapter extends BaseAdapter {
             viewHolder.name = (TextView) view.findViewById(R.id.item_diet_name);
 //            viewHolder.maxUnit = (TextView) view.findViewById(R.id.item_diet_max_unit);
             viewHolder.minUnit = (TextView) view.findViewById(R.id.item_diet_min_unit);
-            viewHolder.minValue = (TextView) view.findViewById(R.id.item_diet_min_value);
-            viewHolder.maxValue = (TextView) view.findViewById(R.id.item_diet_max_value);
+            viewHolder.minValue = (TextView) view.findViewById(R.id.item_diet_max_value);
+            viewHolder.maxValue = (TextView) view.findViewById(R.id.item_diet_min_value);
 
             // store the holder with the view.
             view.setTag(viewHolder);

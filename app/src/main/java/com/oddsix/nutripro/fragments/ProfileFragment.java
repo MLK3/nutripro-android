@@ -60,15 +60,19 @@ public class ProfileFragment extends BaseFragment {
 //        mProvider = new NutriproProvider(getActivity());
         mRealm = Realm.getDefaultInstance();
 
-        DBDietModel dietModel = mRealm.where(DBDietModel.class)
-                .equalTo("email", SharedPreferencesHelper.getInstance().getUserEmail()).findFirst();
-
-        mSuggestedDietResponse = new SuggestedDietResponse(dietModel);
+        getDiet();
 
         if (mRegister == null) getRegister();
         else setListView(mView);
 
         return mView;
+    }
+
+    private void getDiet() {
+        DBDietModel dietModel = mRealm.where(DBDietModel.class)
+                .equalTo("email", SharedPreferencesHelper.getInstance().getUserEmail()).findFirst();
+
+        mSuggestedDietResponse = new SuggestedDietResponse(dietModel);
     }
 
     private void getRegister() {
@@ -163,7 +167,8 @@ public class ProfileFragment extends BaseFragment {
             mRegister = (RegisterResponse) data.getSerializableExtra(Constants.EXTRA_REGISTER_MODEL);
             setHeader(mHeaderView);
         } else if (requestCode == Constants.REQ_EDIT_DIET && resultCode == Activity.RESULT_OK) {
-            ((MainActivity) getActivity()).setSuggestedDiet((SuggestedDietResponse) data.getSerializableExtra(Constants.EXTRA_DIET));
+            getDiet();
+            ((MainActivity) getActivity()).setSuggestedDiet(mSuggestedDietResponse);
             mAdapter.setDiet(mSuggestedDietResponse.getNutrients());
         }
     }
