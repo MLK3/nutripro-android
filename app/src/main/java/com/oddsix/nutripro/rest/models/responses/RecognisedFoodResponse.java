@@ -18,7 +18,7 @@ public class RecognisedFoodResponse implements Serializable {
     private String id;
     private String name;
     private int quantity;
-    private Area area;
+    private Area area = new Area();
     private List<NutrientResponse> nutrients;
 
     public RecognisedFoodResponse(String id, String name) {
@@ -79,7 +79,10 @@ public class RecognisedFoodResponse implements Serializable {
 
     public class Area implements Serializable {
         private String area_id;
-        private List<Point> points;
+        private List<Point> points = new ArrayList<>();
+
+        public Area() {
+        }
 
         public Area(DBAreaModel areaModel) {
             area_id = areaModel.getAreaId();
