@@ -111,7 +111,13 @@ public class AnalysedPictureFragment extends BaseFragment {
 
             @Override
             public void onEditNameClicked(final int position) {
-                showListDialog(position);
+                if (mMeal.getFoods().get(position).getSuggestions() != null) {
+                    showListDialog(position);
+                } else {
+                    mEditingFoodIndex = position;
+                    startSearchActivityReplacingArea();
+                }
+
             }
 
             @Override
@@ -414,7 +420,7 @@ public class AnalysedPictureFragment extends BaseFragment {
         mDialogHelper.showEditTextTextDialog("Digite um nome para sua refeição:", "Incluir", new BaseDialogHelper.OnEditTextTextDialogClickListener() {
             @Override
             public void onInputConfirmed(String text) {
-                if(!text.isEmpty()) {
+                if (!text.isEmpty()) {
                     ((TextView) mHeaderView.findViewById(R.id.header_analysed_meal_name_tv)).setText(text);
                     mMeal.setName(text);
                 } else {
@@ -437,12 +443,8 @@ public class AnalysedPictureFragment extends BaseFragment {
             }
             mAnalysedImgAdapter.setFoods((List<RecognisedFoodResponse>) (List<?>) mMeal.getFoods());
         } else if (resultCode == Activity.RESULT_OK && requestCode == Constants.REQ_ADD_FOOD) {
-            FoodResponse foodSelected = (FoodResponse) data.getSerializableExtra(Constants.EXTRA_FOOD);
-            if (foodSelected.getQuantity() != null) {
-                mMeal.getFoods().add(new AnalysedRecognisedFoodResponse(foodSelected.getId(), foodSelected.getName(), foodSelected.getQuantity()));
-            } else {
-                mMeal.getFoods().add(new AnalysedRecognisedFoodResponse(foodSelected.getId(), foodSelected.getName()));
-            }
+            FoodModel foodSelected = (FoodModel) data.getSerializableExtra(Constants.EXTRA_FOOD);
+            mMeal.getFoods().add(new AnalysedRecognisedFoodResponse("", foodSelected.getFoodName(), foodSelected.getQuantity()));
             mAnalysedImgAdapter.setFoods((List<RecognisedFoodResponse>) (List<?>) mMeal.getFoods());
         }
     }

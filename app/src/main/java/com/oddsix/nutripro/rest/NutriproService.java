@@ -13,12 +13,14 @@ import com.oddsix.nutripro.rest.models.responses.FoodFromMealResponse;
 import com.oddsix.nutripro.rest.models.responses.GeneralResponse;
 import com.oddsix.nutripro.rest.models.responses.LoginResponse;
 import com.oddsix.nutripro.rest.models.responses.MealDetailResponse;
+import com.oddsix.nutripro.rest.models.responses.NutrientResponse;
 import com.oddsix.nutripro.rest.models.responses.RegisterResponse;
 import com.oddsix.nutripro.rest.models.responses.SearchResponse;
 import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
 import com.oddsix.nutripro.rest.models.responses.WeekMealResponse;
 
 import java.util.Calendar;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

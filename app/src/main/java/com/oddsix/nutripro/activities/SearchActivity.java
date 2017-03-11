@@ -13,12 +13,16 @@ import android.widget.ListView;
 import com.oddsix.nutripro.BaseActivity;
 import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.adapters.SearchAdapter;
+import com.oddsix.nutripro.models.FoodModel;
+import com.oddsix.nutripro.models.NutrientModel;
 import com.oddsix.nutripro.rest.NutriproProvider;
-import com.oddsix.nutripro.rest.models.responses.FoodResponse;
+import com.oddsix.nutripro.rest.models.responses.NutrientResponse;
 import com.oddsix.nutripro.rest.models.responses.SearchResponse;
 import com.oddsix.nutripro.utils.Constants;
-import com.oddsix.nutripro.utils.ViewUtil;
 import com.oddsix.nutripro.utils.helpers.FeedbackHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by filippecl on 20/11/16.
@@ -31,6 +35,12 @@ public class SearchActivity extends BaseActivity {
     private SearchResponse mSearchResponse;
     private FeedbackHelper mFeedbackHelper;
     private Button mButton;
+    private View.OnClickListener mOnTryAgainClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            sendRequest(mSearchView.getQuery().toString());
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,13 +60,6 @@ public class SearchActivity extends BaseActivity {
         setSearchView();
     }
 
-    private View.OnClickListener mOnTryAgainClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            sendRequest(mSearchView.getQuery().toString());
-        }
-    };
-
     private void setClick() {
         findViewById(R.id.search_register_send_btn).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,10 +76,11 @@ public class SearchActivity extends BaseActivity {
             @Override
             public void onResponseSuccess(SearchResponse response) {
                 mFeedbackHelper.dismissFeedback();
-                if(response.getFoods().isEmpty()) {
+                if (response.getFoods().isEmpty()) {
                     mFeedbackHelper.showEmptyPlaceHolder();
+                } else {
+                    mAdapter.setResults(response.getFoods());
                 }
-                mAdapter.setResults(response.getFoods());
                 mSearchResponse = response;
             }
 
@@ -95,14 +99,19 @@ public class SearchActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent();
-                intent.putExtra(Constants.EXTRA_FOOD, mSearchResponse.getFoods().get(i));
+                List<NutrientModel> nutrientModels = new ArrayList<NutrientModel>();
+                for (NutrientResponse nutrient : mSearchResponse.getFoods().get(i).getNutrients()) {
+                    nutrientModels.add(new NutrientModel(nutrient.getName(), nutrient.getQuantity(), nutrient.getUnit()));
+                }
+
+                intent.putExtra(Constants.EXTRA_FOOD, new FoodModel(nutrientModels, mSearchResponse.getFoods().get(i).getName(), 0));
                 setResult(RESULT_OK, intent);
                 finish();
             }
         });
     }
 
-    private void setSearchView(){
+    private void setSearchView() {
         mSearchView = (SearchView) findViewById(R.id.search_sv);
         mSearchView.setIconified(false);
         mSearchView.setIconifiedByDefault(false);
@@ -124,9 +133,9 @@ public class SearchActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK && requestCode == Constants.REQ_REGISTER_FOOD) {
+        if (resultCode == RESULT_OK && requestCode == Constants.REQ_REGISTER_FOOD) {
             Intent intent = new Intent();
-            intent.putExtra(Constants.EXTRA_FOOD, (FoodResponse) data.getSerializableExtra(Constants.EXTRA_FOOD));
+            intent.putExtra(Constants.EXTRA_FOOD, (FoodModel) data.getSerializableExtra(Constants.EXTRA_FOOD));
             setResult(RESULT_OK, intent);
             finish();
         }

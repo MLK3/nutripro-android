@@ -1,7 +1,13 @@
 package com.oddsix.nutripro.models;
 
+import com.oddsix.nutripro.rest.models.requests.NutrientRequest;
+import com.oddsix.nutripro.utils.helpers.SharedPreferencesHelper;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
 
 /**
  * Created by filippecl on 06/11/16.

@@ -9,12 +9,13 @@ import android.widget.Button;
 
 import com.oddsix.nutripro.BaseActivity;
 import com.oddsix.nutripro.R;
+import com.oddsix.nutripro.models.FoodModel;
+import com.oddsix.nutripro.models.NutrientModel;
 import com.oddsix.nutripro.rest.NutriproProvider;
 import com.oddsix.nutripro.rest.models.requests.NutrientRequest;
 import com.oddsix.nutripro.rest.models.requests.RegisterFoodRequest;
 import com.oddsix.nutripro.rest.models.responses.CreateFoodResponse;
-import com.oddsix.nutripro.rest.models.responses.FoodResponse;
-import com.oddsix.nutripro.rest.models.responses.GeneralResponse;
+import com.oddsix.nutripro.rest.models.responses.NutrientResponse;
 import com.oddsix.nutripro.utils.Constants;
 
 import java.util.ArrayList;
@@ -65,7 +66,7 @@ public class AddNewFoodActivity extends BaseActivity {
     }
 
     private void createRegister() {
-        List<NutrientRequest> nutrients = new ArrayList<>();
+        final List<NutrientRequest> nutrients = new ArrayList<>();
         for (TextInputLayout til : mTilList) {
             if (til.getId() != R.id.register_food_name_til && til.getId() != R.id.register_food_quantity_til) {
                 nutrients.add(new NutrientRequest(til.getHint().toString(), Integer.valueOf(til.getEditText().getText().toString())));
@@ -78,8 +79,12 @@ public class AddNewFoodActivity extends BaseActivity {
                     public void onResponseSuccess(CreateFoodResponse response) {
                         dismissProgressDialog();
                         Intent intent = new Intent();
-                        intent.putExtra(Constants.EXTRA_FOOD, new FoodResponse(mNameTil.getEditText().getText().toString(), response.getId(),
-                                Integer.valueOf(mPortionTil.getEditText().getText().toString())));
+                        List<NutrientModel> nutrientModels = new ArrayList<NutrientModel>();
+                        for (NutrientResponse nutrient : response.getNutrients()) {
+                                nutrientModels.add(new NutrientModel(nutrient.getName(), nutrient.getQuantity(), nutrient.getUnit()));
+                        }
+
+                        intent.putExtra(Constants.EXTRA_FOOD, new FoodModel(nutrientModels, mNameTil.getEditText().getText().toString(), Integer.valueOf(mPortionTil.getEditText().getText().toString())));
                         setResult(RESULT_OK, intent);
                         finish();
                     }
