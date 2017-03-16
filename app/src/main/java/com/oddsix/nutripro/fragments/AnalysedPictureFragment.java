@@ -444,7 +444,7 @@ public class AnalysedPictureFragment extends BaseFragment {
             mAnalysedImgAdapter.setFoods((List<RecognisedFoodResponse>) (List<?>) mMeal.getFoods());
         } else if (resultCode == Activity.RESULT_OK && requestCode == Constants.REQ_ADD_FOOD) {
             FoodModel foodSelected = (FoodModel) data.getSerializableExtra(Constants.EXTRA_FOOD);
-            mMeal.getFoods().add(new AnalysedRecognisedFoodResponse("", foodSelected.getFoodName(), foodSelected.getQuantity()));
+            mMeal.getFoods().add(new AnalysedRecognisedFoodResponse("", foodSelected.getFoodName(), foodSelected.getQuantity(), foodSelected.getNutrients()));
             mAnalysedImgAdapter.setFoods((List<RecognisedFoodResponse>) (List<?>) mMeal.getFoods());
         }
     }

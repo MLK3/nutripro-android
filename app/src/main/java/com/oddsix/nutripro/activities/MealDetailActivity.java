@@ -32,6 +32,7 @@ import com.oddsix.nutripro.models.FoodModel;
 import com.oddsix.nutripro.models.NutrientModel;
 import com.oddsix.nutripro.rest.NutriproProvider;
 import com.oddsix.nutripro.rest.models.requests.EditMealRequest;
+import com.oddsix.nutripro.rest.models.responses.AnalysedRecognisedFoodResponse;
 import com.oddsix.nutripro.rest.models.responses.DayResumeResponse;
 import com.oddsix.nutripro.rest.models.responses.EditMealFoodResponse;
 import com.oddsix.nutripro.rest.models.responses.FoodResponse;
@@ -55,7 +56,7 @@ import java.util.List;
 public class MealDetailActivity extends BaseActivity {
     private AnalysedImgAdapter mAnalysedImgAdapter;
     private NutriproProvider mProvider;
-//    private FeedbackHelper mFeedbackHelper;
+    //    private FeedbackHelper mFeedbackHelper;
     private MealDetailResponse mMeal;
     private AppColorHelper mColorHelper;
     private DialogHelper mDialogHelper;
@@ -268,37 +269,39 @@ public class MealDetailActivity extends BaseActivity {
         final List<AreaModel> areas = new ArrayList<>();
 
         for (int i = 0; i < mMeal.getFoods().size(); i++) {
-            RecognisedFoodResponse recognisedFood = mMeal.getFoods().get(i);
+            if (!mMeal.getFoods().get(i).getArea().getPoints().isEmpty()) {
+                RecognisedFoodResponse recognisedFood = mMeal.getFoods().get(i);
 
-            //Set color, width and alpha
-            Paint wallPaint = new Paint();
-            wallPaint.setColor(mColorHelper.getNextColor());
-            wallPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-            wallPaint.setStrokeWidth(1);
-            wallPaint.setAlpha(80);
+                //Set color, width and alpha
+                Paint wallPaint = new Paint();
+                wallPaint.setColor(mColorHelper.getNextColor());
+                wallPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+                wallPaint.setStrokeWidth(1);
+                wallPaint.setAlpha(80);
 
-            //Draw polygon
-            Path wallPath = new Path();
-            wallPath.reset();
-            List<RecognisedFoodResponse.Area.Point> points = recognisedFood.getArea().getPoints();
-            //Initial point
-            wallPath.moveTo(points.get(0).getX(), points.get(0).getY());
-            for (int j = 1; j < recognisedFood.getArea().getPoints().size(); j++) {
-                //Rest of the points
-                wallPath.lineTo(points.get(j).getX(), points.get(j).getY());
+                //Draw polygon
+                Path wallPath = new Path();
+                wallPath.reset();
+                List<RecognisedFoodResponse.Area.Point> points = recognisedFood.getArea().getPoints();
+                //Initial point
+                wallPath.moveTo(points.get(0).getX(), points.get(0).getY());
+                for (int j = 1; j < recognisedFood.getArea().getPoints().size(); j++) {
+                    //Rest of the points
+                    wallPath.lineTo(points.get(j).getX(), points.get(j).getY());
+                }
+                wallPath.lineTo(points.get(0).getX(), points.get(0).getY());
+
+                //Draw
+                canvas.drawPath(wallPath, wallPaint);
+
+                //Create a region
+                RectF rectF = new RectF();
+                wallPath.computeBounds(rectF, true);
+                final Region r = new Region();
+                r.setPath(wallPath, new Region((int) rectF.left, (int) rectF.top, (int) rectF.right, (int) rectF.bottom));
+
+                areas.add(new AreaModel(r, recognisedFood, i));
             }
-            wallPath.lineTo(points.get(0).getX(), points.get(0).getY());
-
-            //Draw
-            canvas.drawPath(wallPath, wallPaint);
-
-            //Create a region
-            RectF rectF = new RectF();
-            wallPath.computeBounds(rectF, true);
-            final Region r = new Region();
-            r.setPath(wallPath, new Region((int) rectF.left, (int) rectF.top, (int) rectF.right, (int) rectF.bottom));
-
-            areas.add(new AreaModel(r, recognisedFood, i));
         }
 
         mCanvas = canvas;
@@ -339,12 +342,8 @@ public class MealDetailActivity extends BaseActivity {
             }
             mAnalysedImgAdapter.setFoods(mMeal.getFoods());
         } else if (resultCode == RESULT_OK && requestCode == Constants.REQ_ADD_FOOD) {
-            FoodResponse foodSelected = (FoodResponse) data.getSerializableExtra(Constants.EXTRA_FOOD);
-            if (foodSelected.getQuantity() != null) {
-                mMeal.getFoods().add(new RecognisedFoodResponse(foodSelected.getId(), foodSelected.getName(), foodSelected.getQuantity()));
-            } else {
-                mMeal.getFoods().add(new RecognisedFoodResponse(foodSelected.getId(), foodSelected.getName()));
-            }
+            FoodModel foodSelected = (FoodModel) data.getSerializableExtra(Constants.EXTRA_FOOD);
+            mMeal.getFoods().add(new AnalysedRecognisedFoodResponse("", foodSelected.getFoodName(), foodSelected.getQuantity(), foodSelected.getNutrients()));
             mAnalysedImgAdapter.setFoods(mMeal.getFoods());
         }
     }

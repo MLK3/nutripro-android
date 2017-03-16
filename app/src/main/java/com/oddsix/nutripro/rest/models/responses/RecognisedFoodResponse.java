@@ -5,6 +5,7 @@ import com.oddsix.nutripro.models.DBDayMealModel;
 import com.oddsix.nutripro.models.DBMealFoodModel;
 import com.oddsix.nutripro.models.DBMealNutrientModel;
 import com.oddsix.nutripro.models.DBPoint;
+import com.oddsix.nutripro.models.NutrientModel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,18 +20,24 @@ public class RecognisedFoodResponse implements Serializable {
     private String name;
     private int quantity;
     private Area area = new Area();
-    private List<NutrientResponse> nutrients;
+    private List<NutrientResponse> nutrients = new ArrayList<>();
 
     public RecognisedFoodResponse(String id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public RecognisedFoodResponse(String id, String name, int quantity) {
+    public RecognisedFoodResponse(String id, String name, int quantity, List<NutrientModel> nutrients) {
         this.id = id;
         this.name = name;
         this.quantity = quantity;
+        for (NutrientModel nModel: nutrients) {
+            this.nutrients.add(new NutrientResponse(nModel.getName(), nModel.getQuantity(), nModel.getUnit()));
+        }
+
     }
+
+
 
     public RecognisedFoodResponse() {
     }

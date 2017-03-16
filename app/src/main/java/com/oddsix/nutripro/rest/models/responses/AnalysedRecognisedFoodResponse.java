@@ -1,5 +1,7 @@
 package com.oddsix.nutripro.rest.models.responses;
 
+import com.oddsix.nutripro.models.NutrientModel;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -19,8 +21,8 @@ public class AnalysedRecognisedFoodResponse extends RecognisedFoodResponse imple
         super(id, name);
     }
 
-    public AnalysedRecognisedFoodResponse(String id, String name, int quantity) {
-        super(id, name, quantity);
+    public AnalysedRecognisedFoodResponse(String id, String name, int quantity, List<NutrientModel> nutrients) {
+        super(id, name, quantity, nutrients);
     }
 
     public AnalysedRecognisedFoodResponse() {
