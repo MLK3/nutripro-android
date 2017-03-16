@@ -81,13 +81,13 @@ public class AddNewFoodActivity extends BaseActivity {
                         Intent intent = new Intent();
                         List<NutrientModel> nutrientModels = new ArrayList<NutrientModel>();
                         for (NutrientResponse nutrient : response.getNutrients()) {
-                            // TODO: 16/03/17
-//                            for (NutrientRequest nutrientRequest : nutrients) {
-//                                if (nutrient.getName().equalsIgnoreCase(nutrientRequest.getName())) {
-                                    nutrientModels.add(new NutrientModel(nutrient.getName(), nutrient.getQuantity(), nutrient.getUnit()));
-//                                    break;
-//                                }
-//                            }
+                            // TODO: 16/03/17 add numbers from til and not from response
+                            for (NutrientRequest nutrientRequest : nutrients) {
+                                if (nutrientRequest.getName().toLowerCase().toLowerCase().contains(nutrient.getName())) {
+                                    nutrientModels.add(new NutrientModel(nutrient.getName(), nutrientRequest.getQuantity(), nutrient.getUnit()));
+                                    break;
+                                }
+                            }
                         }
 
                         intent.putExtra(Constants.EXTRA_FOOD, new FoodModel(nutrientModels, mNameTil.getEditText().getText().toString(), Integer.valueOf(mPortionTil.getEditText().getText().toString())));
