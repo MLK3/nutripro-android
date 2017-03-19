@@ -28,6 +28,10 @@ import com.oddsix.nutripro.BaseActivity;
 import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.adapters.AnalysedImgAdapter;
 import com.oddsix.nutripro.models.AreaModel;
+import com.oddsix.nutripro.models.DBAreaModel;
+import com.oddsix.nutripro.models.DBMealFoodModel;
+import com.oddsix.nutripro.models.DBMealModel;
+import com.oddsix.nutripro.models.DBMealNutrientModel;
 import com.oddsix.nutripro.models.FoodModel;
 import com.oddsix.nutripro.models.NutrientModel;
 import com.oddsix.nutripro.rest.NutriproProvider;
@@ -49,6 +53,9 @@ import com.oddsix.nutripro.utils.helpers.FeedbackHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmList;
+
 /**
  * Created by filippecl on 06/11/16.
  */
@@ -62,6 +69,7 @@ public class MealDetailActivity extends BaseActivity {
     private DialogHelper mDialogHelper;
 
     private Canvas mCanvas;
+    private Realm mRealm;
 
     private View mHeaderView;
 
@@ -83,6 +91,8 @@ public class MealDetailActivity extends BaseActivity {
 //                sendRequest(meal.getId());
 //            }
 //        });
+
+        mRealm = Realm.getDefaultInstance();
 
         mProvider = new NutriproProvider(this);
 
@@ -218,30 +228,46 @@ public class MealDetailActivity extends BaseActivity {
     }
 
     public void sendSaveChangesRequest() {
-        //todo
-        EditMealRequest editMealRequest = new EditMealRequest(mMeal.getMeal_id(), mMeal.getName());
-        for (RecognisedFoodResponse food : mMeal.getFoods()) {
-            editMealRequest.getFoods().add(
-                    new EditMealFoodResponse(
-                            food.getArea() == null ? null : food.getArea().getArea_id(),
-                            food.getId(),
-                            food.getQuantity()));
-        }
-        showProgressdialog();
-        mProvider.editMeal(editMealRequest, new NutriproProvider.OnResponseListener<GeneralResponse>() {
-            @Override
-            public void onResponseSuccess(GeneralResponse response) {
-                dismissProgressDialog();
-                showToast(getString(R.string.meal_detail_edit_success));
-                finish();
-            }
 
-            @Override
-            public void onResponseFailure(String msg, int code) {
-                dismissProgressDialog();
-                showToast(msg);
+        DBMealModel dbMealModel = new DBMealModel(mMeal.getName(), mMeal.getPictureUrl(), mMeal.getPrimaryKey());
+        for (RecognisedFoodResponse food : mMeal.getFoods()) {
+            DBAreaModel areaModel = new DBAreaModel(food.getArea().getArea_id(), food.getArea().getPoints());
+            RealmList<DBMealNutrientModel> nutrients = new RealmList<>();
+            for (NutrientResponse nutrient : food.getNutrients()) {
+                nutrients.add(new DBMealNutrientModel(nutrient.getName(), nutrient.getQuantity(), nutrient.getUnit()));
             }
-        });
+            dbMealModel.getFoods().add(new DBMealFoodModel(nutrients, food.getName(), food.getQuantity(), areaModel));
+        }
+
+
+        mRealm.beginTransaction();
+        mRealm.copyToRealmOrUpdate(dbMealModel);
+        mRealm.commitTransaction();
+        setResult(RESULT_OK);
+        finish();
+//        EditMealRequest editMealRequest = new EditMealRequest(mMeal.getMeal_id(), mMeal.getName());
+//        for (RecognisedFoodResponse food : mMeal.getFoods()) {
+//            editMealRequest.getFoods().add(
+//                    new EditMealFoodResponse(
+//                            food.getArea() == null ? null : food.getArea().getArea_id(),
+//                            food.getId(),
+//                            food.getQuantity()));
+//        }
+//        showProgressdialog();
+//        mProvider.editMeal(editMealRequest, new NutriproProvider.OnResponseListener<GeneralResponse>() {
+//            @Override
+//            public void onResponseSuccess(GeneralResponse response) {
+//                dismissProgressDialog();
+//                showToast(getString(R.string.meal_detail_edit_success));
+//                finish();
+//            }
+//
+//            @Override
+//            public void onResponseFailure(String msg, int code) {
+//                dismissProgressDialog();
+//                showToast(msg);
+//            }
+//        });
     }
 
     public void setImage(final View headerView) {
@@ -334,12 +360,8 @@ public class MealDetailActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && (requestCode == Constants.REQ_REPLACE_FOOD || requestCode == Constants.REQ_REPLACE_BY_AREA)) {
-            FoodResponse foodSelected = (FoodResponse) data.getSerializableExtra(Constants.EXTRA_FOOD);
-            mMeal.getFoods().get(mEditingFoodIndex).setId(foodSelected.getId());
-            mMeal.getFoods().get(mEditingFoodIndex).setName(foodSelected.getName());
-            if (foodSelected.getQuantity() != null) {
-                mMeal.getFoods().get(mEditingFoodIndex).setQuantity(foodSelected.getQuantity());
-            }
+            FoodModel foodSelected = (FoodModel) data.getSerializableExtra(Constants.EXTRA_FOOD);
+            mMeal.getFoods().set(mEditingFoodIndex, (new AnalysedRecognisedFoodResponse("", foodSelected.getFoodName(), foodSelected.getQuantity(), foodSelected.getNutrients())));
             mAnalysedImgAdapter.setFoods(mMeal.getFoods());
         } else if (resultCode == RESULT_OK && requestCode == Constants.REQ_ADD_FOOD) {
             FoodModel foodSelected = (FoodModel) data.getSerializableExtra(Constants.EXTRA_FOOD);

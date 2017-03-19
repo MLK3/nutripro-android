@@ -12,6 +12,7 @@ import java.util.List;
  */
 
 public class MealDetailResponse implements Serializable{
+    private String primaryKey;
     private String name;
     private List<RecognisedFoodResponse> foods;
     private List<NutrientResponse> nutrients;
@@ -19,12 +20,17 @@ public class MealDetailResponse implements Serializable{
     private String meal_id;
 
     public MealDetailResponse(DBMealModel mealModel) {
+        this.primaryKey = mealModel.getPrimaryKey();
         this.name = mealModel.getName();
         this.pictureUrl = mealModel.getImagePath();
         foods = new ArrayList<>();
         for (DBMealFoodModel food: mealModel.getFoods()) {
             foods.add(new RecognisedFoodResponse(food));
         }
+    }
+
+    public String getPrimaryKey() {
+        return primaryKey;
     }
 
     public String getMeal_id() {

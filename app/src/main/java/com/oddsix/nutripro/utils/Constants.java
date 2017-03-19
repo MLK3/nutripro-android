@@ -18,6 +18,7 @@ public class Constants {
 
     //DATE FORMATS
     public static final String STANDARD_DATE_FORMAT = "dd/MM/yyyy";
+    public static final String DB_DATE_FORMAT = "dd/MM/yyyy-HH:mm:ss";
     public static final String REQUEST_DATE_FORMAT = "ddMMyyyy";
 
     //REQUEST CODES
@@ -29,6 +30,7 @@ public class Constants {
     public final static int REQ_REGISTER_FOOD = 5;
     public final static int REQ_EDIT_DIET = 6;
     public final static int REQ_PICTURE = 7;
+    public final static int REQ_EDIT_MEAIL = 8;
 
     //EXTRA
     public final static String EXTRA_REGISTER_MODEL = "EXTRA_REGISTER_MODEL";

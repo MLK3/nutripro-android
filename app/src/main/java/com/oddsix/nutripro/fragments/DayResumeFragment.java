@@ -1,5 +1,6 @@
 package com.oddsix.nutripro.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -168,7 +169,7 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
         Intent mealDetailIntent = new Intent(getActivity(), MealDetailActivity.class);
         MealDetailResponse mealDetail = new MealDetailResponse(mDay.getMeals().get(position));
         mealDetailIntent.putExtra(Constants.EXTRA_MEAL_MODEL, mealDetail);
-        startActivity(mealDetailIntent);
+        startActivityForResult(mealDetailIntent, Constants.REQ_EDIT_MEAIL);
     }
 
     private void setData() {
@@ -217,7 +218,7 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
                 for (DBMealNutrientModel nutrientDb : food.getNutrients()) {
                     for (NutrientResponse nutrient: nutrients) {
                         if (nutrient.getName().equalsIgnoreCase(nutrientDb.getName())) {
-                            nutrient.setQuantity(nutrient.getQuantity() + nutrientDb.getQuantity());
+                            nutrient.setQuantity(nutrient.getQuantity() + nutrientDb.getQuantity()*food.getQuantity());
                             break;
                         }
                     }
@@ -295,5 +296,13 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
         setDateLabel(selectedCal);
         mDate = selectedCal;
         getMealByDay(selectedCal);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(Constants.REQ_EDIT_MEAIL == requestCode && resultCode == Activity.RESULT_OK) {
+            refreshDayMeal();
+        }
     }
 }
