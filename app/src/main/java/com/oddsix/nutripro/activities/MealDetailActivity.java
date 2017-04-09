@@ -196,7 +196,7 @@ public class MealDetailActivity extends BaseActivity {
         for (NutrientResponse nutrient : mMeal.getFoods().get(position).getNutrients()) {
             nutrients.add(new NutrientModel(nutrient.getName(), nutrient.getQuantity(), nutrient.getUnit()));
         }
-        FoodModel selectedFood = new FoodModel(nutrients, mMeal.getFoods().get(position).getName(), mMeal.getFoods().get(position).getQuantity());
+        FoodModel selectedFood = new FoodModel(nutrients, mMeal.getFoods().get(position).getName(), mMeal.getFoods().get(position).getQuantity(), mMeal.getFoods().get(position).getPorcao_em_g());
         infoIntent.putExtra(Constants.EXTRA_FOOD_MODEL, selectedFood);
         startActivity(infoIntent);
     }
@@ -236,7 +236,7 @@ public class MealDetailActivity extends BaseActivity {
             for (NutrientResponse nutrient : food.getNutrients()) {
                 nutrients.add(new DBMealNutrientModel(nutrient.getName(), nutrient.getQuantity(), nutrient.getUnit()));
             }
-            dbMealModel.getFoods().add(new DBMealFoodModel(nutrients, food.getName(), food.getQuantity(), areaModel));
+            dbMealModel.getFoods().add(new DBMealFoodModel(nutrients,food.getPorcao_em_g(),food.getName(), food.getQuantity(), areaModel));
         }
 
 

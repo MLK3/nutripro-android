@@ -29,9 +29,14 @@ public class AnalysedRecognisedFoodResponse extends RecognisedFoodResponse imple
     }
 
     public class Suggestion implements Serializable {
-        String id;
-        String name;
-        int quantity;
+        private String id;
+        private String name;
+        private int quantity;
+        private int porcao_em_g;
+
+        public int getPorcao_em_g() {
+            return porcao_em_g;
+        }
 
         public String getId() {
             return id;

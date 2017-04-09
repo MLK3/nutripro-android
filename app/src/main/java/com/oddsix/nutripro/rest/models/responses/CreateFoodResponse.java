@@ -9,6 +9,7 @@ import java.util.List;
 public class CreateFoodResponse {
     private String status;
     private String id;
+    private Integer porcao_em_g;
     private List<NutrientResponse> nutrients;
 
     public List<NutrientResponse> getNutrients() {
@@ -21,5 +22,9 @@ public class CreateFoodResponse {
 
     public String getId() {
         return id;
+    }
+
+    public Integer getPorcao_em_g() {
+        return porcao_em_g;
     }
 }

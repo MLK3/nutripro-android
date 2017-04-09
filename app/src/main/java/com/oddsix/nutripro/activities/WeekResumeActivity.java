@@ -159,7 +159,7 @@ public class WeekResumeActivity extends BaseActivity implements DatePickerDialog
                     for (DBMealFoodModel food : meal.getFoods()) {
                         for (DBMealNutrientModel nutrient : food.getNutrients()) {
                             if (dietNutrient.getName().equalsIgnoreCase(nutrient.getName())) {
-                                sum += nutrient.getQuantity()*food.getQuantity();
+                                sum += nutrient.getQuantity()* (food.getQuantity()/food.getPortionInGrams());
                                 break;
                             }
                         }

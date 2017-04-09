@@ -17,11 +17,17 @@ public class FoodModel implements Serializable {
     private List<NutrientModel> nutrients;
     private String foodName;
     private int quantity;
+    private int portion;
 
-    public FoodModel(List<NutrientModel> nutrients, String foodName, int quantity) {
+    public FoodModel(List<NutrientModel> nutrients, String foodName, int quantity, int portion) {
         this.nutrients = nutrients;
         this.foodName = foodName;
         this.quantity = quantity;
+        this.portion = portion;
+    }
+
+    public int getPortion() {
+        return portion;
     }
 
     public void setNutrients(List<NutrientModel> nutrients) {

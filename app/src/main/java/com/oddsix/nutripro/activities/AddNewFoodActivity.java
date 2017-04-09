@@ -90,7 +90,7 @@ public class AddNewFoodActivity extends BaseActivity {
                             }
                         }
 
-                        intent.putExtra(Constants.EXTRA_FOOD, new FoodModel(nutrientModels, mNameTil.getEditText().getText().toString(), Integer.valueOf(mPortionTil.getEditText().getText().toString())));
+                        intent.putExtra(Constants.EXTRA_FOOD, new FoodModel(nutrientModels, mNameTil.getEditText().getText().toString(), Integer.valueOf(mPortionTil.getEditText().getText().toString()), response.getPorcao_em_g()));
                         setResult(RESULT_OK, intent);
                         finish();
                     }

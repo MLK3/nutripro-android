@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.oddsix.nutripro.BaseFragment;
 import com.oddsix.nutripro.R;
-import com.oddsix.nutripro.activities.MainActivity;
 import com.oddsix.nutripro.activities.MealDetailActivity;
 import com.oddsix.nutripro.adapters.DayResumeAdapter;
 import com.oddsix.nutripro.models.DBAllMealsByDayModel;
@@ -26,8 +25,6 @@ import com.oddsix.nutripro.models.DBDietModel;
 import com.oddsix.nutripro.models.DBMealFoodModel;
 import com.oddsix.nutripro.models.DBMealModel;
 import com.oddsix.nutripro.models.DBMealNutrientModel;
-import com.oddsix.nutripro.rest.NutriproProvider;
-import com.oddsix.nutripro.rest.models.responses.DayResumeResponse;
 import com.oddsix.nutripro.rest.models.responses.DietNutrientResponse;
 import com.oddsix.nutripro.rest.models.responses.MealDetailResponse;
 import com.oddsix.nutripro.rest.models.responses.NutrientResponse;
@@ -44,7 +41,6 @@ import java.util.Calendar;
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmList;
 
 /**
  * Created by Filippe on 21/10/16.
@@ -216,16 +212,15 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
         for (DBMealModel meal : mDay.getMeals()) {
             for (DBMealFoodModel food : meal.getFoods()) {
                 for (DBMealNutrientModel nutrientDb : food.getNutrients()) {
-                    for (NutrientResponse nutrient: nutrients) {
+                    for (NutrientResponse nutrient : nutrients) {
                         if (nutrient.getName().equalsIgnoreCase(nutrientDb.getName())) {
-                            nutrient.setQuantity(nutrient.getQuantity() + nutrientDb.getQuantity()*food.getQuantity());
+                            nutrient.setQuantity(nutrient.getQuantity() + (nutrientDb.getQuantity() * (food.getQuantity() / food.getPortionInGrams())));
                             break;
                         }
                     }
                 }
             }
         }
-
 
         for (NutrientResponse nutrient : nutrients) {
             for (DietNutrientResponse dietNutrient : dietResponse.getNutrients()) {
@@ -301,7 +296,7 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(Constants.REQ_EDIT_MEAIL == requestCode && resultCode == Activity.RESULT_OK) {
+        if (Constants.REQ_EDIT_MEAIL == requestCode && resultCode == Activity.RESULT_OK) {
             refreshDayMeal();
         }
     }

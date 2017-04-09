@@ -232,7 +232,7 @@ public class AnalysedPictureFragment extends BaseFragment {
             for (NutrientResponse nutrient : food.getNutrients()) {
                 nutrients.add(new DBMealNutrientModel(nutrient.getName(), nutrient.getQuantity(), nutrient.getUnit()));
             }
-            dbMealModel.getFoods().add(new DBMealFoodModel(nutrients, food.getName(), food.getQuantity(), areaModel));
+            dbMealModel.getFoods().add(new DBMealFoodModel(nutrients, food.getPorcao_em_g(), food.getName(), food.getQuantity(), areaModel));
         }
 
 
@@ -302,7 +302,7 @@ public class AnalysedPictureFragment extends BaseFragment {
         for (NutrientResponse nutrient : mMeal.getFoods().get(position).getNutrients()) {
             nutrients.add(new NutrientModel(nutrient.getName(), nutrient.getQuantity(), nutrient.getUnit()));
         }
-        FoodModel selectedFood = new FoodModel(nutrients, mMeal.getFoods().get(position).getName(), mMeal.getFoods().get(position).getQuantity());
+        FoodModel selectedFood = new FoodModel(nutrients, mMeal.getFoods().get(position).getName(), mMeal.getFoods().get(position).getQuantity(), mMeal.getFoods().get(position).getPorcao_em_g());
         infoIntent.putExtra(Constants.EXTRA_FOOD_MODEL, selectedFood);
         startActivity(infoIntent);
     }
@@ -438,12 +438,14 @@ public class AnalysedPictureFragment extends BaseFragment {
             FoodResponse foodSelected = (FoodResponse) data.getSerializableExtra(Constants.EXTRA_FOOD);
             mMeal.getFoods().get(mEditingFoodIndex).setId(foodSelected.getId());
             mMeal.getFoods().get(mEditingFoodIndex).setName(foodSelected.getName());
+            mMeal.getFoods().get(mEditingFoodIndex).setPorcao_em_g(foodSelected.getPorcao_em_g());
             if (foodSelected.getQuantity() != null) {
                 mMeal.getFoods().get(mEditingFoodIndex).setQuantity(foodSelected.getQuantity());
             }
             mAnalysedImgAdapter.setFoods((List<RecognisedFoodResponse>) (List<?>) mMeal.getFoods());
         } else if (resultCode == Activity.RESULT_OK && requestCode == Constants.REQ_ADD_FOOD) {
             FoodModel foodSelected = (FoodModel) data.getSerializableExtra(Constants.EXTRA_FOOD);
+            mMeal.getFoods().get(mEditingFoodIndex).setPorcao_em_g(foodSelected.getPortion());
             mMeal.getFoods().add(new AnalysedRecognisedFoodResponse("", foodSelected.getFoodName(), foodSelected.getQuantity(), foodSelected.getNutrients()));
             mAnalysedImgAdapter.setFoods((List<RecognisedFoodResponse>) (List<?>) mMeal.getFoods());
         }

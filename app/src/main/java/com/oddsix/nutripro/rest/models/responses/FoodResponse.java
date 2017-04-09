@@ -10,10 +10,15 @@ import java.util.List;
  */
 
 public class FoodResponse implements Serializable {
-    String name;
-    String id;
-    Integer quantity;
-    List<NutrientResponse> nutrients;
+    private String name;
+    private String id;
+    private Integer quantity;
+    private List<NutrientResponse> nutrients;
+    private Integer porcao_em_g;
+
+    public Integer getPorcao_em_g() {
+        return porcao_em_g;
+    }
 
     public List<NutrientResponse> getNutrients() {
         return nutrients;

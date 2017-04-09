@@ -19,6 +19,7 @@ public class RecognisedFoodResponse implements Serializable {
     private String id;
     private String name;
     private int quantity;
+    private int porcao_em_g;
     private Area area = new Area();
     private List<NutrientResponse> nutrients = new ArrayList<>();
 
@@ -37,7 +38,13 @@ public class RecognisedFoodResponse implements Serializable {
 
     }
 
+    public int getPorcao_em_g() {
+        return porcao_em_g;
+    }
 
+    public void setPorcao_em_g(int porcao_em_g) {
+        this.porcao_em_g = porcao_em_g;
+    }
 
     public RecognisedFoodResponse() {
     }
