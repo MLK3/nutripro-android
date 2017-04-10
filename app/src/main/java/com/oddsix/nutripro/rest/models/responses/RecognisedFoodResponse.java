@@ -28,9 +28,10 @@ public class RecognisedFoodResponse implements Serializable {
         this.name = name;
     }
 
-    public RecognisedFoodResponse(String id, String name, int quantity, List<NutrientModel> nutrients) {
+    public RecognisedFoodResponse(String id, String name, int quantity, List<NutrientModel> nutrients, int portion) {
         this.id = id;
         this.name = name;
+        this.porcao_em_g = portion;
         this.quantity = quantity;
         for (NutrientModel nModel: nutrients) {
             this.nutrients.add(new NutrientResponse(nModel.getName(), nModel.getQuantity(), nModel.getUnit()));
@@ -38,7 +39,7 @@ public class RecognisedFoodResponse implements Serializable {
 
     }
 
-    public int getPorcao_em_g() {
+    public int getPortion() {
         return porcao_em_g;
     }
 
@@ -57,6 +58,7 @@ public class RecognisedFoodResponse implements Serializable {
         for (DBMealNutrientModel nutrientModel : food.getNutrients()) {
             nutrients.add(new NutrientResponse(nutrientModel));
         }
+        porcao_em_g = food.getPortionInGrams();
     }
 
     public List<NutrientResponse> getNutrients() {

@@ -21,8 +21,8 @@ public class AnalysedRecognisedFoodResponse extends RecognisedFoodResponse imple
         super(id, name);
     }
 
-    public AnalysedRecognisedFoodResponse(String id, String name, int quantity, List<NutrientModel> nutrients) {
-        super(id, name, quantity, nutrients);
+    public AnalysedRecognisedFoodResponse(String id, String name, int quantity, List<NutrientModel> nutrients, int portion) {
+        super(id, name, quantity, nutrients, portion);
     }
 
     public AnalysedRecognisedFoodResponse() {

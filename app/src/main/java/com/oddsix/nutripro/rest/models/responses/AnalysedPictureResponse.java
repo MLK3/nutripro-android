@@ -38,6 +38,10 @@ public class AnalysedPictureResponse implements Serializable {
         return picture_url;
     }
 
+    public void setPicture_url(String picture_url) {
+        this.picture_url = picture_url;
+    }
+
     public List<AnalysedRecognisedFoodResponse> getFoods() {
         return foods;
     }

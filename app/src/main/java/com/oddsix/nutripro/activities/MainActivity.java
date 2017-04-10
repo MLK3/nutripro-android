@@ -268,7 +268,7 @@ public class MainActivity extends BaseActivity {
                 byte[] b = baos.toByteArray();
 
                 showProgressdialog();
-                Async async = new Async(b, bm);
+                Async async = new Async(b, bm, data.getStringExtra(Constants.EXTRA_FILE_PATH));
                 async.execute();
             } else {
                 mTabLayout.getTabAt(0).select();
@@ -283,10 +283,13 @@ public class MainActivity extends BaseActivity {
         byte[] b;
         Bitmap bm;
 
+        String photoPath;
+
         String mPhoto64;
 
-        public Async(byte[] b, Bitmap bm) {
+        public Async(byte[] b, Bitmap bm, String photoPath) {
             this.b = b;
+            this.photoPath = photoPath;
             this.bm = bm;
         }
 
@@ -301,7 +304,7 @@ public class MainActivity extends BaseActivity {
             super.onPostExecute(o);
 //            mOnRequestReady.updateImage();
             dismissProgressDialog();
-            mPictureFragment.setImage(bm, Base64.encodeToString(b, Base64.DEFAULT));
+            mPictureFragment.setImage(bm, Base64.encodeToString(b, Base64.DEFAULT), photoPath);
         }
     }
 

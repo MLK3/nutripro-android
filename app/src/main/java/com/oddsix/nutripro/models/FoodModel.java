@@ -17,7 +17,7 @@ public class FoodModel implements Serializable {
     private List<NutrientModel> nutrients;
     private String foodName;
     private int quantity;
-    private int portion;
+    private Integer portion;
 
     public FoodModel(List<NutrientModel> nutrients, String foodName, int quantity, int portion) {
         this.nutrients = nutrients;

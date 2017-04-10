@@ -54,6 +54,7 @@ import com.oddsix.nutripro.utils.helpers.AppColorHelper;
 import com.oddsix.nutripro.utils.helpers.DialogHelper;
 import com.oddsix.nutripro.utils.helpers.SharedPreferencesHelper;
 
+import java.io.File;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -232,7 +233,7 @@ public class AnalysedPictureFragment extends BaseFragment {
             for (NutrientResponse nutrient : food.getNutrients()) {
                 nutrients.add(new DBMealNutrientModel(nutrient.getName(), nutrient.getQuantity(), nutrient.getUnit()));
             }
-            dbMealModel.getFoods().add(new DBMealFoodModel(nutrients, food.getPorcao_em_g(), food.getName(), food.getQuantity(), areaModel));
+            dbMealModel.getFoods().add(new DBMealFoodModel(nutrients, food.getPortion(), food.getName(), food.getQuantity(), areaModel));
         }
 
 
@@ -287,7 +288,7 @@ public class AnalysedPictureFragment extends BaseFragment {
     }
 
     public void showImage(final View headerView) {
-        Glide.with(this).load(mMeal.getPictureUrl()).asBitmap().into(new SimpleTarget<Bitmap>() {
+        Glide.with(this).load(new File(mMeal.getPictureUrl())).asBitmap().into(new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                 ((ImageView) headerView.findViewById(R.id.header_analysed_photo_img)).setImageBitmap(resource);
@@ -302,7 +303,7 @@ public class AnalysedPictureFragment extends BaseFragment {
         for (NutrientResponse nutrient : mMeal.getFoods().get(position).getNutrients()) {
             nutrients.add(new NutrientModel(nutrient.getName(), nutrient.getQuantity(), nutrient.getUnit()));
         }
-        FoodModel selectedFood = new FoodModel(nutrients, mMeal.getFoods().get(position).getName(), mMeal.getFoods().get(position).getQuantity(), mMeal.getFoods().get(position).getPorcao_em_g());
+        FoodModel selectedFood = new FoodModel(nutrients, mMeal.getFoods().get(position).getName(), mMeal.getFoods().get(position).getQuantity(), mMeal.getFoods().get(position).getPortion());
         infoIntent.putExtra(Constants.EXTRA_FOOD_MODEL, selectedFood);
         startActivity(infoIntent);
     }
@@ -394,13 +395,14 @@ public class AnalysedPictureFragment extends BaseFragment {
     }
 
     @SuppressWarnings("unchecked")
-    public void setImage(final Bitmap image, String photo64) {
+    public void setImage(final Bitmap image, String photo64, final String photoPath) {
         showProgressdialog();
         mProvider.analysePicture(photo64, new NutriproProvider.OnResponseListener<AnalysedPictureResponse>() {
             @Override
             public void onResponseSuccess(AnalysedPictureResponse response) {
                 dismissProgressDialog();
                 mMeal = response;
+                response.setPicture_url(photoPath);
                 ((ImageView) mHeaderView.findViewById(R.id.header_analysed_photo_img)).setImageBitmap(image);
                 showImage(mHeaderView);
                 showNameDialog();
@@ -438,15 +440,14 @@ public class AnalysedPictureFragment extends BaseFragment {
             FoodResponse foodSelected = (FoodResponse) data.getSerializableExtra(Constants.EXTRA_FOOD);
             mMeal.getFoods().get(mEditingFoodIndex).setId(foodSelected.getId());
             mMeal.getFoods().get(mEditingFoodIndex).setName(foodSelected.getName());
-            mMeal.getFoods().get(mEditingFoodIndex).setPorcao_em_g(foodSelected.getPorcao_em_g());
+            mMeal.getFoods().get(mEditingFoodIndex).setPorcao_em_g(foodSelected.getPortion());
             if (foodSelected.getQuantity() != null) {
                 mMeal.getFoods().get(mEditingFoodIndex).setQuantity(foodSelected.getQuantity());
             }
             mAnalysedImgAdapter.setFoods((List<RecognisedFoodResponse>) (List<?>) mMeal.getFoods());
         } else if (resultCode == Activity.RESULT_OK && requestCode == Constants.REQ_ADD_FOOD) {
             FoodModel foodSelected = (FoodModel) data.getSerializableExtra(Constants.EXTRA_FOOD);
-            mMeal.getFoods().get(mEditingFoodIndex).setPorcao_em_g(foodSelected.getPortion());
-            mMeal.getFoods().add(new AnalysedRecognisedFoodResponse("", foodSelected.getFoodName(), foodSelected.getQuantity(), foodSelected.getNutrients()));
+            mMeal.getFoods().add(new AnalysedRecognisedFoodResponse("", foodSelected.getFoodName(), foodSelected.getQuantity(), foodSelected.getNutrients(), foodSelected.getPortion()));
             mAnalysedImgAdapter.setFoods((List<RecognisedFoodResponse>) (List<?>) mMeal.getFoods());
         }
     }

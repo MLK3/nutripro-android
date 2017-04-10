@@ -138,7 +138,6 @@ public class AddNewFoodActivity extends BaseActivity {
         mFibersTil = (TextInputLayout) findViewById(R.id.register_food_fibers_til);
         mSodiumTil = (TextInputLayout) findViewById(R.id.register_food_sodium_til);
         mPortionTil = (TextInputLayout) findViewById(R.id.register_food_quantity_til);
-
         mSendBtn = (Button) findViewById(R.id.register_food_send_btn);
     }
 

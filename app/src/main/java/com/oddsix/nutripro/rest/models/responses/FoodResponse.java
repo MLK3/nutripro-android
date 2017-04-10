@@ -16,7 +16,7 @@ public class FoodResponse implements Serializable {
     private List<NutrientResponse> nutrients;
     private Integer porcao_em_g;
 
-    public Integer getPorcao_em_g() {
+    public Integer getPortion() {
         return porcao_em_g;
     }
 

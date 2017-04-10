@@ -104,7 +104,7 @@ public class SearchActivity extends BaseActivity {
                     nutrientModels.add(new NutrientModel(nutrient.getName(), nutrient.getQuantity(), nutrient.getUnit()));
                 }
 
-                intent.putExtra(Constants.EXTRA_FOOD, new FoodModel(nutrientModels, mSearchResponse.getFoods().get(i).getName(), 0, mSearchResponse.getFoods().get(i).getPorcao_em_g()));
+                intent.putExtra(Constants.EXTRA_FOOD, new FoodModel(nutrientModels, mSearchResponse.getFoods().get(i).getName(), 0, mSearchResponse.getFoods().get(i).getPortion()));
                 setResult(RESULT_OK, intent);
                 finish();
             }

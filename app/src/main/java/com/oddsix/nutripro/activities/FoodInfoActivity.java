@@ -79,7 +79,7 @@ public class FoodInfoActivity extends BaseActivity {
 
     private void setHeader(View headerView) {
         TextView quantityTv = (TextView) headerView.findViewById(R.id.food_info_quantity_tv);
-        quantityTv.setText(getString(R.string.food_info_quantity, mFoodModel.getQuantity(), "g"));
+        quantityTv.setText(getString(R.string.food_info_quantity, mFoodModel.getPortion(), "g"));
         TextView nameTv = (TextView) headerView.findViewById(R.id.food_info_name_tv);
         nameTv.setText(mFoodModel.getFoodName());
     }
