@@ -43,7 +43,7 @@ public class RecognisedFoodResponse implements Serializable {
         return porcao_em_g;
     }
 
-    public void setPorcao_em_g(int porcao_em_g) {
+    public void setPorcaoEmG(int porcao_em_g) {
         this.porcao_em_g = porcao_em_g;
     }
 

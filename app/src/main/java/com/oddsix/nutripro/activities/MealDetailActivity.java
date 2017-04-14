@@ -34,9 +34,9 @@ import com.oddsix.nutripro.models.FoodModel;
 import com.oddsix.nutripro.models.NutrientModel;
 import com.oddsix.nutripro.rest.NutriproProvider;
 import com.oddsix.nutripro.rest.models.responses.AnalysedRecognisedFoodResponse;
+import com.oddsix.nutripro.rest.models.responses.MealDetailResponse;
 import com.oddsix.nutripro.rest.models.responses.NutrientResponse;
 import com.oddsix.nutripro.rest.models.responses.RecognisedFoodResponse;
-import com.oddsix.nutripro.rest.models.responses.MealDetailResponse;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.base.BaseDialogHelper;
 import com.oddsix.nutripro.utils.helpers.AppColorHelper;
@@ -205,9 +205,8 @@ public class MealDetailActivity extends BaseActivity {
             for (NutrientResponse nutrient : food.getNutrients()) {
                 nutrients.add(new DBMealNutrientModel(nutrient.getName(), nutrient.getQuantity(), nutrient.getUnit()));
             }
-            dbMealModel.getFoods().add(new DBMealFoodModel(nutrients,food.getPortion(),food.getName(), food.getQuantity(), areaModel));
+            dbMealModel.getFoods().add(new DBMealFoodModel(nutrients, food.getPortion(), food.getName(), food.getQuantity(), areaModel));
         }
-
 
         mRealm.beginTransaction();
         mRealm.copyToRealmOrUpdate(dbMealModel);
@@ -217,7 +216,7 @@ public class MealDetailActivity extends BaseActivity {
     }
 
     public void setImage(final View headerView) {
-        Glide.with(this).load(new File(mMeal.getPictureUrl())).asBitmap().into(new SimpleTarget<Bitmap>() {
+        Glide.with(this).load(new File(mMeal.getPictureUrl())).asBitmap().placeholder(R.drawable.ic_logo_nutripro).into(new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                 ((ImageView) headerView.findViewById(R.id.header_analysed_photo_img)).setImageBitmap(resource);

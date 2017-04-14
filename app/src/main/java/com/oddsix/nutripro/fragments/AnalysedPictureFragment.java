@@ -440,7 +440,7 @@ public class AnalysedPictureFragment extends BaseFragment {
             FoodResponse foodSelected = (FoodResponse) data.getSerializableExtra(Constants.EXTRA_FOOD);
             mMeal.getFoods().get(mEditingFoodIndex).setId(foodSelected.getId());
             mMeal.getFoods().get(mEditingFoodIndex).setName(foodSelected.getName());
-            mMeal.getFoods().get(mEditingFoodIndex).setPorcao_em_g(foodSelected.getPortion());
+            mMeal.getFoods().get(mEditingFoodIndex).setPorcaoEmG(foodSelected.getPortion());
             if (foodSelected.getQuantity() != null) {
                 mMeal.getFoods().get(mEditingFoodIndex).setQuantity(foodSelected.getQuantity());
             }

@@ -214,7 +214,8 @@ public class DayResumeFragment extends BaseFragment implements DatePickerDialog.
                 for (DBMealNutrientModel nutrientDb : food.getNutrients()) {
                     for (NutrientResponse nutrient : nutrients) {
                         if (nutrient.getName().equalsIgnoreCase(nutrientDb.getName())) {
-                            nutrient.setQuantity(nutrient.getQuantity() + (nutrientDb.getQuantity() * (food.getQuantity() / food.getPortionInGrams())));
+                            nutrient.setQuantity(
+                                    nutrient.getQuantity() + ((int) (nutrientDb.getQuantity() * (((float)food.getQuantity() / (float)food.getPortionInGrams())))));
                             break;
                         }
                     }

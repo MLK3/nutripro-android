@@ -159,7 +159,7 @@ public class WeekResumeActivity extends BaseActivity implements DatePickerDialog
                     for (DBMealFoodModel food : meal.getFoods()) {
                         for (DBMealNutrientModel nutrient : food.getNutrients()) {
                             if (dietNutrient.getName().equalsIgnoreCase(nutrient.getName())) {
-                                sum += nutrient.getQuantity()* (food.getQuantity()/food.getPortionInGrams());
+                                sum += (int) (nutrient.getQuantity() * (((float) food.getQuantity() / (float) food.getPortionInGrams())));
                                 break;
                             }
                         }
@@ -322,20 +322,20 @@ public class WeekResumeActivity extends BaseActivity implements DatePickerDialog
 
     private void setData() throws ParseException {
         ArrayList<Entry> values = new ArrayList<Entry>();
-        Calendar cal= Calendar.getInstance();
+        Calendar cal = Calendar.getInstance();
         cal.setTime(mNutrientResponse.getQuantities().get(0).getDate());
         cal = getFirstDayOfTheWeek(cal);
         for (int i = 0; i < 7; i++) {
             Date date = DateHelper.addDay(i, cal.getTime());
             boolean dayExists = false;
             for (int j = 0; j < mNutrientResponse.getQuantities().size(); j++) {
-                if(DateHelper.parseDate(Constants.STANDARD_DATE_FORMAT, date).equalsIgnoreCase(DateHelper.parseDate(Constants.STANDARD_DATE_FORMAT, mNutrientResponse.getQuantities().get(j).getDate()))) {
+                if (DateHelper.parseDate(Constants.STANDARD_DATE_FORMAT, date).equalsIgnoreCase(DateHelper.parseDate(Constants.STANDARD_DATE_FORMAT, mNutrientResponse.getQuantities().get(j).getDate()))) {
                     values.add(new Entry(mNutrientResponse.getQuantities().get(j).getDate().getTime(), mNutrientResponse.getQuantities().get(j).getSum()));
                     dayExists = true;
                     break;
                 }
             }
-            if(!dayExists) {
+            if (!dayExists) {
                 values.add(new Entry(date.getTime(), 0));
             }
         }
