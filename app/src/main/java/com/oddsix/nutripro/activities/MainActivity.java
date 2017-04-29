@@ -8,7 +8,7 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -16,6 +16,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -24,20 +25,18 @@ import com.oddsix.nutripro.R;
 import com.oddsix.nutripro.fragments.AnalysedPictureFragment;
 import com.oddsix.nutripro.fragments.DayResumeFragment;
 import com.oddsix.nutripro.fragments.ProfileFragment;
-import com.oddsix.nutripro.models.DBDietModel;
-import com.oddsix.nutripro.models.DBRegisterModel;
-import com.oddsix.nutripro.rest.models.responses.DayResumeResponse;
-import com.oddsix.nutripro.rest.models.responses.RegisterResponse;
-import com.oddsix.nutripro.rest.models.responses.SuggestedDietResponse;
 import com.oddsix.nutripro.utils.Constants;
 import com.oddsix.nutripro.utils.helpers.SharedPreferencesHelper;
-import com.oddsix.nutripro.utils.helpers.UpdatePhotoHelper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
@@ -178,7 +177,7 @@ public class MainActivity extends BaseActivity {
 
     private Bitmap loadPrescaledBitmap(String filename) throws IOException {
         // Facebook image size
-        int mPhotoMaxSize = 400;
+        int mPhotoMaxSize = 600;
 
         File file = null;
         FileInputStream fis;
@@ -255,20 +254,20 @@ public class MainActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Constants.REQ_PICTURE) {
             if (resultCode == RESULT_OK) {
-                Bitmap bm;
-                try {
-                    bm = rotateImage(data.getStringExtra(Constants.EXTRA_FILE_PATH));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    bm = BitmapFactory.decodeFile(data.getStringExtra(Constants.EXTRA_FILE_PATH));
-                }
-
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] b = baos.toByteArray();
-
+//                Bitmap bm;
+//                try {
+//                    bm = rotateImage(data.getStringExtra(Constants.EXTRA_FILE_PATH));
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    bm = BitmapFactory.decodeFile(data.getStringExtra(Constants.EXTRA_FILE_PATH));
+//                }
+//
+//                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+//                byte[] b = baos.toByteArray();
+//
                 showProgressdialog();
-                Async async = new Async(b, bm, data.getStringExtra(Constants.EXTRA_FILE_PATH));
+                Async async = new Async(data.getStringExtra(Constants.EXTRA_FILE_PATH));
                 async.execute();
             } else {
                 mTabLayout.getTabAt(0).select();
@@ -280,23 +279,78 @@ public class MainActivity extends BaseActivity {
      * Async task to send updateImageRequest
      */
     private class Async extends AsyncTask {
-        byte[] b;
-        Bitmap bm;
-
-        String photoPath;
+        String mPhotoPath;
+        String mNewPhotoPath;
 
         String mPhoto64;
 
-        public Async(byte[] b, Bitmap bm, String photoPath) {
-            this.b = b;
-            this.photoPath = photoPath;
-            this.bm = bm;
+        public Async(String photoPath) {
+            mPhotoPath = photoPath;
         }
 
         @Override
         protected Object doInBackground(Object[] params) {
-            mPhoto64 = Base64.encodeToString(b, Base64.DEFAULT);
+            try {
+                Bitmap bm = rotateImage(mPhotoPath);
+                mPhoto64 = getPhoto64(bm);
+                mNewPhotoPath = storeImage(bm);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             return null;
+        }
+
+        private String getPhoto64(Bitmap bm) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] b = baos.toByteArray();
+            return Base64.encodeToString(b, Base64.DEFAULT);
+        }
+
+        private String storeImage(Bitmap image) {
+            File pictureFile = getOutputMediaFile();
+            if (pictureFile == null) {
+                Log.d("PHOTOSTORAGE",
+                        "Error creating media file, check storage permissions: ");// e.getMessage());
+                return "";
+            }
+            try {
+                FileOutputStream fos = new FileOutputStream(pictureFile);
+                image.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                fos.close();
+                return pictureFile.getAbsolutePath();
+            } catch (FileNotFoundException e) {
+                Log.d("PHOTOSTORAGE", "File not found: " + e.getMessage());
+            } catch (IOException e) {
+                Log.d("PHOTOSTORAGE", "Error accessing file: " + e.getMessage());
+            }
+            return "";
+        }
+
+        private  File getOutputMediaFile(){
+            // To be safe, you should check that the SDCard is mounted
+            // using Environment.getExternalStorageState() before doing this.
+            File mediaStorageDir = new File(Environment.getExternalStorageDirectory()
+                    + "/Android/data/"
+                    + getApplicationContext().getPackageName()
+                    + "/Files");
+
+            // This location works best if you want the created images to be shared
+            // between applications and persist after your app has been uninstalled.
+
+            // Create the storage directory if it does not exist
+            if (! mediaStorageDir.exists()){
+                if (! mediaStorageDir.mkdirs()){
+                    return null;
+                }
+            }
+            // Create a media file name
+            String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmm").format(new Date());
+            File mediaFile;
+            String mImageName="MI_"+ timeStamp +".jpg";
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator + mImageName);
+            return mediaFile;
         }
 
         @Override
@@ -304,7 +358,11 @@ public class MainActivity extends BaseActivity {
             super.onPostExecute(o);
 //            mOnRequestReady.updateImage();
             dismissProgressDialog();
-            mPictureFragment.setImage(bm, Base64.encodeToString(b, Base64.DEFAULT), photoPath);
+            if(!mNewPhotoPath.isEmpty()) {
+                mPictureFragment.setImage(mPhoto64, mNewPhotoPath);
+            } else {
+                showToast("Erro ao formatar imagem.");
+            }
         }
     }
 

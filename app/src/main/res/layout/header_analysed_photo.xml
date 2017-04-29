@@ -13,8 +13,9 @@
         android:layout_marginRight="@dimen/horizontal_margin"
         android:layout_marginTop="@dimen/vertical_margin"
         android:adjustViewBounds="true"
-        android:maxHeight="@dimen/analyzed_image_size"
-        android:scaleType="centerCrop"/>
+        />
+    <!--android:maxHeight="@dimen/analyzed_image_size"-->
+    <!--android:scaleType="centerCrop"-->
 
     <ImageView
         android:id="@+id/header_analysed_drawing"

@@ -403,7 +403,31 @@ public class AnalysedPictureFragment extends BaseFragment {
                 dismissProgressDialog();
                 mMeal = response;
                 response.setPicture_url(photoPath);
-                ((ImageView) mHeaderView.findViewById(R.id.header_analysed_photo_img)).setImageBitmap(image);
+//                ((ImageView) mHeaderView.findViewById(R.id.header_analysed_photo_img)).setImageBitmap(image);
+                showImage(mHeaderView);
+                showNameDialog();
+                mAnalysedImgAdapter.setFoods((List<RecognisedFoodResponse>) (List<?>) response.getFoods());
+            }
+
+            @Override
+            public void onResponseFailure(String msg, int code) {
+                dismissProgressDialog();
+                showToast(msg);
+                ((MainActivity) getActivity()).resetTabIndex();
+            }
+        });
+    }
+
+    @SuppressWarnings("unchecked")
+    public void setImage(String photo64, final String photoPath) {
+        showProgressdialog();
+        mProvider.analysePicture(photo64, new NutriproProvider.OnResponseListener<AnalysedPictureResponse>() {
+            @Override
+            public void onResponseSuccess(AnalysedPictureResponse response) {
+                dismissProgressDialog();
+                mMeal = response;
+                response.setPicture_url(photoPath);
+//                ((ImageView) mHeaderView.findViewById(R.id.header_analysed_photo_img)).setImageBitmap(image);
                 showImage(mHeaderView);
                 showNameDialog();
                 mAnalysedImgAdapter.setFoods((List<RecognisedFoodResponse>) (List<?>) response.getFoods());
