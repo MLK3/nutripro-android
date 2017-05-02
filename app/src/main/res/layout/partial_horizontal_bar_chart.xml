@@ -48,7 +48,8 @@
         android:lines="1"
         android:paddingRight="@dimen/list_internal_horizontal_margin"
         android:text="150kcal"
-        android:layout_alignRight="@id/chart_bar"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="@dimen/spacing_between_items"
         android:textColor="@color/color_white"
         android:textSize="@dimen/text_large_body"/>
 
